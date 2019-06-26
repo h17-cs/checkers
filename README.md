@@ -10,3 +10,4 @@ Members are Idan, Charles, Nick, and Brendan.
   * [Linux](https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh "Anaconda3 Linux")
 * coverage.py:
   * `conda install -c anaconda coverage`
+* (PyLint is already included in Anaconda3)
