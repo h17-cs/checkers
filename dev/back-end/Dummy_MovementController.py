@@ -1,4 +1,4 @@
-# Class moderating the movement of pieces
+# Dummy code for MovementController class
 # Created: 08/15
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
