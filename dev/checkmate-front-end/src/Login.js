@@ -5,8 +5,8 @@ import TextField from 'material-ui/TextField';
 import React from 'react';
 import axios from 'axios'
 
-import Index from './index'
-//change to actual screen redirect after successful login
+import index from './index'
+//TODO: change to actual screen redirect after successful login
 
 class Login extends React.Component {
 constructor(props){
@@ -29,7 +29,7 @@ constructor(props){
 		if(response.data.code === 200){
 			console.log("Login successfull");
 			var uploadScreen=[];
-			uploadScreen.push(<Index appContext={self.props.appContext}/>)
+			uploadScreen.push(<index appContext={self.props.appContext}/>)
 			self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
 		}
 		else if(response.data.code === 204){

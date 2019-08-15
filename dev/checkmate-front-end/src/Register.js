@@ -22,7 +22,7 @@ class Register extends Component {
   }
 
   handleClick(event){
-    var apiBaseUrl = "http://localhost:3000/api/";
+    var apiBaseUrl = "https://postman-echo.com/post";
     console.log("values",this.state.first_name,this.state.last_name,this.state.email,this.state.password);
     //To be done:check for empty values before hitting submit
     var payload={
