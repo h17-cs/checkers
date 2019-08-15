@@ -1,7 +1,7 @@
 # Class representing the logic and control of a checkers game instance
 # Created: 08/14
 # Author: Charles Hill
-# Edited: 08/14 (by Charles)
+# Edited: 08/15 (by Charles)
 # Complies to Requirements:
 #   - R1.1
 #   - R1.3-5
@@ -29,22 +29,39 @@
 #   - R12.3.3
 #   - Complies to Use Cases as defined in the Requirements document
 
+import threading
+from enum import Enum
 from Timer import Timer
 from Player import Player, PlayerColor
 
 class GameController:
+
     def __init__(self, socket):
-        self.board = []
-        self.players = []
-        self.timer = None;
-        self.currentTurn = PlayerColor.Light;
-        self.messenger = new MessengeManager(socket);
+        self.__board = []
+        self.__players = []
+        self.__currentTurn = PlayerColor.Light;
+        self.__messenger = new MessengeManager(socket);
+        self.__players = [new Player(PlayerColor.Light, None, self),
+                        new Player(PlayerColor.Dark, None, self)]
+        self.__timer = new Timer(60.0, GameController.timeout, (self,));
+        self.__controllock = threading.Lock()
+
+    def getBoard(self):
+        # Game board accessor
+        return self.__board
+
+    def getPlayer(self, color):
+        # Game board accessor
+        return self.__players[color]
+
+    def getBoard(self):
+        # Game board accessor
+        return self.__board
 
     def initialize(self):
         # Initialize the game board, place pieces, and start the game
-        self.players = [new Player(PlayerColor.Light, None, self),
-                        new Player(PlayerColor.Dark, None, self)]
-        self.timer = new Timer();
+        #--DUMMY--
+        pass
 
     def registerPlayer(self, playerColor, playerID):
         # Register players to the board
@@ -52,18 +69,22 @@ class GameController:
 
     def addPiece(self, piece, location):
         # add a piece to the board
+        # --DUMMY--
         return True;
 
     def movePiece(self, piece, location):
         # move a piece 
+        # --DUMMY--
         return True;
 
     def removePiece(self, piece):
         # remove a piece from the game board
+        # --DUMMY--
         return True;
 
     def promotePiece(self, piece):
         # Promote a piece on the game board
+        # --DUMMY--
         return True;
 
     def queryOtherPlayer(self, sourcecolor, queryFunc):
@@ -80,6 +101,10 @@ class GameController:
 
         return result
 
-    def isEnded():
+    def isEnded(self):
         # Determine whether the game is in an end state
+        # --DUMMY--
         return False
+
+    def timeout(self):
+        self.__controllock.acquire()

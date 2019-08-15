@@ -13,6 +13,7 @@
 from enum import enum
 
 class PlayerColor(Enum):
+    # R2.6- Defines the color of a player
     Light = 0
     Dark = 1
 
@@ -35,10 +36,12 @@ class Player:
 
     def queryDraw(self):
         # Ask the user if they wish to draw
-        return False
+        # --DUMMY--
+        return False 
 
     def querySave(self):
         # Ask the user if they wish to save the current game
+        # --DUMMY--
         return False
         
     def associate(self, userId):
@@ -48,4 +51,5 @@ class Player:
         else return False
 
     def act(self):
+        # --DUMMY--
         pass
