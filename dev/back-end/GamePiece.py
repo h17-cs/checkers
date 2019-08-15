@@ -7,7 +7,8 @@
 #   - R3.1
 #   - R4.2.3
 
-from enum import enum
+from enum import Enum
+from DummyWrap import dummy
 
 class PieceColor(Enum):
     # Describes the type of the color according to R3.1
@@ -48,6 +49,7 @@ class GamePiece:
         # Returns the checkers game associated with the piece
         return self.__game
 
+    @dummy
     def getValidMoves(self):
         # Returns a list of valid locations for the piece to move to
         # Satisfies R1.4.1

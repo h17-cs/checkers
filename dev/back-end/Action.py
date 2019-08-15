@@ -31,3 +31,8 @@ class Action:
     def getData(self):
         # Returns the data associated with the action
         return self.__actionData
+
+    def setData(self, newData):
+        # Sets the action data
+        self.__actionData = newData
+

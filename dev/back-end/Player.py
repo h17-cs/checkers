@@ -12,6 +12,8 @@
 
 from enum import enum
 
+from DummyWrap import dummy
+
 class PlayerColor(Enum):
     # R2.6- Defines the color of a player
     Light = 0
@@ -34,11 +36,13 @@ class Player:
         # Player(this) requested a forfeit
         self.game.query(self.color, Player.querySave);
 
+    @dummy
     def queryDraw(self):
         # Ask the user if they wish to draw
         # --DUMMY--
         return False 
 
+    @dummy
     def querySave(self):
         # Ask the user if they wish to save the current game
         # --DUMMY--
@@ -50,6 +54,7 @@ class Player:
             return True
         else return False
 
+    @dummy
     def act(self):
         # --DUMMY--
         pass

@@ -35,3 +35,9 @@ class Action:
     def getData(self):
         # Returns the data associated with the action
         return None
+
+    @dummy
+    def setData(self, newData):
+        # Sets the action data
+        pass
+

@@ -34,6 +34,8 @@ from enum import Enum
 from Timer import Timer
 from Player import Player, PlayerColor
 
+from DummyWrap import dummy
+
 class GameController:
 
     def __init__(self, socket):
@@ -58,6 +60,7 @@ class GameController:
         # Game board accessor
         return self.__board
 
+    @dummy
     def initialize(self):
         # Initialize the game board, place pieces, and start the game
         #--DUMMY--
@@ -67,21 +70,25 @@ class GameController:
         # Register players to the board
         return self.players[playerColor].associate(playerID);
 
+    @dummy
     def addPiece(self, piece, location):
         # add a piece to the board
         # --DUMMY--
         return True;
 
+    @dummy
     def movePiece(self, piece, location):
         # move a piece 
         # --DUMMY--
         return True;
 
+    @dummy
     def removePiece(self, piece):
         # remove a piece from the game board
         # --DUMMY--
         return True;
 
+    @dummy
     def promotePiece(self, piece):
         # Promote a piece on the game board
         # --DUMMY--
@@ -101,6 +108,7 @@ class GameController:
 
         return result
 
+    @dummy
     def isEnded(self):
         # Determine whether the game is in an end state
         # --DUMMY--
