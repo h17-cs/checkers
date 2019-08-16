@@ -5,6 +5,7 @@
 
 from DummyWrap import dummy
 from enum import Enum
+import json
 
 class MessageType(Enum):
     Text = 0
@@ -13,11 +14,30 @@ class MessageType(Enum):
     AccountAdministration = 3
 
 class Message:
-    @dummy
     def __init__(self, messageType)
-        self.__messageType = None
-        self.__messageBody = None
+        self.__messageType = messageType
+        self.__messageBody = {}
 
-    @dummy
-    def resolve(self):
-        return ""
+    def __str__(self):
+        # Resolve the message to a JSON string
+        return json.dumps(
+            {
+                'message_type' : self.__messageType
+                'message_body' : self.__messageBody
+            } );
+
+    def addField(self, key, value):
+        # Add a (key, value) pair to the message body
+        self.__messageBody[key] = value;
+
+    def parse(jstring):
+        # STATIC: Generate a message from a JSON string
+        obj = json.loads(jstring)
+        mtype = obj['message_type']
+        mbody = obj['message_body']
+        
+        msg = Message(mtype)
+        for key in mbody:
+            msg.addField(key, mbody[key])
+
+        return msg

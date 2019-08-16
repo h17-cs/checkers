@@ -38,9 +38,10 @@ from DummyWrap import dummy
 
 class GameController:
 
-    def __init__(self, socket):
+    def __init__(self, port):
         self.__board = []
         self.__players = []
+        self.__port = port
         self.__currentTurn = PlayerColor.Light;
         self.__messenger = new MessengeManager(socket);
         self.__players = [new Player(PlayerColor.Light, None, self),
@@ -116,3 +117,5 @@ class GameController:
 
     def timeout(self):
         self.__controllock.acquire()
+
+    def run(self):
