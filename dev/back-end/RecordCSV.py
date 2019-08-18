@@ -11,7 +11,7 @@ class Record:
         Filled = True
         Empty = False
 
-    class FlagChar(Enum):
+    class FlagChar : 
         Filled = '#'
         Empty = '-'
 
@@ -59,6 +59,16 @@ class Record:
         self.__datalock.release()
         return ret_dat
 
+    def setField(self, field, data):
+        # Set the data corresponding to the field, if the field exists
+        self.__datalock.acquire()
+        ret_stat = False
+        if self.hasField(field):
+            self.__data[field] = data
+            ret_stat = True
+        self.__datalock.release()
+        return ret_stat
+
     def hasField(self, field):
         # Check if Record has the given field
         return field in [header for header,_ in self.__fields]
@@ -105,15 +115,15 @@ class Record:
     def __str__(self):
         # generate a string representing the record and all its fields
         data_tail = ""
-        fields = []
+        fields = self.getFields()
         self.__datalock.acquire()
 
-        data_tail = ",".join(size for _,size in self.getFields())
+        data_tail = ",".join("%%%ds"%size for _,size in fields)
 
         dat = self.getData()
-        data_tail = data_tail%(dat[f] for f in fields)
+        data_tail = data_tail % tuple(dat[f] for f,_ in fields)
 
-        flag = Record.FlagChar.Filled if self.getFlag() == Record.Filled else Record.FlagChar.Empty
+        flag = Record.FlagChar.Filled if self.getFlag() == Record.Flag.Filled else Record.FlagChar.Empty
         key = ("%%%ds"%self.__keysize) % self.getKey()
         key_header = "%c,%s"%(flag,key)
         self.__datalock.release()
@@ -128,19 +138,19 @@ class Record:
         data = tokens[2:]
 
         if not len(data) == len(fields):
-            print("Field length mismatch in: \n%16s%s\n\t\tvs\n%16s%s\n" % 
+            print("Field length mismatch in: \n%-16s%s\n\t\tvs\n%-16s%s\n" % 
                 (   "expected:", ",".join(f for f,_ in fields),
                     "data:", ",".join(data)
                     )) 
 
-        r = Record(fields)
+        r = Record(16,fields)
         r.setFlag(Record.Flag.Filled if flag == Record.FlagChar.Filled else Record.Flag.Empty)
         r.setKey(tokens[1])
         if tokens[1] is None or len(tokens[1]) == 0:
             r.setFlag(Record.Flag.Empty)
 
-        for i in len(data):
-            r.setData(fields[i],data[i])
+        for i in range(len(data)):
+            r.setField(fields[i][0],data[i])
 
         return r
 

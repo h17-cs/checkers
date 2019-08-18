@@ -27,7 +27,7 @@ class CSVDatabase:
     def __init__(self, dbpath, keysize=None, fields=None):
         self.__dbpath = dbpath
         self.__datalock = threading.Lock()
-        self.__buff = PriorityBuffer(self.BufferSize, debuffer=self.writeTo)
+        self.__buff = PriorityBuffer(self.BufferSize, debuffer= lambda x: self.writeTo(x.getEntry()))
 
         if keysize is None:
             self.__keysize = CSVDB_Header.sizes["uname"]
@@ -46,20 +46,22 @@ class CSVDatabase:
         #   In both of the above, return True
         # If a filled record exists with the same key, return False
 
-        r = Record(self.__keysize, fields)
+        r = Record(self.__keysize, self.__fields)
         r.setKey(key)
         r.setFlag(Record.Flag.Filled)
+        r.setData(**fields)
 
-        return self.__buff.add(Record())
+        return self.__buff.add(r)
 
     def remove(self, key, **fields):
         # Removes a user from the database
         rec = self.findAll(key, **fields)
 
-        if rec is None or rec.getFlag() == Record.Flag.Empty:
+        if rec is None or len(rec) == 0:
             return False
         else:
-            rec.setFlag(Record.Flag.Empty)
+            for r in rec:
+                r.setFlag(Record.Flag.Empty)
             return True
 
     def exists(self, key, **fields):
@@ -67,8 +69,8 @@ class CSVDatabase:
         reqtime = time.time()
         findings = None
         while findings is None and time.time() - reqtime < self.RequestTimeout:
-            findings = self.__buff.get(key, Record.match(key, **fields))
-
+            findings = self.__buff.get(Record.match(key, **fields))
+            #print(findings,fields)
             if len(findings) == 0:
                 findings = self.readFor(key, blocking=False, **fields)
                 time.sleep(0.01)
@@ -78,9 +80,16 @@ class CSVDatabase:
     def findAll(self, key, **fields):
         # Return all records corresponding to the key and field criteria
         reqtime = time.time()
+        findings = buffered = None
+        while findings is None and time.time() - reqtime < self.RequestTimeout:
+            buffered = self.__buff.get(Record.match(key, **fields))
+            findings = self.readFor(key, blocking=False, **fields)
+            time.sleep(0.01)
 
-        while time.time() - reqtime < self.RequestTimeout:
-            findings = self.readFor(key=key, blocking=False, **fields)
+        if findings is None:
+            findings = []
+        findings.extend(buffered)
+        return findings
 
     def readFor(self, key, blocking=True, **fields):
         # Reads database to find records, then returns the given record
@@ -90,7 +99,7 @@ class CSVDatabase:
             return None
 
         matches = []
-        match = Record.match(key, fields)
+        match = Record.match(key, **fields)
         f = open(self.__dbpath,'r')
         for line in f:
             r = Record.parse(line,self.__fields)
@@ -100,7 +109,7 @@ class CSVDatabase:
         self.__datalock.release()
         for m in matches:
             self.__buff.add(m)
-        return retval
+        return matches
 
     def writeTo(self, record):
         # Writes record to DB, inserting in same spot if a record with the same key already exists
@@ -108,16 +117,19 @@ class CSVDatabase:
         self.__datalock.acquire()
         f = open(self.__dbpath,'r+')
         firstEmpty = -1
+        bytesRead = 0
         found = False
         for line in f:
-            lineSize = len(line)
-            r = Record.parse(line)
+            lineSize = len(line) + 1
+            bytesRead += lineSize
+            r = Record.parse(line,self.__fields)
             if firstEmpty < 0 and r.getFlag() == Record.Flag.Empty:
-                firstEmpty = f.tell() - lineSize
+                firstEmpty = bytesRead - lineSize
 
-            if r.equals(record):
-                f.seek(-1*lineSize,1)
+            if r == record:
+                f.seek(bytesRead-lineSize)
                 found = True
+                break
 
         if not found and firstEmpty != -1:
             f.seek(firstEmpty)
@@ -127,3 +139,6 @@ class CSVDatabase:
         self.__datalock.release()
 
         return True
+
+    def flush(self):
+        self.__buff.debuffer(self.__buff.size())

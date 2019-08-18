@@ -46,6 +46,10 @@ class DatabaseManager:
     def queryForUser(self, uname, passwd=None):
         # Checks that the username, password pair exists in the database
         if passwd is None:
-            return self.__db.exists(key=uname,password=passwd)
-        else:
             return self.__db.exists(key=uname)
+        else:
+            return self.__db.exists(key=uname,password=passwd)
+
+    def flush(self):
+        # Flush all buffered data to the file
+        self.__db.flush()
