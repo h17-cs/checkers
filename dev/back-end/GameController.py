@@ -43,10 +43,10 @@ class GameController:
         self.__players = []
         self.__port = port
         self.__currentTurn = PlayerColor.Light;
-        self.__messenger = new MessengeManager(socket);
-        self.__players = [new Player(PlayerColor.Light, None, self),
-                        new Player(PlayerColor.Dark, None, self)]
-        self.__timer = new Timer(60.0, GameController.timeout, (self,));
+        self.__messenger = MessengeManager(socket);
+        self.__players = [Player(PlayerColor.Light, None, self),
+                        Player(PlayerColor.Dark, None, self)]
+        self.__timer = Timer(60.0, GameController.timeout, (self,));
         self.__controllock = threading.Lock()
 
     def getBoard(self):
@@ -97,9 +97,7 @@ class GameController:
 
     def queryOtherPlayer(self, sourcecolor, queryFunc):
         # Facilitate a Player-to-Player query
-        otherPlayer = (self.player_1.color == sourcecolor)
-            ? self.player_2
-            : self.player_1 ;
+        otherPlayer = self.player_2 if (self.player_1.color == sourcecolor) else self.player_1;
         result = queryFunc(otherPlayer)
 
         if result:
@@ -115,7 +113,13 @@ class GameController:
         # --DUMMY--
         return False
 
+    @dummy
     def timeout(self):
         self.__controllock.acquire()
 
+        self.__controllock.release()
+        pass
+
+    @dummy
     def run(self):
+        pass

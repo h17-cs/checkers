@@ -4,45 +4,48 @@
 # Edited: 08/15 (by Charles)
 
 from DummyWrap import dummy
+from CSVDatabase import CSVDatabase, CSVDB_Header
+
 from enum import Enum
 import threading
 import time
 
 class DatabaseType(Enum):
     CSV = 1
-    SQL = 2
+
 
 class DatabaseManager:
+    # Class representing a CSV-style database manager
+    BufferSize = 1024   # Buffer 2^10 records from file
 
-    @dummy
     def __init__(self, dbtype, dbpath):
-        self.__dbtype = dbtype
+        self.__dbtype = DatabaseType.CSV
         self.__dbpath = dbpath
-        self.__filelock = threading.Lock()
-        self.__dbdict = {}
-        self.__lasttouched = None
+        self.__datalock = threading.Lock()
 
-    @dummy
+        self.__db = CSVDatabase(dbpath=dbpath)
+
     def addUser(self, uname, passwd):
         # Adds a user to the database
-        return True
+        # If an empty record exists with the same key (uname), update and fill that record 
+        # If no record exists with the same key (uname), make and populate a new record
+        #   In both of the above, return True
+        # If a filled record exists with the same key, return False
+        if self.__db.exists(uname):
+            return False
+        else:
+            return self.__db.add(key=uname,password=passwd)
 
-    @dummy
     def deleteUser(self, uname, passwd):
         # Removes a user from the database
-        return True
+        if self.queryForUser(uname,passwd):
+            return self.__db.remove(key=uname,password=passwd)
+        else:
+            return False
 
-    @dummy
-    def verify(self, uname, passwd):
+    def queryForUser(self, uname, passwd=None):
         # Checks that the username, password pair exists in the database
-        return True
-
-    @dummy
-    def open(self):
-        # Opens the database
-        pass
-
-    @dummy
-    def flush(self):
-        # Flushes the local database to the file
-        pass
+        if passwd is None:
+            return self.__db.exists(key=uname,password=passwd)
+        else:
+            return self.__db.exists(key=uname)

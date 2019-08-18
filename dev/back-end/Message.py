@@ -4,17 +4,17 @@
 # Edited: 08/15 (by Charles)
 
 from DummyWrap import dummy
-from enum import Enum
+from enum import IntEnum
 import json
 
-class MessageType(Enum):
+class MessageType(IntEnum):
     Text = 0
     GameUpdate = 1
     GameAdministration = 2
     AccountAdministration = 3
 
 class Message:
-    def __init__(self, messageType)
+    def __init__(self, messageType):
         self.__messageType = messageType
         self.__messageBody = {}
 
@@ -22,7 +22,7 @@ class Message:
         # Resolve the message to a JSON string
         return json.dumps(
             {
-                'message_type' : self.__messageType
+                'message_type' : self.__messageType,
                 'message_body' : self.__messageBody
             } );
 

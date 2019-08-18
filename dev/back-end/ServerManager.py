@@ -16,7 +16,8 @@ class ServerManager:
 
     @dummy
     def addUser(self, uname, passwd):
-        return self.__db.
+        return True
+        #return self.__db.addUser(uname,passwd)
 
     @dummy
     def deleteUser(self, uname, passwd):

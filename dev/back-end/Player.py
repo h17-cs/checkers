@@ -10,7 +10,7 @@
 #   - R4.7
 #   - R5.1
 
-from enum import enum
+from enum import Enum
 
 from DummyWrap import dummy
 
@@ -52,7 +52,8 @@ class Player:
         if self.userID is None:
             self.userID = userId
             return True
-        else return False
+        else:
+            return False
 
     @dummy
     def act(self):

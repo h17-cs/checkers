@@ -6,13 +6,14 @@
 from DummyWrap import dummy
 from random import randint
 import threading
+import random
 
 class PortManager:
 
     def __init__(self, lowerbound, upperbound, logpath):
         self.__portlock = threading.Lock()
         self.__closed = []
-        self.__open = range(lowerbound,upperbound+1)
+        self.__open = [i for i in range(lowerbound,upperbound+1)]
 
         self.scramble()
 
@@ -20,8 +21,12 @@ class PortManager:
         # Acquire any free port, closing it from further use
         self.__portlock.acquire();
         
-        port = self.__open.pop();
-        self.__closed.append(port);
+        if len(self.__open) == 0:
+            print("No ports available")
+            port = -1
+        else:
+            port = self.__open.pop();
+            self.__closed.append(port);
 
         self.__portlock.release();
 
@@ -35,7 +40,7 @@ class PortManager:
             p = self.__closed.index(port);
             self.__closed.pop(p)
             self.__open.append(port)
-        except (ValueError e):
+        except ValueError:
             print("Error: port %d not closed"%(port))
 
         self.__portlock.release();
@@ -54,6 +59,6 @@ class PortManager:
         # Randomize the port order
         self.__portlock.acquire();
 
-        self.__open = shuffle(self.__open)
+        random.shuffle(self.__open)
 
         self.__portlock.release();

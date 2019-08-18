@@ -13,7 +13,7 @@ class Timer:
         # Initialize the thread
         self.__lockobj = threading.Lock();
         self.__running = False;
-        self.__startTime = time.time();
+        self.__startTime = None
         self.__duration = duration;
         self.__subscribers = [];
         if not subscriber is None:
@@ -21,12 +21,20 @@ class Timer:
 
     def begin (self):
         # Begin the timer, initializing a hidden worker thread
+        if self.isRunning():
+            print("Timer already running")
+            return False
         t = threading.Thread(target=Timer.wait,name="Timer Helper Thread",args=(self,));
         self.__running = True
+        self.__startTime = time.time();
         t.start();
+        return True
 
     def getTimeElapsed(self):
         # Return the time elapsed on the timer
+        if self.__startTime is None:
+            print("Timer hasn't started yet!")
+            return -1.0
         return time.time() - self.__startTime;
 
     def getTimeRemaining(self):
@@ -39,7 +47,7 @@ class Timer:
 
     def wait(self):
         if not self.isRunning():
-            print("Attempted to wait on a dead worker.\n");
+            print("Attempted to wait on a dead worker.");
             return False;
         elapsed = 0.0;
         n = 0;
@@ -48,29 +56,35 @@ class Timer:
                 n = 0;
                 elapsed = self.getTimeElapsed();
                 self.__lockobj.release();
-            else print("\rMissed %d lock attempt(s)\r", ++n);
-            sleep(MIN_TICK);
+            else:
+                print("\rMissed %d lock attempt(s)\r"%(++n));
+            time.sleep(MIN_TICK);
         self.__lockobj.acquire()
         self.__running = False
         self.__lockobj.release()
 
         for f,fargs in self.__subscribers:
-            f(fargs);
+            if fargs is not None:
+                f(fargs);
+            else:
+                f();
 
         return True;
 
     def subscribe(self, function, fargs=None):
         self.__lockobj.acquire()
-        if not self.isRunning():
-            self.__lockobj.release()
-            return False
+        #if not self.isRunning():
+        #    self.__lockobj.release()
+        #    return False
         self.__subscribers.append((function,fargs))
         self.__lockobj.release()
         return True
 
+    '''
     def restart(self):
-        self.__lockobbj.acquire()
+        self.__lockobj.acquire()
         self.__startTime = time.time()
         if not self.isRunning():
             self.begin()
         self.__lockobj.release()
+    '''
