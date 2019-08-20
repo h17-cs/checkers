@@ -8,7 +8,7 @@ import axios from 'axios';
 import Login from './Login'
 
 
-
+//TODO: Change payload to what charles sent to front end discord. For login and register
 
 class Register extends Component {
   constructor(props){
