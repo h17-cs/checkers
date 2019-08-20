@@ -4,6 +4,7 @@
 # Edited: 08/15 (by Charles)
 
 from enum import Enum
+from DummyWrap import dummy
 
 class ActionType(Enum):
     # Describes the type of action. Options are:
@@ -20,19 +21,23 @@ class ActionType(Enum):
 
 class Action:
     # Defines a player action, and houses relevant action data
+    @dummy
     def __init__(self, actionType, actionData):
         self.__actionType = actionType
         self.__actionData = actionData
 
+    @dummy
     def getType(self):
         # Returns the type of the action
-        return self.__actionType
+        return 0
 
+    @dummy
     def getData(self):
         # Returns the data associated with the action
-        return self.__actionData
+        return None
 
+    @dummy
     def setData(self, newData):
         # Sets the action data
-        self.__actionData = newData
+        pass
 

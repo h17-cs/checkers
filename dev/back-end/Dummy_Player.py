@@ -1,18 +1,10 @@
-# Class representing a player in the checkers game
-# Created: 08/14
+# Dummy code for Player class
+# Created: 08/15
 # Author: Charles Hill
-# Edited: 08/14 (by Charles)
-# Complies to Requirements:
-#   - R1.1
-#   - R1.3-5
-#   - R2.6
-#   - R4.6.1
-#   - R4.7
-#   - R5.1
-
-from enum import enum
+# Edited: 08/15 (by Charles)
 
 from DummyWrap import dummy
+from enum import enum
 
 class PlayerColor(Enum):
     # R2.6- Defines the color of a player
@@ -20,41 +12,40 @@ class PlayerColor(Enum):
     Dark = 1
 
 class Player:
+    @dummy
     def __init__(self,color,activeGame):
-        self.color = color;
+        self.color = None;
         self.userID = None;
 
+    @dummy
     def forfeit(self):
         # Player(this) requested a forfeit
-        self.game.forfeit(self);
+        pass
 
+    @dummy
     def draw(self):
         # Player(this) requested a draw
-        self.game.query(self.color, Player.queryDraw);
+        pass
 
+    @dummy
     def save(self):
         # Player(this) requested a forfeit
-        self.game.query(self.color, Player.querySave);
+        pass
 
     @dummy
     def queryDraw(self):
         # Ask the user if they wish to draw
-        # --DUMMY--
         return False 
 
     @dummy
     def querySave(self):
         # Ask the user if they wish to save the current game
-        # --DUMMY--
         return False
         
+    @dummy
     def associate(self, userId):
-        if self.userID is None:
-            self.userID = userId
-            return True
-        else return False
+        return True
 
     @dummy
     def act(self):
-        # --DUMMY--
         pass
