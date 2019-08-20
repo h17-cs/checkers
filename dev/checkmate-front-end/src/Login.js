@@ -18,7 +18,7 @@ constructor(props){
 
  handleClick(event){
    //TODO: Change apiBaseURL to the actual URL
-	var apiBaseUrl = "lol";
+	var apiBaseUrl = "http://httpbin.org/post";
 	var self = this;
 	var payload={
     "message_type" : 3,
@@ -30,20 +30,21 @@ constructor(props){
 	axios.post(apiBaseUrl, payload)
 	.then(function (response) {
 		console.log(response);
-		if(response.data.code === 200){
+		if(response.status === 200){
 			console.log("Login successfull");
 			var uploadScreen=[];
 			uploadScreen.push(<index appContext={self.props.appContext}/>)
 			self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
 		}
-		else if(response.data.code === 204){
+		else if(response.status === 204){
 			console.log("email password do not match");
 			alert("email password do not match")
-		}
-		else{
-			console.log("email does not exists");
-			alert("email does not exist");
-		}
+    }
+    //TODO: Uncomment when database is ready
+		// else{
+		// 	console.log("email does not exists");
+		// 	//alert("email does not exist");
+		// }
 	})
 	.catch(function (error) {
 		console.log(error);
