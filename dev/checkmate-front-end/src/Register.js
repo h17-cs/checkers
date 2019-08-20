@@ -22,16 +22,20 @@ class Register extends Component {
   }
 
   handleClick(event){
-    var apiBaseUrl = "https://postman-echo.com/post";
+    //TODO: Change apiBaseURL to the actual URL
+    var apiBaseUrl = "http://httpbin.org/get";
     console.log("values",this.state.first_name,this.state.last_name,this.state.email,this.state.password);
     //To be done:check for empty values before hitting submit
     var payload={
+      "message_type" : 3,
+      "body" : {
         "first_name": this.state.first_name,
         "last_name":this.state.last_name,
         "email":this.state.email,
         "password":this.state.password
+      }
     }
-    axios.post(apiBaseUrl+'/register', payload)
+    axios.post(apiBaseUrl, payload)
    .then(function (response) {
      console.log(response);
      if(response.data.code === 200){

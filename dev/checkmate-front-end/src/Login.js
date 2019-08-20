@@ -7,7 +7,6 @@ import axios from 'axios'
 
 import index from './index'
 //TODO: change to actual screen redirect after successful login
-
 class Login extends React.Component {
 constructor(props){
   super(props);
@@ -16,14 +15,19 @@ constructor(props){
   password:''
   }
  }
+
  handleClick(event){
-	var apiBaseUrl = "http://localhost:3000/api/";
+   //TODO: Change apiBaseURL to the actual URL
+	var apiBaseUrl = "lol";
 	var self = this;
 	var payload={
-		"email":this.state.email,
-		"password":this.state.password
-	}
-	axios.post(apiBaseUrl+'login', payload)
+    "message_type" : 3,
+    "body" : {    
+      "email":this.state.email,
+      "password":this.state.password
+    }
+  }
+	axios.post(apiBaseUrl, payload)
 	.then(function (response) {
 		console.log(response);
 		if(response.data.code === 200){
