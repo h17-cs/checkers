@@ -1,13 +1,9 @@
-# Class representing a checkers game piece
-# Created: 08/14
+# Dummy code for GamePiece
+# Created: 08/15
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
-# Complies to Requirements:
-#   - R1.4.1
-#   - R3.1
-#   - R4.2.3
 
-from enum import Enum
+from enum import enum
 from DummyWrap import dummy
 
 class PieceColor(Enum):
@@ -22,6 +18,7 @@ class PieceType(Enum):
 
 class GamePiece:
     # Describes a checkers game piece
+    @dummy
     def __init__(self, color, owner, game):
         self.__color = color;
         self.__owner = owner;
@@ -29,29 +26,33 @@ class GamePiece:
         self.__location = None;
         self.__game = game;
 
+    @dummy
     def getColor(self):
         # Returns the piece color
-        return self.__color
+        return None
 
+    @dummy
     def getOwner(self):
         # Returns the piece owner
-        return self.__owner
+        return None
 
+    @dummy
     def getType(self):
         # Returns the piece type
-        return self.__type
+        return None
 
+    @dummy
     def getLocation(self):
         # Returns the piece location
-        return self.__location
+        return None
 
+    @dummy
     def getGame(self):
         # Returns the checkers game associated with the piece
-        return self.__game
+        return None
 
     @dummy
     def getValidMoves(self):
         # Returns a list of valid locations for the piece to move to
         # Satisfies R1.4.1
-        # --DUMMY--
-        return [None];
+        return [];
