@@ -27,6 +27,7 @@ class App extends Component {
       <Link to="/">Home Page</Link>
       <Link to="/login">Login</Link>
       <Link to="/register">Register</Link>
+      <Link to="/game">Board</Link>
       <Routes/>
       </div>
    
