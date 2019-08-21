@@ -13,7 +13,7 @@ class Login extends React.Component {
 constructor(props){
   super(props);
   this.state={
-  email:'',
+  username:'',
   password:''
   }
  }
@@ -25,7 +25,7 @@ constructor(props){
 	var payload={
     "message_type" : 3,
     "body" : {    
-      "email":this.state.email,
+      "username":this.state.username,
       "password":this.state.password
     }
   }
@@ -39,13 +39,13 @@ constructor(props){
 			self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
 		}
 		else if(response.status === 204){
-			console.log("email password do not match");
-			alert("email password do not match")
+			console.log("username password do not match");
+			alert("username password do not match")
     }
     //TODO: Uncomment when database is ready
 		// else{
-		// 	console.log("email does not exists");
-		// 	//alert("email does not exist");
+		// 	console.log("username does not exists");
+		// 	//alert("username does not exist");
 		// }
 	})
 	.catch(function (error) {
@@ -62,9 +62,9 @@ render() {
              title="Login"
            />
            <TextField
-             hintText="Enter your Email"
-             floatingLabelText="Email"
-             onChange = {(event,newValue) => this.setState({email:newValue})}
+             hintText="Enter your Username"
+             floatingLabelText="Username"
+             onChange = {(event,newValue) => this.setState({username:newValue})}
              />
            <br/>
              <TextField
