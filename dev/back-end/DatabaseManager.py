@@ -22,7 +22,7 @@ class DatabaseManager:
         self.__dbtype = DatabaseType.CSV
         self.__dbpath = dbpath
         self.__datalock = threading.Lock()
-
+        
         self.__db = CSVDatabase(dbpath=dbpath)
 
     def addUser(self, uname, passwd):

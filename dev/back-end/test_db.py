@@ -52,7 +52,7 @@ def querysome(i):
         dunlock()
         count += 1
         print(globcount,"- queried",uname,",",passwd,":",res)
-        time.sleep(random.random()*.001)
+        time.sleep(random.random()*.01)
 
 
 
@@ -79,9 +79,9 @@ def removesome(i):
 
 def refresh():
     for i in range(6):
+        time.sleep(30)
         print("\t\t\t","Flushing")
         db.flush()
-        time.sleep(30)
 
 threads = []
 
@@ -104,10 +104,11 @@ def run():
         for t in threads:
             t.start()
 
-        k = input("\t\t\tPress enter whenever")
+        #k = input("\t\t\tPress enter whenever")
     except:
         pass
     END = True
     for t in threads:
         t.join()
+    db.flush()
     print ("Failures:",failures)

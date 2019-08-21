@@ -10,6 +10,7 @@ from RecordCSV import Record
 
 import threading
 import time
+import os
 
 class CSVDB_Header:
     sizes = {
@@ -28,6 +29,9 @@ class CSVDatabase:
         self.__dbpath = dbpath
         self.__datalock = threading.Lock()
         self.__buff = PriorityBuffer(self.BufferSize, debuffer= lambda x: self.writeTo(x.getEntry()))
+
+        if not os.path.isfile(dbpath):
+            open(dbpath,'w').close();
 
         if keysize is None:
             self.__keysize = CSVDB_Header.sizes["uname"]
