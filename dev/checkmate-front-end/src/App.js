@@ -1,6 +1,9 @@
-import './App.css';
 import React, { Component } from 'react';
-import Loginscreen from './Loginscreen'
+import './App.css';
+import LoginScreen from './Loginscreen';
+import { Router, Route, Link, Switch } from 'react-router-dom';
+
+import Routes from "./Routes";
 
 
 class App extends Component {
@@ -11,24 +14,24 @@ class App extends Component {
       uploadScreen:[]
     }
   }
-  componentWillMount(){
-    var loginPage =[];
-    loginPage.push(<Loginscreen parentContext={this}/>);
-    this.setState({
-      loginPage:loginPage
-    })
-  }
+  // componentWillMount(){
+  //   var loginPage =[];
+  //   loginPage.push(<LoginScreen appContext={this} key={"login-screen"}/>);
+  //   this.setState({
+  //                 loginPage:loginPage
+  //                   })
+  // }
   render() {
     return (
       <div className="App">
-        {this.state.loginPage}
-        {this.state.uploadScreen}
+      <Link to="/">Home Page</Link>
+      <Link to="/login">Login</Link>
+      <Link to="/register">Register</Link>
+      <Routes/>
       </div>
+   
     );
   }
 }
-const style = {
-  margin: 15,
-};
 
 export default App;

@@ -23,7 +23,7 @@ class Register extends Component {
 
   handleClick(event){
     //TODO: Change apiBaseURL to the actual URL
-    var apiBaseUrl = "http://httpbin.org/get";
+    var apiBaseUrl = "http://httpbin.org/post";
     console.log("values",this.state.first_name,this.state.last_name,this.state.username,this.state.password);
     //To be done:check for empty values before hitting submit
     var payload={

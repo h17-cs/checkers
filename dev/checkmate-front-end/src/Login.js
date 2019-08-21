@@ -4,8 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import React from 'react';
 import axios from 'axios'
-import { Router, Route, Link } from 'react-router-dom';
-import index from './index'
 import Register from './Register'
 //TODO: change to actual screen redirect after successful login
 
@@ -13,10 +11,15 @@ class Login extends React.Component {
 constructor(props){
   super(props);
   this.state={
-  username:'',
-  password:''
+    username:'',
+    password:''
   }
  }
+
+ validateForm() {
+  return this.state.username.length > 0 && this.state.password.length > 0;
+}
+
 
  handleClick(event){
    //TODO: Change apiBaseURL to the actual URL
