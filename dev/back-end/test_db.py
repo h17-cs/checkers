@@ -52,9 +52,7 @@ def querysome(i):
         dunlock()
         count += 1
         print(globcount,"- queried",uname,",",passwd,":",res)
-        time.sleep(random.random()*.01)
-
-
+        time.sleep(random.random()*.02)
 
 def removesome(i):
     global failures,globcount,END
@@ -104,7 +102,7 @@ def run():
         for t in threads:
             t.start()
 
-        #k = input("\t\t\tPress enter whenever")
+        k = input("\t\t\tPress enter whenever")
     except:
         pass
     END = True

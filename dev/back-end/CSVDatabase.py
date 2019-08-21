@@ -12,6 +12,14 @@ import threading
 import time
 import os
 
+CRLF = 0;
+if os.name == "nt":
+    #Windows
+    CRLF = 1
+elif on.name == "posix":
+    #Linux
+    pass
+
 class CSVDB_Header:
     sizes = {
         "uname" : 16,
@@ -124,7 +132,7 @@ class CSVDatabase:
         bytesRead = 0
         found = False
         for line in f:
-            lineSize = len(line) + 1
+            lineSize = len(line) + CRLF
             bytesRead += lineSize
             r = Record.parse(line,self.__fields)
             if firstEmpty < 0 and r.getFlag() == Record.Flag.Empty:
