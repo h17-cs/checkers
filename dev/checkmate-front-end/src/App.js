@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import LoginScreen from './containers/Loginscreen';
-import { Router, Route, Link, Switch } from 'react-router-dom';
+import { Navbar, Nav, NavItem} from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { Link } from 'react-router-dom';
+
+
 
 import Routes from "./Routes";
 
@@ -21,7 +24,6 @@ class App extends Component {
       isAuthenticated : authenticated
     });
   }
-
   // componentWillMount(){
   //   var loginPage =[];
   //   loginPage.push(<LoginScreen appContext={this} key={"login-screen"}/>);
@@ -36,14 +38,33 @@ class App extends Component {
       userHasAuthenticated: this.userHasAuthenticated
     };
     return (
+
       <div className="App">
-      <Link to="/">Home Page</Link>
-      <Link to="/login">Login</Link>
-      <Link to="/register">Register</Link>
-      <Link to="/game">Board</Link>
-      <Routes childProps= {childProps}/>     
+        <Navbar fluid collapseOnSelect>
+          <Navbar.Header>
+            <Nav pullLeft>
+            <LinkContainer to="/">
+            <NavItem>Home</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/game">
+            <NavItem>Game</NavItem>
+            </LinkContainer>
+            </Nav>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+          <Nav pullRight>
+            <LinkContainer to="/register">
+            <NavItem >Register</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/login">
+            <NavItem>Login</NavItem>
+            </LinkContainer>
+          </Nav>
+        </Navbar.Collapse>
+        </Navbar>
+        <Routes childProps= {childProps}/>     
       </div>
-   
     );
   }
 }
