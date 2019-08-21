@@ -1,4 +1,8 @@
 import React from 'react';
+import LightSquare from './components/LightSquare';
+import DarkSquare from './components/DarkSquare';
+import LightPiece from './components/LightPiece';
+import DarkPiece from './components/DarkPiece';
 
 class Board extends React.Component {
   onClick(id) {
@@ -34,18 +38,29 @@ class Board extends React.Component {
     };
 
     let tbody = [];
-    for (let i = 0; i < 3; i++) {
-      let cells = [];
-      for (let j = 0; j < 3; j++) {
-        const id = 3 * i + j;
-        cells.push(
-          <td style={cellStyle} key={id} onClick={() => this.onClick(id)}>
-            {this.props.G.cells[id]}
-          </td>
-        );
+    for(let i = 0; i<8; i++){
+      let cells = []
+      for (let j = 0; j< 8; j++){
+          if( i % 2 === 0){
+              if(j%2 === 0){
+              cells.push(<td> {<LightSquare> </LightSquare>} </td>);
+              }
+              else{
+              cells.push(<td> {<DarkSquare> </DarkSquare>} </td>);
+              }
+          }
+          else{
+              if(j%2 === 0){
+                  cells.push(<td> {<DarkSquare/>} </td>);
+              }
+              else{
+                  cells.push(<td> {<LightSquare/>} </td>);
+              }
+          }
       }
-      tbody.push(<tr key={i}>{cells}</tr>);
-    }
+      tbody.push(<tr> {cells} </tr>)
+  }
+
 
     return (
       <div>
