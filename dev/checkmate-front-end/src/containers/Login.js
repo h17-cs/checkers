@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import React from 'react';
 import axios from 'axios'
-import Register from './Register'
+import Register from '../Register'
 //TODO: change to actual screen redirect after successful login
 
 class Login extends React.Component {

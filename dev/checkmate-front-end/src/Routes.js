@@ -1,7 +1,7 @@
 import React from "react";
 import { Router, Route, Link, Switch } from 'react-router-dom';
 import Home from './Home'
-import Login from "./Login";
+import Login from "./containers/Login";
 import Register from "./Register";
 import Game from "./components/Game";
 import DarkSquare from "./components/DarkSquare";

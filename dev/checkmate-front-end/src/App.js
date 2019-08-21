@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import LoginScreen from './Loginscreen';
+import LoginScreen from './containers/Loginscreen';
 import { Router, Route, Link, Switch } from 'react-router-dom';
 
 import Routes from "./Routes";
@@ -41,8 +41,7 @@ class App extends Component {
       <Link to="/login">Login</Link>
       <Link to="/register">Register</Link>
       <Link to="/game">Board</Link>
-      <Routes/>
-      <Routes childProps= {childProps}/>
+      <Routes childProps= {childProps}/>     
       </div>
    
     );
