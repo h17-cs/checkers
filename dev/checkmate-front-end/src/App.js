@@ -1,34 +1,51 @@
-import './App.css';
 import React, { Component } from 'react';
-import Loginscreen from './Loginscreen'
+import './App.css';
+import LoginScreen from './containers/Loginscreen';
+import { Router, Route, Link, Switch } from 'react-router-dom';
+
+import Routes from "./Routes";
 
 
 class App extends Component {
   constructor(props){
     super(props);
     this.state={
-      loginPage:[],
-      uploadScreen:[]
-    }
+      // loginPage:[],
+      // uploadScreen:[]
+      isAuthenticated:  false
+    };
   }
-  componentWillMount(){
-    var loginPage =[];
-    loginPage.push(<Loginscreen parentContext={this}/>);
+
+  userHasAuthenticated = authenticated => {
     this.setState({
-      loginPage:loginPage
-    })
+      isAuthenticated : authenticated
+    });
   }
+
+  // componentWillMount(){
+  //   var loginPage =[];
+  //   loginPage.push(<LoginScreen appContext={this} key={"login-screen"}/>);
+  //   this.setState({
+  //                 loginPage:loginPage
+  //                   })
+  // }
   render() {
+
+    const childProps = {
+      isAuthenticated: this.state.isAuthenticated,
+      userHasAuthenticated: this.userHasAuthenticated
+    };
     return (
       <div className="App">
-        {this.state.loginPage}
-        {this.state.uploadScreen}
+      <Link to="/">Home Page</Link>
+      <Link to="/login">Login</Link>
+      <Link to="/register">Register</Link>
+      <Link to="/game">Board</Link>
+      <Routes childProps= {childProps}/>     
       </div>
+   
     );
   }
 }
-const style = {
-  margin: 15,
-};
 
 export default App;

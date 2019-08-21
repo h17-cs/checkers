@@ -4,17 +4,22 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import React from 'react';
 import axios from 'axios'
-
-import index from './index'
+import Register from '../Register'
 //TODO: change to actual screen redirect after successful login
+
 class Login extends React.Component {
 constructor(props){
   super(props);
   this.state={
-  username:'',
-  password:''
+    username:'',
+    password:''
   }
  }
+
+ validateForm() {
+  return this.state.username.length > 0 && this.state.password.length > 0;
+}
+
 
  handleClick(event){
    //TODO: Change apiBaseURL to the actual URL
@@ -33,7 +38,7 @@ constructor(props){
 		if(response.status === 200){
 			console.log("Login successfull");
 			var uploadScreen=[];
-			uploadScreen.push(<index appContext={self.props.appContext}/>)
+			uploadScreen.push(<Register appContext={self.props.appContext}/>)
 			self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
 		}
 		else if(response.status === 204){
