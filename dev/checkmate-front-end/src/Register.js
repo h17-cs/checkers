@@ -16,22 +16,26 @@ class Register extends Component {
     this.state={
       first_name:'',
       last_name:'',
-      email:'',
+      username:'',
       password:''
     }
   }
 
   handleClick(event){
-    var apiBaseUrl = "https://postman-echo.com/post";
-    console.log("values",this.state.first_name,this.state.last_name,this.state.email,this.state.password);
+    //TODO: Change apiBaseURL to the actual URL
+    var apiBaseUrl = "http://httpbin.org/get";
+    console.log("values",this.state.first_name,this.state.last_name,this.state.username,this.state.password);
     //To be done:check for empty values before hitting submit
     var payload={
+      "message_type" : 3,
+      "body" : {
         "first_name": this.state.first_name,
         "last_name":this.state.last_name,
-        "email":this.state.email,
+        "username":this.state.username,
         "password":this.state.password
+      }
     }
-    axios.post(apiBaseUrl+'/register', payload)
+    axios.post(apiBaseUrl, payload)
    .then(function (response) {
      console.log(response);
      if(response.data.code === 200){
@@ -59,23 +63,12 @@ class Register extends Component {
           <AppBar
              title="Register"
            />
-           <TextField
-             hintText="Enter your First Name"
-             floatingLabelText="First Name"
-             onChange = {(event,newValue) => this.setState({first_name:newValue})}
-             />
            <br/>
            <TextField
-             hintText="Enter your Last Name"
-             floatingLabelText="Last Name"
-             onChange = {(event,newValue) => this.setState({last_name:newValue})}
-             />
-           <br/>
-           <TextField
-             hintText="Enter your Email"
-             type="email"
-             floatingLabelText="Email"
-             onChange = {(event,newValue) => this.setState({email:newValue})}
+             hintText="Enter your Username"
+             type="username"
+             floatingLabelText="Username"
+             onChange = {(event,newValue) => this.setState({username:newValue})}
              />
            <br/>
            <TextField

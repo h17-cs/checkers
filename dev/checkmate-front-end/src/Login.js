@@ -7,39 +7,44 @@ import axios from 'axios'
 
 import index from './index'
 //TODO: change to actual screen redirect after successful login
-
 class Login extends React.Component {
 constructor(props){
   super(props);
   this.state={
-  email:'',
+  username:'',
   password:''
   }
  }
+
  handleClick(event){
-	var apiBaseUrl = "http://localhost:3000/api/";
+   //TODO: Change apiBaseURL to the actual URL
+	var apiBaseUrl = "http://httpbin.org/post";
 	var self = this;
 	var payload={
-		"email":this.state.email,
-		"password":this.state.password
-	}
-	axios.post(apiBaseUrl+'login', payload)
+    "message_type" : 3,
+    "body" : {    
+      "username":this.state.username,
+      "password":this.state.password
+    }
+  }
+	axios.post(apiBaseUrl, payload)
 	.then(function (response) {
 		console.log(response);
-		if(response.data.code === 200){
+		if(response.status === 200){
 			console.log("Login successfull");
 			var uploadScreen=[];
 			uploadScreen.push(<index appContext={self.props.appContext}/>)
 			self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
 		}
-		else if(response.data.code === 204){
-			console.log("email password do not match");
-			alert("email password do not match")
-		}
-		else{
-			console.log("email does not exists");
-			alert("email does not exist");
-		}
+		else if(response.status === 204){
+			console.log("username password do not match");
+			alert("username password do not match")
+    }
+    //TODO: Uncomment when database is ready
+		// else{
+		// 	console.log("username does not exists");
+		// 	//alert("username does not exist");
+		// }
 	})
 	.catch(function (error) {
 		console.log(error);
@@ -55,9 +60,9 @@ render() {
              title="Login"
            />
            <TextField
-             hintText="Enter your Email"
-             floatingLabelText="Email"
-             onChange = {(event,newValue) => this.setState({email:newValue})}
+             hintText="Enter your Username"
+             floatingLabelText="Username"
+             onChange = {(event,newValue) => this.setState({username:newValue})}
              />
            <br/>
              <TextField
