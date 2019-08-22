@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './App.css';
 import { Navbar, Nav, NavItem} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { Link } from 'react-router-dom';
 
 
 
@@ -15,7 +14,7 @@ class App extends Component {
     this.state={
       // loginPage:[],
       // uploadScreen:[]
-      isAuthenticated:  false
+      isAuthenticated:  true
     };
   }
 
@@ -23,6 +22,10 @@ class App extends Component {
     this.setState({
       isAuthenticated : authenticated
     });
+  }
+
+  handleLogout = event => {
+    this.userHasAuthenticated(false);
   }
   // componentWillMount(){
   //   var loginPage =[];
@@ -43,25 +46,30 @@ class App extends Component {
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Nav pullLeft>
-            <LinkContainer to="/">
-            <NavItem>Home</NavItem>
-            </LinkContainer>
-            <LinkContainer to="/game">
-            <NavItem>Game</NavItem>
-            </LinkContainer>
+              <LinkContainer to="/">
+                <NavItem>Home</NavItem>
+              </LinkContainer>
+              <LinkContainer to="/game">
+                <NavItem>Game</NavItem>
+              </LinkContainer>
             </Nav>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
           <Nav pullRight>
-            <LinkContainer to="/register">
-            <NavItem >Register</NavItem>
-            </LinkContainer>
-            <LinkContainer to="/login">
-            <NavItem>Login</NavItem>
-            </LinkContainer>
+            {this.state.isAuthenticated ? 
+              <NavItem onClick={this.handleLogout}>Logout</NavItem> : 
+              <Fragment>
+                <LinkContainer to="/register">
+                <NavItem>Register</NavItem>
+                </LinkContainer>
+                <LinkContainer to="/login">
+                <NavItem>Login</NavItem>
+                </LinkContainer>
+              </Fragment>
+            }
           </Nav>
-        </Navbar.Collapse>
+          </Navbar.Collapse>
         </Navbar>
         <Routes childProps= {childProps}/>     
       </div>
