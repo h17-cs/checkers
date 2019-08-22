@@ -5,10 +5,14 @@
 
 from enum import Enum
 from DummyWrap import dummy
+from PortManager import PortManager
 import threading
 import time
 import zmq
+import socket as s
+from zmq.utils.monitor import recv_monitor_message
 from Message import Message, MessageType
+import config as cfg
 
 class MessageManager:
 
@@ -16,7 +20,7 @@ class MessageManager:
         self.__port = portbind;
         self.__context = zmq.Context();
         self.__socket = self.__context.socket(zmq.REP);
-        self.__socket.bind(self.__port);
+        self.__socket.bind("tcp://*:" + str(self.__port));
 
     def send(self, message):
         # Send a message to the socket
@@ -27,6 +31,25 @@ class MessageManager:
         msg = self.__socket.recv(copy=True)
         return Message.parse(msg);
 
+    def monitorSocket(self, monitor):
+        events = cfg.events
+        while(monitor.poll()):
+            event = recv_monitor_message(monitor)
+            event.update({'descriptor:': events[event['event']]})
+            if ("EVENT_ACCEPTED" in  events[event['event']]):
+                print("Player connected!")
+
+    def monitorSocket(self, monitor, timer):
+        events = cfg.events
+        timeout = time.time() + timer
+        connected_users = []
+        while(monitor.poll() and (time.time() < timeout)):
+            event = recv_monitor_message(monitor)
+            event.update({'descriptor:': events[event['event']]})
+            if ("EVENT_ACCEPTED" in  events[event['event']]):
+                print("Player connected!")
+                connected_users.append(event['value'])
+            print("Event: {}".format(event))
     @dummy
     def sendGameUpdate(self, *updates):
         # Send a Game Update Message to the socket

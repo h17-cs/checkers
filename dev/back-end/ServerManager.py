@@ -7,6 +7,8 @@ from DummyWrap import dummy
 from DatabaseManager import DatabaseManager
 from MessageManager import MessageManager
 from GameController import GameController
+from PortManager import PortManager
+import config
 
 class ServerManager:
     db_addr = "checkers.db"
@@ -14,10 +16,18 @@ class ServerManager:
     def __init__(self):
         self.__db = DatabaseManager(db_addr)
 
+        # Instantiate the port manager for all games + admin messages
+        self.__port_manager = PortManager(config.lower_bound, config.upper_bound)
+
+        # Instantiate the message manager exclusively for admin messages
+        self.__message_manager = MessageManager()
+        
     @dummy
     def addUser(self, uname, passwd):
         return True
         #return self.__db.addUser(uname,passwd)
+
+
 
     @dummy
     def deleteUser(self, uname, passwd):
@@ -51,3 +61,4 @@ class ServerManager:
     @dummy
     def serveHTTP(self, adress):
         return None
+sm = ServerManager()
