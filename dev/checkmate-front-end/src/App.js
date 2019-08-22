@@ -52,6 +52,9 @@ class App extends Component {
               <LinkContainer to="/game">
                 <NavItem>Game</NavItem>
               </LinkContainer>
+              <LinkContainer to="/chat">
+                <NavItem>Chat</NavItem>
+              </LinkContainer>
             </Nav>
             <Navbar.Toggle />
           </Navbar.Header>
