@@ -14,42 +14,43 @@ class Game extends Component {
                     playerOne: "Idan",
                     playerTwo: "Nick",
                     currentTurn: 0
-               },
-               gameState: {
-                   "1": (0 , 0),
-                   "2": (0 , 0),
-                   "3": (0 , 0),
-                   "4": (0 , 0),
-                   "5": (0 , 0),
-                   "6": (0 , 0),
-                   "7": (0 , 0),
-                   "8": (0 , 0),
-                   "9": (0 , 0),
-                   "10": (0 , 0),
-                   "11": (0 , 0),
-                   "12": (0 , 0),
-                   "13": (0 , 0),
-                   "14": (0 , 0),
-                   "15": (0 , 0),
-                   "16": (0 , 0),
-                   "17": (0 , 0),
-                   "18": (0 , 0),
-                   "19": (0 , 0),
-                   "20": (0 , 0),
-                   "21": (0 , 0),
-                   "22": (0 , 0),
-                   "23": (0 , 0),
-                   "24": (0 , 0),
-                   "25": (0 , 0),
-                   "26": (0 , 0),
-                   "27": (0 , 0),
-                   "28": (0 , 0),
-                   "29": (0 , 0),
-                   "30": (0 , 0),
-                   "31": (0 , 0),
-                   "32": (0 , 0),
                }
-           }
+           },
+           gameState: {
+            "zero": [0 , 0],
+            "one": [0 , 0],
+            "two": [0 , 0],
+            "three": [0 , 0],
+            "four": [0 , 0],
+            "five": [0 , 0],
+            "six": [0 , 0],
+            "seven": [0 , 0],
+            "eight": [0 , 0],
+            "nine": [0 , 0],
+            "ten": [0 , 0],
+            "eleven": [0 , 0],
+            "twelve": null,
+            "thirteen": null,
+            "fourteen":  null,
+            "fifteen":  null,
+            "sixteen":  null,
+            "seventeen":  null,
+            "eighteen":  null,
+            "nineteen":  null,
+            "twent": [1 , 0],
+            "twentOne": [1 , 0],
+            "twentTwo": [1 , 0],
+            "twentThree": [1 , 0],
+            "twentFour": [1 , 0],
+            "twentFive": [1 , 0],
+            "twentSix": [1 , 0],
+            "twentSeven": [1 , 0],
+            "twentEight": [1 , 0],
+            "twentNine": [1 , 0],
+            "thirt": [1, 0],
+            "thirtOne": [1 , 0],
+            "thirtTwo": [1 , 0],
+        }
        }
    }
    
@@ -58,7 +59,7 @@ class Game extends Component {
             <div className="topMargin">
                 <h1>{this.state.gameTimer}</h1>
                 <div className="holdingSpacer">
-                    <Board/>
+                    <Board gameState = {this.state.gameState}/>
                     <div>
                         <GameInfo gameInfo = {this.state.gameInfo}/>
                         <div className="formatButtons">

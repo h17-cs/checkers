@@ -6,13 +6,13 @@ import DarkPiece from './DarkPiece';
 class GameTrackBox extends Component {
 
     renderLightPlayer(){
-        if (this.props.gameTrackBox.currentTurn == 0){
+        if (this.props.gameTrackBox.currentTurn === 0){
             return <LightPiece/>
        }
     }
 
     renderDarkPlayer(){
-        if (this.props.gameTrackBox.currentTurn == 1){
+        if (this.props.gameTrackBox.currentTurn === 1){
             return <DarkPiece/>
        }
     }
