@@ -14,18 +14,18 @@ class BoardComponent extends Component {
             for (let j = 0; j< 8; j++){
                 if( i % 2 === 0){
                     if(j%2 === 0){
-                    cells.push(<td key = {'col_'.concat(i.toString(),'_row_',j.toString() ) }> {<LightSquare key = {'col_'.concat(i.toString(),'_row_',j.toString() ) } />} </td>);
+                    cells.push(<td key = { i.toString().concat('_', j.toString() ) } > {<LightSquare key = { i.toString().concat('_', j.toString() ) } />} </td>);
                     }
                     else{
-                    cells.push(<td key = {'col_'.concat(i.toString(),'_row_',j.toString() ) }> {<DarkSquare key = {'col_'.concat(i.toString(),'_row_',j.toString() ) }/>} </td>);
+                    cells.push(<td key = { i.toString().concat('_', j.toString() ) }> {<DarkSquare key = { i.toString().concat('_', j.toString() ) }/>} </td>);
                     }
                 }
                 else{
                     if(j%2 === 0){
-                        cells.push(<td key = {'col_'.concat(i.toString(),'_row_',j.toString() ) }> {<DarkSquare key = {'col_'.concat(i.toString(),'_row_',j.toString() ) }/>} </td>);
+                        cells.push(<td key = { i.toString().concat('_', j.toString() ) }> {<DarkSquare key = { i.toString().concat('_', j.toString() ) }/>} </td>);
                     }
                     else{
-                        cells.push(<td key = {'col_'.concat(i.toString(),'_row_',j.toString() ) }> {<LightSquare key = {'col_'.concat(i.toString(),'_row_',j.toString() ) }/>} </td>);
+                        cells.push(<td key = { i.toString().concat('_', j.toString() ) }> {<LightSquare key = { i.toString().concat('_', j.toString() ) }/>} </td>);
                     }
                 }
             }

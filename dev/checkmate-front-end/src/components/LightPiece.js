@@ -1,3 +1,5 @@
+import '../Game.css'
+
 import React, { Component } from 'react';
 
 class LightPiece extends Component {
