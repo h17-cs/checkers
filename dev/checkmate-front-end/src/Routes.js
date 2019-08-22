@@ -1,16 +1,16 @@
 import React from "react";
 import { Router, Route, Link, Switch } from 'react-router-dom';
-import Home from './Home'
-import Login from "./Login";
+import Home from './containers/Home'
+import Login from "./containers/Login";
 import Register from "./Register";
 import Game from "./components/Game";
-import DarkSquare from "./components/DarkSquare";
+import AppliedRoute from "./components/AppliedRoute";
 
 
-export default () =>
+export default ({childProps}) =>
   <Switch>
-    <Route path="/" exact component={Home} />
-    <Route path="/login" exact component={Login} />
-    <Route path="/register" exact component={Register} />
-    <Route path="/game" exact component={Game}/>
+    <AppliedRoute path="/" exact component={Home} props={childProps}/>
+    <Route path="/login" exact component={Login} props={childProps}/>
+    <Route path="/register" exact component={Register} props={childProps}/>
+    <Route path="/game" exact component={Game} props={childProps}/>
   </Switch>;
