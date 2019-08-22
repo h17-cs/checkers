@@ -1,7 +1,7 @@
 .darkSquare {
   height: 75px;
   width: 75px;
-  background-color: #5d9e70
+  background-color: #5d9e70;
 }
 
 .lightSquare {
@@ -9,6 +9,22 @@
     width: 75px;
     background-color: #dcf5ce
 }
+
+.darkPiece {
+    height: 50px;
+    width: 50px;
+    background-color: #ad3146;
+    border-radius: 50%;
+    margin:0 auto
+  }
+  
+  .lightPiece {
+      height: 50px;
+      width: 50px;
+      background-color: #eff3ed;
+      border-radius: 50%;
+      margin: auto ;
+  }
 
 .boardBackground {
     background-color: #d4cfae;
@@ -25,9 +41,9 @@
 }
 
 .gameInfo{
-    background-color:#8d9b86;  
+    background-color:#b4b4b4;  
     height: 600px;
-    width: 200px;
+    width: 250px;
     margin-left: 50px;
 }
 
@@ -38,5 +54,67 @@
 
 .holdingSpacer{
   display:inline-flex;
-  margin: auto
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.pieceNameSep{
+    display:inline-flex;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.nameSpacing{
+    margin-left: 20px;
+}
+
+.hrLine{
+    border-color: #000000;
+    width : 80%
+}
+
+.chatBox{
+    background-color:#979797;  
+    height: 350px;
+    width: 90%;
+    margin: auto;
+}
+
+.sendButton{
+    height: 25px;
+    width: 45px;
+    background-color: #5d9e70;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+    vertical-align: middle
+}
+
+.vertSpacer{
+    margin-top: 5%
+}
+
+.actionButton{
+    height: 35px;
+    width: 80px;
+    background-color: #4e9678;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+    vertical-align: middle
+}
+
+.formatButtons{
+    margin-top: 10px;
+    margin-left: 45px;
+    display: inline-block;
+}
+
+.topMargin{
+    margin-top: 50px;
+    background-color: #dcf5ce;
 }
