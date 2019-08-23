@@ -11,18 +11,23 @@ import time
 import zmq
 import socket as s
 import uuid
+import math,random
 import tornado
+import tornado.ioloop
+import tornado.web
+import tornado.websocket
 from zmq.utils.monitor import recv_monitor_message
 from Message import Message, MessageType
 import config as cfg
+import asyncio
 
-class WebsocketMessageManager():
+class WebsocketMessageManager:
     def __init__(self, portbind):
         self.__port = portbind;
         self.__context = zmq.Context();
         self.__socket = self.__context.socket(zmq.REP);
-        self.__socket.bind("tcp://*:" + str(self.__port));
-
+        #self.__socket.bind("tcp://*:" + str(self.__port));
+        self.__endpoint_url = ''.join(random.choice(cfg.dict) for i in range(cfg.endpoint_length))
     def send(self, message):
         # Send a message to the socket
         self.__socket.send(message.__str__())
@@ -32,45 +37,28 @@ class WebsocketMessageManager():
         msg = self.__socket.recv(copy=True)
         return Message.parse(msg);
 
-    def monitorSocket(self, monitor):
-        events = cfg.events
-        while(monitor.poll()):
-            event = recv_monitor_message(monitor)
-            event.update({'descriptor:': events[event['event']]})
-            if ("EVENT_ACCEPTED" in  events[event['event']]):
-                print("Player connected!")
+    def run(self):
+        print("Endpoint URL for WebsocketMessageHandler: /" + str(self.__endpoint_url))
+        epurl = "/" + self.__endpoint_url
+        websocket_endpoint = tornado.web.Application([(epurl, WebsocketMessageHandler),])
+        serv = tornado.httpserver.HTTPServer(websocket_endpoint)
+        print("PORT: " + str(self.__port))
+        serv.listen(self.__port)
 
-    def monitorSocket(self, monitor, timer):
-        events = cfg.events
-        timeout = time.time() + timer
-        connected_users = []
-        while(monitor.poll() and (time.time() < timeout)):
-            event = recv_monitor_message(monitor)
-            event.update({'descriptor:': events[event['event']]})
-            if ("EVENT_ACCEPTED" in  events[event['event']]):
-                print("Player connected!")
-                connected_users.append(event['value'])
-            print("Event: {}".format(event))
-    @dummy
-    def sendGameUpdate(self, *updates):
-        # Send a Game Update Message to the socket
-        pass
-
-    @dummy
-    def sendText(self, textbody):
-        # Send a Text Message to the socket
-        pass
-
-    @dummy
-    def sendGameAdministration(self, *credentials):
-        # Send a Game Administration Message to the socket
-        pass
-
-    @dummy
-    def sendAccountAdministration(self, *credentials):
-        # Send an Account Administration Message to the socket
-        pass
 class WebsocketMessageHandler(tornado.websocket.WebSocketHandler):
-    def __init__(self, application, request, **kwargs):
-        super(WSHandler, self).__init__(application, request, **kwargs)
-        self.client_id = str(uuid.uuid4())
+    def get(self):
+        print("Get got")
+    def open(self):
+        print("Connection identified")
+        # if (len(self.connected_players) < 2):
+        #     self.connected_players.append(self)
+        #     print("Player has connected")
+        #     self.write_message("Connected")
+    def on_message(self, message):
+        print ('message received:  %s' % message)
+        # Reverse Message and send it back
+        print ('sending back message: %s' % message[::-1])
+        self.write_message(message[::-1])
+    def on_close(self):
+        self.connected_players.pop()
+        print("Player disconnected")
