@@ -43,7 +43,7 @@ class GameController:
         self.__players = []
         self.__port = port
         self.__currentTurn = PlayerColor.Light;
-        self.__messenger = MessengeManager(socket);
+        self.__messenger = MessengeManager(port);
         self.__players = [Player(PlayerColor.Light, None, self),
                         Player(PlayerColor.Dark, None, self)]
         self.__timer = Timer(60.0, GameController.timeout, (self,));
@@ -79,7 +79,7 @@ class GameController:
 
     @dummy
     def movePiece(self, piece, location):
-        # move a piece 
+        # move a piece
         # --DUMMY--
         return True;
 

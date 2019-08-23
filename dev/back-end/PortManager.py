@@ -10,7 +10,7 @@ import random
 
 class PortManager:
 
-    def __init__(self, lowerbound, upperbound, logpath):
+    def __init__(self, lowerbound, upperbound):
         self.__portlock = threading.Lock()
         self.__closed = []
         self.__open = [i for i in range(lowerbound,upperbound+1)]
@@ -20,7 +20,7 @@ class PortManager:
     def getPort(self):
         # Acquire any free port, closing it from further use
         self.__portlock.acquire();
-        
+
         if len(self.__open) == 0:
             print("No ports available")
             port = -1
@@ -35,7 +35,7 @@ class PortManager:
     def freePort(self, port):
         # Close the given port, freeing it for further use
         self.__portlock.acquire();
-        
+
         try:
             p = self.__closed.index(port);
             self.__closed.pop(p)

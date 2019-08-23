@@ -16,3 +16,12 @@ for name in dir(zmq):
     if name.startswith('EVENT_'):
         val = getattr(zmq, name)
         events[val] = name
+
+# Visual version number because we lazy
+version_number = "0.0.1"
+
+# Group member names for ui
+names = "Charles, Nick, Idan, Brendan"
+
+# db path
+db_addr = "./testdb.csv"
