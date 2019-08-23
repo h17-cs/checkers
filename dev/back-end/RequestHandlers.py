@@ -15,3 +15,7 @@ class AddUserHandler(tornado.web.RequestHandler):
             return super(AddUserHandler, self).get_argument(arg, default)
     def post(self):
         print(self.get_argument('', None))
+
+class ContentHandler(tornado.web.RequestHandler):
+    def get(self):
+        print("get got")

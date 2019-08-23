@@ -14,7 +14,7 @@ import os,sys,time,threading
 import configparser
 from cursesmenu import *
 from cursesmenu.items import *
-from RequestHandlers import AddUserHandler
+from RequestHandlers import AddUserHandler, ContentHandler
 import tornado.ioloop
 import tornado.web
 
@@ -88,7 +88,13 @@ class ServerManager:
         return True
 
     def serveHTTP(self):
-        dblist = tornado.web.Application([(r"/", AddUserHandler),])
+
+        endpoints = [
+        (r"/addUser", AddUserHandler),
+        (r"/", ContentHandler),
+        ]
+
+        dblist = tornado.web.Application(endpoints, debug=cfg.debug)
         dblist.listen(8080)
         tornado.ioloop.IOLoop.current().start()
 

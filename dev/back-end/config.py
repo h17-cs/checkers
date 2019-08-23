@@ -25,3 +25,6 @@ names = "Charles, Nick, Idan, Brendan"
 
 # db path
 db_addr = "./testdb.csv"
+
+# tornado debug value
+debug = False
