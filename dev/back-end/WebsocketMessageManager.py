@@ -19,7 +19,6 @@ import tornado.websocket
 from zmq.utils.monitor import recv_monitor_message
 from Message import Message, MessageType
 import config as cfg
-import asyncio
 
 class WebsocketMessageManager:
     def __init__(self, portbind):
