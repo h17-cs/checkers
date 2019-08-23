@@ -1,7 +1,13 @@
 import tornado.web
+from tornado.gen import coroutine
+from react.render import render_component
+from DatabaseManager import DatabaseManager, DatabaseType
+import config as cfg
+import os,sys,time,threading
 
 class AddUserHandler(tornado.web.RequestHandler):
     def prepare(self):
+        dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
         super(AddUserHandler, self).prepare()
         self.json_data = None
         try:
@@ -9,8 +15,12 @@ class AddUserHandler(tornado.web.RequestHandler):
         except ValueError:
             pass
     def get_argument(self, arg, default=None):
-        if self.request.method in ['POST', 'PUT'] and self.json_data:
-            return self.json_data['body']['username']
+        if self.request.method in ['POST', 'PUT'] and self.json_data and (self.json_data["message_type"] == 3):
+            print("database post req recieved")
+            dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
+            userToAdd = self.json_data['body']['username']
+            passwdToAdd = self.json_data['body']['password']
+            return dm.addUser(userToAdd, passwdToAdd)
         else:
             return super(AddUserHandler, self).get_argument(arg, default)
     def post(self):
@@ -18,4 +28,5 @@ class AddUserHandler(tornado.web.RequestHandler):
 
 class ContentHandler(tornado.web.RequestHandler):
     def get(self):
-        print("get got")
+        rendered = render_component(os.path.join(os.getcwd(), 'local_files', 'checkmate-front-end', 'src', 'Register.js'),{},to_static_markup=False,)
+        self.render('/home/salieri/Desktop/checkers/dev/back-end/local_files/checkmate-front-end/public/index.html', rendered=rendered)

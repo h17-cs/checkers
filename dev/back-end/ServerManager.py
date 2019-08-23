@@ -28,8 +28,6 @@ class ServerManager:
         # Instantiate the message manager exclusively for admin messages
         self.__message_manager = MessageManager(5506)
 
-
-
     def runGame():
         gc = GameController()
     @dummy
@@ -104,8 +102,6 @@ if __name__ == '__main__':
 
      # Parse command line arguments
      parser = argparse.ArgumentParser()
-
-     # Required arguments
 
      parser.add_argument(
         "-q", "--headless", help="Start the ServerManager without a CLI",
