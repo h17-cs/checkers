@@ -30,6 +30,8 @@ class ServerManager:
 
     def runGame():
         gc = GameController()
+        wmm = WebsocketMessageManager()
+        wmm.run()
     @dummy
     def addUser(self, uname, passwd):
         return True
@@ -86,33 +88,38 @@ class ServerManager:
         return True
 
     def serveHTTP(self):
-
         endpoints = [
         (r"/addUser", AddUserHandler),
         (r"/", ContentHandler),
         ]
-
         dblist = tornado.web.Application(endpoints, debug=cfg.debug)
         dblist.listen(8080)
         tornado.ioloop.IOLoop.current().start()
 
 if __name__ == '__main__':
-     current_path = os.path.abspath(os.path.dirname(sys.argv[0]))
-     config = configparser.ConfigParser()
+    current_path = os.path.abspath(os.path.dirname(sys.argv[0]))
+    config = configparser.ConfigParser()
 
-     # Parse command line arguments
-     parser = argparse.ArgumentParser()
+    # Parse command line arguments
+    parser = argparse.ArgumentParser()
 
-     parser.add_argument(
+    parser.add_argument(
         "-q", "--headless", help="Start the ServerManager without a CLI",
-     default=False, action="store_true"
+        default=False, action="store_true"
      )
-     args = parser.parse_args()
-     if (args.headless):
-         sm = ServerManager()
-         sm.run(False)
-         sm.serveHTTP()
-     else:
-         sm = ServerManager()
-         t = threading.Thread(target=sm.serveHTTP, args=())
-         sm.run(True)
+    args = parser.parse_args()
+    if (args.headless):
+        sm = ServerManager()
+        sm.run(False)
+        t = threading.Thread(target=sm.serveHTTP, args=())
+        t.start()
+        game1 = GameController(5507)
+        t1 = threading.Thread(target=game1.run, args=())
+        t1.start()
+        # game2 = GameController(5508)
+        # t2 = threading.Thread(target=game2.run, args=())f
+        # t2.start()
+    else:
+        sm = ServerManager()
+        t = threading.Thread(target=sm.serveHTTP, args=())
+        sm.run(True)

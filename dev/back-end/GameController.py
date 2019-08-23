@@ -33,19 +33,19 @@ import threading
 from enum import Enum
 from Timer import Timer
 from Player import Player, PlayerColor
-
+from MessageManager import MessageManager
 from DummyWrap import dummy
-
+from WebsocketMessageManager import WebsocketMessageManager
 class GameController:
 
     def __init__(self, port):
         self.__board = []
         self.__players = []
         self.__port = port
-        self.__currentTurn = PlayerColor.Light;
-        self.__messenger = MessengeManager(port);
-        self.__players = [Player(PlayerColor.Light, None, self),
-                        Player(PlayerColor.Dark, None, self)]
+        self.__currentTurn = PlayerColor.Light
+        self.__messenger = WebsocketMessageManager(self.__port)
+        self.__players = [Player(PlayerColor.Light, None),
+                        Player(PlayerColor.Dark, None)]
         self.__timer = Timer(60.0, GameController.timeout, (self,));
         self.__controllock = threading.Lock()
 
@@ -120,6 +120,6 @@ class GameController:
         self.__controllock.release()
         pass
 
-    @dummy
     def run(self):
-        pass
+        print("Running messenger")
+        self.__messenger.run()
