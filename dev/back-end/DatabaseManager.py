@@ -22,12 +22,12 @@ class DatabaseManager:
         self.__dbtype = DatabaseType.CSV
         self.__dbpath = dbpath
         self.__datalock = threading.Lock()
-        
+
         self.__db = CSVDatabase(dbpath=dbpath)
 
     def addUser(self, uname, passwd):
         # Adds a user to the database
-        # If an empty record exists with the same key (uname), update and fill that record 
+        # If an empty record exists with the same key (uname), update and fill that record
         # If no record exists with the same key (uname), make and populate a new record
         #   In both of the above, return True
         # If a filled record exists with the same key, return False

@@ -10,12 +10,13 @@ import threading
 import time
 import zmq
 import socket as s
+import uuid
+import tornado
 from zmq.utils.monitor import recv_monitor_message
 from Message import Message, MessageType
 import config as cfg
 
-class MessageManager:
-
+class WebsocketMessageManager():
     def __init__(self, portbind):
         self.__port = portbind;
         self.__context = zmq.Context();
@@ -69,3 +70,7 @@ class MessageManager:
     def sendAccountAdministration(self, *credentials):
         # Send an Account Administration Message to the socket
         pass
+class WebsocketMessageHandler(tornado.websocket.WebSocketHandler):
+    def __init__(self, application, request, **kwargs):
+        super(WSHandler, self).__init__(application, request, **kwargs)
+        self.client_id = str(uuid.uuid4())
