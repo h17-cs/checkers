@@ -19,6 +19,7 @@ import tornado.websocket
 from zmq.utils.monitor import recv_monitor_message
 from Message import Message, MessageType
 import config as cfg
+import asyncio
 
 class WebsocketMessageManager:
     def __init__(self, portbind):
@@ -37,6 +38,8 @@ class WebsocketMessageManager:
         return Message.parse(msg);
 
     def run(self):
+        aio_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(aio_loop)
         print("Endpoint URL for WebsocketMessageHandler: /" + str(self.__endpoint_url))
         epurl = "/" + self.__endpoint_url
         websocket_endpoint = tornado.web.Application([(epurl, WebsocketMessageHandler),])
