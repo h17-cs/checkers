@@ -16,7 +16,7 @@ CRLF = 0;
 if os.name == "nt":
     #Windows
     CRLF = 1
-elif on.name == "posix":
+elif os.name == "posix":
     #Linux
     pass
 
@@ -53,7 +53,7 @@ class CSVDatabase:
 
     def add(self, key, **fields):
         # Adds a record to the database
-        # If an empty record exists with the same key (uname), update and fill that record 
+        # If an empty record exists with the same key (uname), update and fill that record
         # If no record exists with the same key (uname), make and populate a new record
         #   In both of the above, return True
         # If a filled record exists with the same key, return False

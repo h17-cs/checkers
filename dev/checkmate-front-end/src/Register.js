@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
+import "./containers/Login.css"
 
 import Login from './containers/Login'
 
@@ -14,8 +14,6 @@ class Register extends Component {
   constructor(props){
     super(props);
     this.state={
-      first_name:'',
-      last_name:'',
       username:'',
       password:''
     }
@@ -23,14 +21,12 @@ class Register extends Component {
 
   handleClick(event){
     //TODO: Change apiBaseURL to the actual URL
-    var apiBaseUrl = "http://httpbin.org/post";
-    console.log("values",this.state.first_name,this.state.last_name,this.state.username,this.state.password);
+    var apiBaseUrl = "http://68.82.219.27:8080/addUser";
+    console.log("values",this.state.username,this.state.password);
     //To be done:check for empty values before hitting submit
     var payload={
       "message_type" : 3,
       "body" : {
-        "first_name": this.state.first_name,
-        "last_name":this.state.last_name,
         "username":this.state.username,
         "password":this.state.password
       }
@@ -57,30 +53,31 @@ class Register extends Component {
 
   render() {
     return (
-      <div>
-        <MuiThemeProvider>
+      <div class="wrapper fadeInDown">
+        <div id="formContent">
           <div>
-          <AppBar
-             title="Register"
-           />
-           <br/>
-           <TextField
-             hintText="Enter your Username"
-             type="username"
-             floatingLabelText="Username"
-             onChange = {(event,newValue) => this.setState({username:newValue})}
-             />
-           <br/>
-           <TextField
-             type = "password"
-             hintText="Enter your Password"
-             floatingLabelText="Password"
-             onChange = {(event,newValue) => this.setState({password:newValue})}
-             />
-           <br/>
-           <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+              <h3>Register</h3>
           </div>
-         </MuiThemeProvider>
+          <MuiThemeProvider>
+            <div>
+            <TextField
+              hintText="Enter your Username"
+              type="username"
+              floatingLabelText="Username"
+              onChange = {(event,newValue) => this.setState({username:newValue})}
+              />
+            <br/>
+              <TextField
+                type = "password"
+                hintText="Enter your Password"
+                floatingLabelText="Password"
+                onChange = {(event,newValue) => this.setState({password:newValue})}
+              />
+              <br/>
+              <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+            </div>
+          </MuiThemeProvider>
+        </div>
       </div>
     );
   }
