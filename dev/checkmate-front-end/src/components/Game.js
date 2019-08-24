@@ -7,62 +7,152 @@ class Game extends Component {
    constructor(props){
        super(props);
 
+    this.setMoveOrder = this.setMoveOrder.bind(this)
+    this.forfeit = this.forfeit.bind(this)
+    this.timer = this.timer.bind(this)
+    //this.componentDidMount = this.componentDidMount(this)
        this.state = {
-           gameTimer:"2:00",
+           timestamp:1566344113915,
+           clock_expire:1566344113915,
+           floatTimer: 60,
            gameInfo:{
-               gameTrackBox: {
-                    playerOne: "Idan",
-                    playerTwo: "Nick",
-                    currentTurn: 0
-               },
-               gameState: {
-                   "1": (0 , 0),
-                   "2": (0 , 0),
-                   "3": (0 , 0),
-                   "4": (0 , 0),
-                   "5": (0 , 0),
-                   "6": (0 , 0),
-                   "7": (0 , 0),
-                   "8": (0 , 0),
-                   "9": (0 , 0),
-                   "10": (0 , 0),
-                   "11": (0 , 0),
-                   "12": (0 , 0),
-                   "13": (0 , 0),
-                   "14": (0 , 0),
-                   "15": (0 , 0),
-                   "16": (0 , 0),
-                   "17": (0 , 0),
-                   "18": (0 , 0),
-                   "19": (0 , 0),
-                   "20": (0 , 0),
-                   "21": (0 , 0),
-                   "22": (0 , 0),
-                   "23": (0 , 0),
-                   "24": (0 , 0),
-                   "25": (0 , 0),
-                   "26": (0 , 0),
-                   "27": (0 , 0),
-                   "28": (0 , 0),
-                   "29": (0 , 0),
-                   "30": (0 , 0),
-                   "31": (0 , 0),
-                   "32": (0 , 0),
-               }
-           }
+                playerOne: "Idan",
+                playerTwo: "Nick",
+            },
+           screenOwner: 0,
+           playerTurn: 0,
+           valid_moves: new Array(),
+           moveOrder: new Array(),
+           isGameOver:0,
+           didForfeit:0,
+           timeExpire:0,
+           possible_moves: {
+            "zero": null,
+            "one": null,
+            "two": null,
+            "three": null,
+            "four": null,
+            "five": null,
+            "six": null,
+            "seven": null,
+            "eight": [12, 13],
+            "nine": [13,14],
+            "ten": [14, 15],
+            "eleven": [15],
+            "twelve": null,
+            "thirteen": null,
+            "fourteen":  null,
+            "fifteen":  null,
+            "sixteen":  null,
+            "seventeen":  null,
+            "eighteen":  null,
+            "nineteen":  null,
+            "twent": [16],
+            "twentOne": [16, 17],
+            "twentTwo": [17, 18],
+            "twentThree": [18, 19],
+            "twentFour": null,
+            "twentFive": null,
+            "twentSix": null,
+            "twentSeven": null,
+            "twentEight": null,
+            "twentNine": null,
+            "thirt": null,
+            "thirtOne": null,
+            "thirtTwo": null,
+           },
+           gameState: {
+            "zero": [0 , 0],
+            "one": [0 , 0],
+            "two": [0 , 0],
+            "three": [0 , 0],
+            "four": [0 , 0],
+            "five": [0 , 0],
+            "six": [0 , 0],
+            "seven": [0 , 0],
+            "eight": [0 , 0],
+            "nine": [0 , 0],
+            "ten": [0 , 0],
+            "eleven": [0 , 0],
+            "twelve": null,
+            "thirteen": null,
+            "fourteen":  null,
+            "fifteen":  null,
+            "sixteen":  null,
+            "seventeen":  null,
+            "eighteen":  null,
+            "nineteen":  null,
+            "twent": [1 , 0],
+            "twentOne": [1 , 0],
+            "twentTwo": [1 , 0],
+            "twentThree": [1 , 0],
+            "twentFour": [1 , 0],
+            "twentFive": [1 , 0],
+            "twentSix": [1 , 0],
+            "twentSeven": [1 , 0],
+            "twentEight": [1 , 0],
+            "twentNine": [1 , 0],
+            "thirt": [1, 0],
+            "thirtOne": [1 , 0],
+            "thirtTwo": [1 , 0],
+        }
        }
    }
+
+   componentDidMount(){
+       this.interval = setInterval(() => this.timer(), 1000)
+   }
+
+   componentWillMount(){
+       clearInterval(this.interval);
+   }
    
+   timer(){
+        this.setState({floatTimer: (this.state.floatTimer - 1)})
+        if(this.state.floatTimer === 0){
+            this.setState({timeExpire: 1})
+        }
+   }
+   setMoveOrder( newData ){
+       this.setState({moveOrder: newData[0],
+            valid_moves: newData[1]
+        })
+   }
+
+   forfeit(){
+       this.setState({isGameOver: 1})
+   }
+
+   formatGameTime(){
+       var totalSecs= this.state.floatTimer
+       if(this.state.floatTimer > 0) {
+            var minutes = Math.floor( totalSecs / 60)
+            var seconds = totalSecs - (minutes * 60)
+            var strSeconds;
+            if(seconds < 10){
+                strSeconds = "0"+ seconds.toString()
+            }
+            else {
+                 strSeconds = seconds.toString()
+             }
+            return minutes.toString().concat(":", strSeconds)
+        }
+        else{
+            return "0:00"
+        }
+
+   }
+
     render() {
         return(
             <div className="topMargin">
-                <h1>{this.state.gameTimer}</h1>
+                <h1>{this.formatGameTime()}</h1>
                 <div className="holdingSpacer">
-                    <Board/>
+                    <Board gameState = {[this.state.gameState, this.state.moveOrder, this.state.possible_moves, this.state.valid_moves, this.state.screenOwner]}  setMoveOrder = {this.setMoveOrder}/>
                     <div>
-                        <GameInfo gameInfo = {this.state.gameInfo}/>
+                        <GameInfo gameInfo = {[this.state.gameInfo, this.state.playerTurn]}/>
                         <div className="formatButtons">
-                            <input type ="button" value= "Forfeit" className="actionButton"/>
+                            <input type ="button" value= "Forfeit" className="actionButton" onClick={this.forfeit}/>
                             <input type ="button" value= "Save Game" className="actionButton"/>
                             <input type ="button" value= "Main Menu" className="actionButton"/>
                             
