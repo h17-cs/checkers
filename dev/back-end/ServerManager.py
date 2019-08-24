@@ -12,6 +12,7 @@ import config as cfg
 import argparse
 import os,sys,time,threading
 import configparser
+import asyncio
 from cursesmenu import *
 from cursesmenu.items import *
 from RequestHandlers import AddUserHandler, ContentHandler
@@ -88,10 +89,9 @@ class ServerManager:
         return True
 
     def serveHTTP(self):
-        endpoints = [
-        (r"/addUser", AddUserHandler),
-        (r"/", ContentHandler),
-        ]
+        aio_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(aio_loop)
+        endpoints = [ (r"/addUser", AddUserHandler), (r"/", ContentHandler),]
         dblist = tornado.web.Application(endpoints, debug=cfg.debug)
         dblist.listen(8080)
         tornado.ioloop.IOLoop.current().start()
