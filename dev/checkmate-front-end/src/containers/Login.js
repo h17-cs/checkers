@@ -1,10 +1,10 @@
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import "./Login.css"
+import "../App"
 import React from 'react';
 import axios from 'axios'
-import Register from '../Register'
 //TODO: change to actual screen redirect after successful login
 
 class Login extends React.Component {
@@ -20,11 +20,16 @@ constructor(props){
   return this.state.username.length > 0 && this.state.password.length > 0;
 }
 
+userHasAuthenticated() {
+  this.props.userHasAuthenticated(true);
+  console.log("sup")
+}
+
 
  handleClick(event){
+   var self = this;
    //TODO: Change apiBaseURL to the actual URL
 	var apiBaseUrl = "http://httpbin.org/post";
-	var self = this;
 	var payload={
     "message_type" : 3,
     "body" : {    
@@ -37,9 +42,11 @@ constructor(props){
 		console.log(response);
 		if(response.status === 200){
 			console.log("Login successfull");
-			var uploadScreen=[];
-			uploadScreen.push(<Register appContext={self.props.appContext}/>)
-			self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
+			// var uploadScreen=[];
+			// uploadScreen.push(<Register appContext={self.props.appContext}/>)
+      // self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
+      self.userHasAuthenticated();
+      self.props.history.push("/");
 		}
 		else if(response.status === 204){
 			console.log("username password do not match");
@@ -57,32 +64,35 @@ constructor(props){
 }
 
 render() {
-    return (
-      <div>
+  return (
+    <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <div>
+            <h3>Login</h3>
+        </div>
         <MuiThemeProvider>
           <div>
-          {/* <AppBar
-             title="Login"
-           /> */}
-           <TextField
-             hintText="Enter your Username"
-             floatingLabelText="Username"
-             onChange = {(event,newValue) => this.setState({username:newValue})}
-             />
-           <br/>
-             <TextField
-               type="password"
-               hintText="Enter your Password"
-               floatingLabelText="Password"
-               onChange = {(event,newValue) => this.setState({password:newValue})}
-               />
-             <br/>
-             <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
-         </div>
-         </MuiThemeProvider>
+          <TextField
+            hintText="Enter your Username"
+            type="username"
+            floatingLabelText="Username"
+            onChange = {(event,newValue) => this.setState({username:newValue})}
+            />
+          <br/>
+            <TextField
+              type = "password"
+              hintText="Enter your Password"
+              floatingLabelText="Password"
+              onChange = {(event,newValue) => this.setState({password:newValue})}
+            />
+            <br/>
+            <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
+          </div>
+        </MuiThemeProvider>
       </div>
-    );
-  }
+    </div>
+  );
+}
 }
 const style = {
  margin: 15,

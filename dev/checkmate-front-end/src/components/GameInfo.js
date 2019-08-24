@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import GameTrackBox from './GameTrackBox';
 // import ChatBox from './ChatBox'
 import Chat from './Chat/Chat'
+import BoardComponent from './BoardComponent.css'
 
 
 

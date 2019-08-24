@@ -3,8 +3,6 @@ import './App.css';
 import { Navbar, Nav, NavItem} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
-
-
 import Routes from "./Routes";
 
 
@@ -14,7 +12,7 @@ class App extends Component {
     this.state={
       // loginPage:[],
       // uploadScreen:[]
-      isAuthenticated:  true
+      isAuthenticated:  false
     };
   }
 
@@ -67,7 +65,7 @@ class App extends Component {
                 <NavItem>Register</NavItem>
                 </LinkContainer>
                 <LinkContainer to="/login">
-                <NavItem>Login</NavItem>
+                <NavItem Component={this.userHasAuthenticated}>Login</NavItem>
                 </LinkContainer>
               </Fragment>
             }

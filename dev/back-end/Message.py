@@ -4,20 +4,41 @@
 # Edited: 08/15 (by Charles)
 
 from DummyWrap import dummy
-from enum import Enum
+from enum import IntEnum
+import json
 
-class MessageType(Enum):
+class MessageType(IntEnum):
     Text = 0
     GameUpdate = 1
     GameAdministration = 2
     AccountAdministration = 3
+    GameInit = 4
 
 class Message:
-    @dummy
-    def __init__(self, messageType)
-        self.__messageType = None
-        self.__messageBody = None
+    def __init__(self, messageType):
+        self.__messageType = messageType
+        self.__messageBody = {}
 
-    @dummy
-    def resolve(self):
-        return ""
+    def __str__(self):
+        # Resolve the message to a JSON string
+        return json.dumps(
+            {
+                'message_type' : self.__messageType,
+                'message_body' : self.__messageBody
+            } );
+
+    def addField(self, key, value):
+        # Add a (key, value) pair to the message body
+        self.__messageBody[key] = value;
+
+    def parse(jstring):
+        # STATIC: Generate a message from a JSON string
+        obj = json.loads(jstring)
+        mtype = obj['message_type']
+        mbody = obj['message_body']
+        
+        msg = Message(mtype)
+        for key in mbody:
+            msg.addField(key, mbody[key])
+
+        return msg
