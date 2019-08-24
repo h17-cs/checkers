@@ -3,12 +3,14 @@ import zmq
 import threading
 import time
 
+# The administrative port
+admin = 2048
 
 # The lower bound of the port range to use.
-lower_bound = 5506
+lower_bound = 2049
 
 # The upper bound of the port range to use.
-upper_bound = 5700
+upper_bound = 3072
 
 # ZMQ Event types, in case we want to change
 events = {}

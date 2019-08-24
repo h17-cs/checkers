@@ -27,7 +27,7 @@ class ServerManager:
         self.__port_manager = PortManager(cfg.lower_bound, cfg.upper_bound)
 
         # Instantiate the message manager exclusively for admin messages
-        self.__message_manager = MessageManager(5506)
+        self.__message_manager = MessageManager(cfg.admin)
 
     def runGame():
         gc = GameController()
