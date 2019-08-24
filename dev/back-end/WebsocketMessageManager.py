@@ -53,7 +53,7 @@ class WebsocketMessageManager:
         aio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(aio_loop)
         print("Endpoint URL for WebsocketMessageHandler: /" + str(self.__endpoint_url))
-        epurl = "/" + self.__endpoint_url
+        epurl = "/game/" + self.__endpoint_url + "/(.*)"
         websocket_endpoint = tornado.web.Application([(epurl, WebsocketMessageHandler),])
         serv = tornado.httpserver.HTTPServer(websocket_endpoint)
         print("PORT: " + str(self.__port))
