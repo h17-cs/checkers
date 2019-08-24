@@ -27,32 +27,29 @@ class ServerManager:
         self.__port_manager = PortManager(cfg.lower_bound, cfg.upper_bound)
 
         # Instantiate the message manager exclusively for admin messages
-        self.__message_manager = MessageManager(5506)
+        self.__message_manager = MessageManager(cfg.admin)
 
     def runGame():
         gc = GameController()
         wmm = WebsocketMessageManager()
         wmm.run()
+    
     @dummy
     def addUser(self, uname, passwd):
-        return True
-        #return self.__db.addUser(uname,passwd)
+        return self.__db.addUser(uname,passwd)
 
     @dummy
     def deleteUser(self, uname, passwd):
-        return True
+        return self.__db.deleteUser(uname,passwd)
 
     @dummy
-    def openPublicGame(self, user1, user2):
+    def openPublicGame(self, user1=None, user2=None):
         game = GameController()
         return True
 
     @dummy
-    def openPublicGame(self):
-        return True
-
-    @dummy
-    def openPrivateGame(self, user1):
+    def openPrivateGame(self, user1=None, user2=None):
+        game = GameController()
         return True
 
     @dummy

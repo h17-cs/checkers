@@ -41,6 +41,17 @@ class GamePiece:
         # Returns the piece type
         return self.__type
 
+    def promote(self):
+        # Promote a piece from Basic to King
+        if self.__type == PieceType.King:
+            pass
+        else:
+            self.__type = PieceType.King
+
+    def setLocation(self, newloc):
+        # Returns the piece location
+        self.__location = newloc
+
     def getLocation(self):
         # Returns the piece location
         return self.__location
