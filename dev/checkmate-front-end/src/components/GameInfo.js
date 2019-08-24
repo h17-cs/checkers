@@ -10,7 +10,7 @@ class GameInfo extends Component {
     render() {
         return(
             <div className = "gameInfo">
-                <GameTrackBox gameTrackBox = {this.props.gameInfo.gameTrackBox}/>
+                <GameTrackBox gameTrackBox = {this.props.gameInfo}/>
                 <hr className="hrLine"/>
                 <Chat/>
                

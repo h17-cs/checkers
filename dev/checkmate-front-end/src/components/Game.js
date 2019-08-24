@@ -7,14 +7,54 @@ class Game extends Component {
    constructor(props){
        super(props);
 
+    this.setMoveOrder = this.setMoveOrder.bind(this)
+
        this.state = {
+           timestamp:1566344113915,
+           clock_expire:1566344113915,
            gameTimer:"2:00",
            gameInfo:{
-               gameTrackBox: {
-                    playerOne: "Idan",
-                    playerTwo: "Nick",
-                    currentTurn: 0
-               }
+                playerOne: "Idan",
+                playerTwo: "Nick",
+            },
+           screenOwner: 0,
+           playerTurn: 0,
+           valid_moves: new Array(),
+           moveOrder: new Array(),
+           possible_moves: {
+            "zero": null,
+            "one": null,
+            "two": null,
+            "three": null,
+            "four": null,
+            "five": null,
+            "six": null,
+            "seven": null,
+            "eight": [12, 13],
+            "nine": [13,14],
+            "ten": [14, 15],
+            "eleven": [15],
+            "twelve": null,
+            "thirteen": null,
+            "fourteen":  null,
+            "fifteen":  null,
+            "sixteen":  null,
+            "seventeen":  null,
+            "eighteen":  null,
+            "nineteen":  null,
+            "twent": [16],
+            "twentOne": [16, 17],
+            "twentTwo": [17, 18],
+            "twentThree": [18, 19],
+            "twentFour": null,
+            "twentFive": null,
+            "twentSix": null,
+            "twentSeven": null,
+            "twentEight": null,
+            "twentNine": null,
+            "thirt": null,
+            "thirtOne": null,
+            "thirtTwo": null,
            },
            gameState: {
             "zero": [0 , 0],
@@ -53,15 +93,31 @@ class Game extends Component {
         }
        }
    }
+
+//    gameTimer:"2:00",
+//            gameInfo:{
+//                 playerOne: "Idan",
+//                 playerTwo: "Nick",
+//             },
+//            playerTurn: 0,
+//            moveOrder: [],
+//            gameState: {
    
+   setMoveOrder( newData ){
+       this.setState({moveOrder: newData[0],
+            valid_moves: newData[1]
+        })
+       
+   }
+
     render() {
         return(
             <div className="topMargin">
                 <h1>{this.state.gameTimer}</h1>
                 <div className="holdingSpacer">
-                    <Board gameState = {this.state.gameState}/>
+                    <Board gameState = {[this.state.gameState, this.state.moveOrder, this.state.possible_moves, this.state.valid_moves, this.state.screenOwner]}  setMoveOrder = {this.setMoveOrder}/>
                     <div>
-                        <GameInfo gameInfo = {this.state.gameInfo}/>
+                        <GameInfo gameInfo = {[this.state.gameInfo, this.state.playerTurn]}/>
                         <div className="formatButtons">
                             <input type ="button" value= "Forfeit" className="actionButton"/>
                             <input type ="button" value= "Save Game" className="actionButton"/>

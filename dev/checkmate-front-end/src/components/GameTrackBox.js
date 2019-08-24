@@ -6,13 +6,13 @@ import DarkPiece from './DarkPiece';
 class GameTrackBox extends Component {
 
     renderLightPlayer(){
-        if (this.props.gameTrackBox.currentTurn === 0){
+        if (this.props.gameTrackBox[1] === 0){
             return <LightPiece/>
        }
     }
 
     renderDarkPlayer(){
-        if (this.props.gameTrackBox.currentTurn === 1){
+        if (this.props.gameTrackBox[1] === 1){
             return <DarkPiece/>
        }
     }
@@ -23,13 +23,13 @@ class GameTrackBox extends Component {
             <div>
                 <div className = "pieceNameSep">
                     {this.renderLightPlayer()}
-                    <h1 className = "nameSpacing"> {this.props.gameTrackBox.playerOne} </h1>
+                    <h1 className = "nameSpacing"> {this.props.gameTrackBox[0].playerOne} </h1>
                 </div>
             </div>
             <div>
                 <div className = "pieceNameSep">
                     {this.renderDarkPlayer()}
-                    <h1 className = "nameSpacing"> {this.props.gameTrackBox.playerTwo} </h1>
+                    <h1 className = "nameSpacing"> {this.props.gameTrackBox[0].playerTwo} </h1>
                 </div>
             </div>
             </div>
