@@ -39,17 +39,7 @@ class MessageManager:
             if ("EVENT_ACCEPTED" in  events[event['event']]):
                 print("Player connected!")
 
-    def monitorSocket(self, monitor, timer):
-        events = cfg.events
-        timeout = time.time() + timer
-        connected_users = []
-        while(monitor.poll() and (time.time() < timeout)):
-            event = recv_monitor_message(monitor)
-            event.update({'descriptor:': events[event['event']]})
-            if ("EVENT_ACCEPTED" in  events[event['event']]):
-                print("Player connected!")
-                connected_users.append(event['value'])
-            print("Event: {}".format(event))
+
     @dummy
     def sendGameUpdate(self, *updates):
         # Send a Game Update Message to the socket

@@ -33,7 +33,7 @@ class ServerManager:
         gc = GameController()
         wmm = WebsocketMessageManager()
         wmm.run()
-    
+
     @dummy
     def addUser(self, uname, passwd):
         return self.__db.addUser(uname,passwd)
@@ -90,7 +90,7 @@ class ServerManager:
         asyncio.set_event_loop(aio_loop)
         endpoints = [ (r"/addUser", AddUserHandler), (r"/", ContentHandler),]
         dblist = tornado.web.Application(endpoints, debug=cfg.debug)
-        dblist.listen(8080)
+        dblist.listen(cfg.web_test)
         tornado.ioloop.IOLoop.current().start()
 
 if __name__ == '__main__':
@@ -106,6 +106,9 @@ if __name__ == '__main__':
      )
     args = parser.parse_args()
     if (args.headless):
+
+        # NOTE: All for testing below.
+
         sm = ServerManager()
         sm.run(False)
         t = threading.Thread(target=sm.serveHTTP, args=())

@@ -32,6 +32,11 @@ db_addr = "./testdb.csv"
 debug = False
 
 # Length of endpoint str
-endpoint_length=5
+endpoint_length = 5
 
+# Dictionary used for endpoint gen
 dict = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
+# Ports for web server configuration.
+web_test = 8080
+web_prod = 80

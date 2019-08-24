@@ -37,6 +37,18 @@ class WebsocketMessageManager:
         msg = self.__socket.recv(copy=True)
         return Message.parse(msg);
 
+    # DEPRICIATED: Used to monitor a socket for connections
+    def monitorSocket(self, monitor, timer):
+        events = cfg.events
+        timeout = time.time() + timer
+        connected_users = []
+        while(monitor.poll() and (time.time() < timeout)):
+            event = recv_monitor_message(monitor)
+            event.update({'descriptor:': events[event['event']]})
+            if ("EVENT_ACCEPTED" in  events[event['event']]):
+                print("Player connected!")
+                connected_users.append(event['value'])
+            print("Event: {}".format(event))
     def run(self):
         aio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(aio_loop)
