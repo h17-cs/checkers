@@ -2,6 +2,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import "./Login.css"
+import "../App"
 import React from 'react';
 import axios from 'axios'
 //TODO: change to actual screen redirect after successful login
@@ -19,10 +20,16 @@ constructor(props){
   return this.state.username.length > 0 && this.state.password.length > 0;
 }
 
+userHasAuthenticated() {
+  this.props.userHasAuthenticated(true);
+  console.log("sup")
+}
+
 
  handleClick(event){
+   var self = this;
    //TODO: Change apiBaseURL to the actual URL
-	var apiBaseUrl = "http://localhost:8080/addUser";
+	var apiBaseUrl = "http://httpbin.org/post";
 	var payload={
     "message_type" : 3,
     "body" : {    
@@ -38,7 +45,8 @@ constructor(props){
 			// var uploadScreen=[];
 			// uploadScreen.push(<Register appContext={self.props.appContext}/>)
       // self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
-      this.props.userHasAuthenticathed(true);
+      self.userHasAuthenticated();
+      self.props.history.push("/");
 		}
 		else if(response.status === 204){
 			console.log("username password do not match");
