@@ -29,22 +29,22 @@ class DarkSquare extends Component {
         }
     }
 
-    clickedSquare(e, pieceInfo, selectedSquares, possible_moves, valid_moves){
+    clickedSquare(e, pieceInfo, selectedSquares, possible_moves, valid_moves, screenOwner){
     
         let id =this.state.squareId
-            if(pieceInfo != null && selectedSquares.length === 0) {
+            if(pieceInfo != null && selectedSquares.length === 0 && pieceInfo[0] === screenOwner) {
                 console.log("First Piece Selected for moving");
                 this.setState({clicked: true})
                 return new Array( [id], possible_moves);
             }
-            else if(pieceInfo === null && selectedSquares.length === 1){
+            else if(selectedSquares.length === 1){
                 console.log("I get In");
                 if(id === selectedSquares[0]){
                     console.log("Unselect First Square");
                     this.setState({clicked: false})
                     return new Array(new Array(), new Array())
                 }
-                else if ( valid_moves != null && valid_moves.includes(id)){
+                else if (pieceInfo === null && valid_moves != null && valid_moves.includes(id)){
                     console.log("Attempt Second Square");
                     this.setState({clicked: true})
                     return new Array( new Array(selectedSquares[0], id), new Array());
@@ -57,7 +57,7 @@ class DarkSquare extends Component {
     
     render() {
         return(
-            <div className = { (this.state.clicked ?  "highlightSquare" : "darkSquare" )} onClick = {(e) => {this.props.setMoveOrder(this.clickedSquare(e, this.props.pieceInfo, this.props.selectedSquares, this.props.possible_moves, this.props.valid_moves))}}>
+            <div className = { (this.state.clicked ?  "highlightSquare" : "darkSquare" )} onClick = {(e) => {this.props.setMoveOrder(this.clickedSquare(e, this.props.pieceInfo, this.props.selectedSquares, this.props.possible_moves, this.props.valid_moves, this.props.screenOwner))}}>
                 {this.decideOccupation()}
             </div>
         );

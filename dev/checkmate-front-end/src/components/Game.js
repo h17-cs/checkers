@@ -8,7 +8,7 @@ class Game extends Component {
        super(props);
 
     this.setMoveOrder = this.setMoveOrder.bind(this)
-
+    this.forfeit = this.forfeit.bind(this)
        this.state = {
            timestamp:1566344113915,
            clock_expire:1566344113915,
@@ -21,6 +21,7 @@ class Game extends Component {
            playerTurn: 0,
            valid_moves: new Array(),
            moveOrder: new Array(),
+           isGameOver:0,
            possible_moves: {
             "zero": null,
             "one": null,
@@ -107,7 +108,10 @@ class Game extends Component {
        this.setState({moveOrder: newData[0],
             valid_moves: newData[1]
         })
-       
+   }
+
+   forfeit(){
+       this.setState({isGameOver: 1})
    }
 
     render() {
@@ -119,7 +123,7 @@ class Game extends Component {
                     <div>
                         <GameInfo gameInfo = {[this.state.gameInfo, this.state.playerTurn]}/>
                         <div className="formatButtons">
-                            <input type ="button" value= "Forfeit" className="actionButton"/>
+                            <input type ="button" value= "Forfeit" className="actionButton" onClick={this.forfeit}/>
                             <input type ="button" value= "Save Game" className="actionButton"/>
                             <input type ="button" value= "Main Menu" className="actionButton"/>
                             
