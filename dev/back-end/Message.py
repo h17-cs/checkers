@@ -12,6 +12,7 @@ class MessageType(IntEnum):
     GameUpdate = 1
     GameAdministration = 2
     AccountAdministration = 3
+    GameInit = 4
 
 class Message:
     def __init__(self, messageType):
