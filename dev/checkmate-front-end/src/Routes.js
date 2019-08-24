@@ -11,7 +11,7 @@ import Chat from "./components/Chat/Chat"
 export default ({childProps}) =>
   <Switch>
     <AppliedRoute path="/" exact component={Home} props={childProps}/>
-    <Route path="/login" exact component={Login} props={childProps}/>
+    <AppliedRoute path="/login" exact component={Login} props={childProps}/>
     <Route path="/register" exact component={Register} props={childProps}/>
     <Route path="/game" exact component={Game} props={childProps}/>
     <Route path="/chat" exact component={Chat} props={childProps}/>
