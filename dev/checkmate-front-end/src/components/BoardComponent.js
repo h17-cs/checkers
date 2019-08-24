@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import LightSquare from './LightSquare';
 import DarkSquare from './DarkSquare';
 import '../App.css';
+import './BoardComponent.css'
 //import LightPiece from './LightPiece';
 //import DarkPiece from './DarkPiece';
 

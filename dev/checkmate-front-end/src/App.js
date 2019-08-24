@@ -65,7 +65,7 @@ class App extends Component {
                 <NavItem>Register</NavItem>
                 </LinkContainer>
                 <LinkContainer to="/login">
-                <NavItem>Login</NavItem>
+                <NavItem Component={this.userHasAuthenticated}>Login</NavItem>
                 </LinkContainer>
               </Fragment>
             }
