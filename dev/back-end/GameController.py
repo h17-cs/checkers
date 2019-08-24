@@ -33,7 +33,6 @@ import threading
 from enum import Enum
 from Timer import Timer
 from Player import Player, PlayerColor
-from MessageManager import MessageManager
 from DummyWrap import dummy
 from WebsocketMessageManager import WebsocketMessageManager
 class GameController:
@@ -95,7 +94,7 @@ class GameController:
         else:
             self.__board[location.toIndex()] = piece
             piece.setLocation(location)
-            
+
         self.log("Moved piece from #%02d to #%02d"%(oldloc.toIndex(), location.toIndex()))
         return True
 

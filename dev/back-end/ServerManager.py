@@ -5,7 +5,6 @@
 
 from DummyWrap import dummy
 from DatabaseManager import DatabaseManager, DatabaseType
-from MessageManager import MessageManager
 from GameController import GameController
 from PortManager import PortManager
 import config as cfg
@@ -27,7 +26,7 @@ class ServerManager:
         self.__port_manager = PortManager(cfg.lower_bound, cfg.upper_bound)
 
         # Instantiate the message manager exclusively for admin messages
-        self.__message_manager = MessageManager(cfg.admin)
+        self.__message_manager = WebsocketMessageManager(cfg.admin)
 
     def runGame():
         gc = GameController()
