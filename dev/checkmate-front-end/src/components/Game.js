@@ -9,10 +9,12 @@ class Game extends Component {
 
     this.setMoveOrder = this.setMoveOrder.bind(this)
     this.forfeit = this.forfeit.bind(this)
+    this.timer = this.timer.bind(this)
+    //this.componentDidMount = this.componentDidMount(this)
        this.state = {
            timestamp:1566344113915,
            clock_expire:1566344113915,
-           gameTimer:"2:00",
+           floatTimer: 60,
            gameInfo:{
                 playerOne: "Idan",
                 playerTwo: "Nick",
@@ -22,6 +24,8 @@ class Game extends Component {
            valid_moves: new Array(),
            moveOrder: new Array(),
            isGameOver:0,
+           didForfeit:0,
+           timeExpire:0,
            possible_moves: {
             "zero": null,
             "one": null,
@@ -95,15 +99,20 @@ class Game extends Component {
        }
    }
 
-//    gameTimer:"2:00",
-//            gameInfo:{
-//                 playerOne: "Idan",
-//                 playerTwo: "Nick",
-//             },
-//            playerTurn: 0,
-//            moveOrder: [],
-//            gameState: {
+   componentDidMount(){
+       this.interval = setInterval(() => this.timer(), 1000)
+   }
+
+   componentWillMount(){
+       clearInterval(this.interval);
+   }
    
+   timer(){
+        this.setState({floatTimer: (this.state.floatTimer - 1)})
+        if(this.state.floatTimer === 0){
+            this.setState({timeExpire: 1})
+        }
+   }
    setMoveOrder( newData ){
        this.setState({moveOrder: newData[0],
             valid_moves: newData[1]
@@ -114,10 +123,30 @@ class Game extends Component {
        this.setState({isGameOver: 1})
    }
 
+   formatGameTime(){
+       var totalSecs= this.state.floatTimer
+       if(this.state.floatTimer > 0) {
+            var minutes = Math.floor( totalSecs / 60)
+            var seconds = totalSecs - (minutes * 60)
+            var strSeconds;
+            if(seconds < 10){
+                strSeconds = "0"+ seconds.toString()
+            }
+            else {
+                 strSeconds = seconds.toString()
+             }
+            return minutes.toString().concat(":", strSeconds)
+        }
+        else{
+            return "0:00"
+        }
+
+   }
+
     render() {
         return(
             <div className="topMargin">
-                <h1>{this.state.gameTimer}</h1>
+                <h1>{this.formatGameTime()}</h1>
                 <div className="holdingSpacer">
                     <Board gameState = {[this.state.gameState, this.state.moveOrder, this.state.possible_moves, this.state.valid_moves, this.state.screenOwner]}  setMoveOrder = {this.setMoveOrder}/>
                     <div>
