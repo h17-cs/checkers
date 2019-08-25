@@ -9,7 +9,7 @@ class AddUserHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-        self.set_header("Access-Control-Allow-Methods", "POST, GET, PUT")
+        self.set_header("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS")
     def prepare(self):
         dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
         super(AddUserHandler, self).prepare()
@@ -31,6 +31,9 @@ class AddUserHandler(tornado.web.RequestHandler):
         self.write_message(message)
     def post(self):
         print(self.get_argument('', None))
+    def options(self):
+        self.status(200)
+        self.finish()
 
 class createPublicGameHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
