@@ -34,9 +34,9 @@ class AddUserHandler(tornado.web.RequestHandler):
         self.write_message(message)
     def post(self):
         print(self.get_argument('', None))
-    # def options(self):
-    #     self.set_status(200)
-    #     self.finish()
+    def options(self):
+        self.set_status(200)
+        self.finish()
 
 class createPublicGameHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
