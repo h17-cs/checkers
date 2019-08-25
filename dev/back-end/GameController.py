@@ -106,23 +106,16 @@ class GameController:
         else:
             self.__board[location.toIndex()] = piece
             piece.setLocation(location)
-<<<<<<< Updated upstream
-
-=======
             self.__controllock.release()
-            
->>>>>>> Stashed changes
+
         self.log("Moved piece from #%02d to #%02d"%(oldloc.toIndex(), location.toIndex()))
         return True
 
     def removePiece(self, piece):
         # remove a piece from the game board
-<<<<<<< HEAD
         loc = piece.getLocation().toIndex();
-=======
         self.__controllock.acquire()
         loc = piece.getLocation();
->>>>>>> 642944c9d783c9d16c1d5622e1f86853d0e7ae70
         retval = False
         if self.__board[loc] is None:
             print("Error: location points to None")
@@ -167,4 +160,3 @@ class GameController:
     def log(self, message):
         # Log a message to users and maybe log to a file
         pass
-
