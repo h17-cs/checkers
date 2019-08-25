@@ -28,12 +28,14 @@ class ServerManager:
         self.__port_manager = PortManager(cfg.lower_bound, cfg.upper_bound)
         # Instantiate the message manager exclusively for admin messages
         self.__message_manager = WebsocketMessageManager(cfg.admin)
-        self.__worker = threading.Thread(target=self.run)
         self.__pid = os.getpid()
         self.__headless = False
         self.__public_requests = ThreadsafeQueue()
         self.__game_pids = ThreadsafeQueue()
 
+        self.__running = True
+        self.__worker = threading.Thread(target=self.run)
+        self.__polling = threading.Thread(target=self.pollPublic)
 
     def createGame(self, port, user1, user2=None, private=False):
 
@@ -46,6 +48,7 @@ class ServerManager:
             args.append('--private')
         pid = os.spawnlp(os.P_NOWAIT, 'createGame.py', args, '--user1=%s')
         self.addPid(pid)
+        return True
 
     def addPid(self, pid):
         # Add a pid to the internal list of game process IDs
@@ -70,27 +73,52 @@ class ServerManager:
         if p == -1:
             # No ports available
             print("Cannot open public game: No ports available")
-            return False
+            return None
         self.createGame(p, user1, user2, private=False)
-        return True
+        return p
 
     def openPrivateGame(self, user1, user2=None):
         p = self.__port_manager.getPort()
         if p == -1:
             # No ports available
             print("Cannot open private game for user %s: No ports available"%user1)
-            return False
+            return None
         self.createGame(p, user1, user2, private=True)
-        return True
+        return p
+
+    def pollPublic(self):
+        print("Not implem")
+
+    def isRunning(self):
+        # Indicates whether or not the server is running
+        return self.__running
 
     def killGame(self, pid):
-        if (not self.__headless):
-            pid = input("Enter a PID")
-        if (self.__game_pids.remove(pid)):
-            os.kill(pid, signal.SIGINT)
-            print("Game successfully killed")
+        # Kills the game associated with the given PID.
+        # If the process can't be killed, reports
+        r = self.__game_pids.remove(pid)
+        if not r:
+            print("PID not valid- pid:%d"%(pid))
+            return False
         else:
-            print("Game not found in current pids")
+            os.kill(pid,signal.SIGINT)
+            _, status = os.waitpid(pid)
+            attempts = 0
+            while not os.WIFSTOPPED(status) and attempts < MAXATTEMPTS:
+                attempts+=1
+                time.sleep(0.01)
+                os.kill(pid,signal.SIGINT)
+                _, status = os.waitpid(pid)
+            if attempts == MAXATTEMPTS:
+                self.log("Aborting pkill(2) pid:%d after %d attempts"%(pid,attempts))
+                return False
+            self.log("Successfully killed pid:%d"%(pid))
+            return True
+
+    @dummy
+    def log(self, msg):
+        pass
+
     def run(self, useCLI):
         print("Use cli")
         print(useCLI)
