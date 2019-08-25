@@ -72,39 +72,66 @@ class GameController:
         # Register players to the board
         return self.players[playerColor].associate(playerID, port);
 
+    def playerBind(self, playerId, playerHandler):
+        # Register players to the game
+        self.__controllock.acquire()
+        retval = False
+        if len(self.__players) < 2:
+            self.__players.append(Player(playerId, playerHandler, self))
+            retval = True
+        self.__controllock.release()
+        return retval
+
     def addPiece(self, piece, location):
         # add a piece to the board
+        self.__controllock.acquire()
         if self.__board[location.toIndex()] is not None:
             print("Attempted to place a piece in a filled square")
+            self.__controllock.release()
             return False
         else:
             self.__board[location.toIndex()] = piece
             piece.setLocation(location)
+            self.__controllock.release()
             return True
 
     def movePiece(self, piece, location):
         # move a piece
+        self.__controllock.acquire()
         oldloc = piece.getLocation()
         if self.__board[location.toIndex()] is not None:
             print("Attempted to place a piece in a filled square")
+            self.__controllock.release()
             return False
         else:
             self.__board[location.toIndex()] = piece
             piece.setLocation(location)
+<<<<<<< Updated upstream
 
+=======
+            self.__controllock.release()
+            
+>>>>>>> Stashed changes
         self.log("Moved piece from #%02d to #%02d"%(oldloc.toIndex(), location.toIndex()))
         return True
 
     def removePiece(self, piece):
         # remove a piece from the game board
+<<<<<<< HEAD
         loc = piece.getLocation().toIndex();
+=======
+        self.__controllock.acquire()
+        loc = piece.getLocation();
+>>>>>>> 642944c9d783c9d16c1d5622e1f86853d0e7ae70
         retval = False
         if self.__board[loc] is None:
             print("Error: location points to None")
             retval = False
+            self.__controllock.release()
         else:
             self.__board[loc] = None
             retval = True
+            self.__controllock.release()
 
         self.log("Removed %s piece at #%02d"%("king" if piece.getType() is PieceType.King else "ordinary"), loc)
         return retval
