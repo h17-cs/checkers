@@ -25,7 +25,7 @@ class ThreadsafeQueue:
                 self.__lockobj.release()
                 time.sleep(0.01)
                 self.__lockobj.acquire()
-        
+
         retval = self.__queue.pop(0)
         self.__lockobj.release()
         return retval
