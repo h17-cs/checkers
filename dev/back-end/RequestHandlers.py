@@ -5,12 +5,17 @@ from DatabaseManager import DatabaseManager, DatabaseType
 import config as cfg
 import os,sys,time,threading
 
-class AddUserHandler(tornado.web.RequestHandler):
+class BaseHandle(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "*")
         self.set_header("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS")
         self.set_header("Content-Type", "application/json")
+    def options(self):
+        self.set_status(200)
+        self.finish()
+
+class AddUserHandler(BaseHandle):
     def prepare(self):
         dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
         super(AddUserHandler, self).prepare()
@@ -34,15 +39,8 @@ class AddUserHandler(tornado.web.RequestHandler):
         self.write_message(message)
     def post(self):
         print(self.get_argument('', None))
-    def options(self):
-        self.set_status(200)
-        self.finish()
 
-class createPublicGameHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-        self.set_header("Access-Control-Allow-Methods", "POST, GET")
+class createPublicGameHandler(BaseHandler):
     def prepare(self):
         super(createPublicGameHandler, self).prepare()
     def get(self, slug):
@@ -52,11 +50,7 @@ class createPublicGameHandler(tornado.web.RequestHandler):
         # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
         ##############################################
 
-class createPrivateGameHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-        self.set_header("Access-Control-Allow-Methods", "POST, GET")
+class createPrivateGameHandler(BaseHandler):
     def prepare(self):
         super(createPrivateGameHandler, self).prepare()
     def get(self, slug):
@@ -66,7 +60,7 @@ class createPrivateGameHandler(tornado.web.RequestHandler):
         # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
         ##############################################
 
-class loginHandler(tornado.web.RequestHandler):
+class loginHandler(BaseHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
@@ -92,7 +86,7 @@ class loginHandler(tornado.web.RequestHandler):
     def post(self):
         print(self.get_argument('', None))
 
-class ContentHandler(tornado.web.RequestHandler):
+class ContentHandler(BaseHandler):
     def get(self):
         rendered = render_component(os.path.join(os.getcwd(), 'local_files', 'checkmate-front-end', 'src', 'Register.js'),{},to_static_markup=False,)
         self.render('/home/salieri/Desktop/checkers/dev/back-end/local_files/checkmate-front-end/public/index.html', rendered=rendered)
