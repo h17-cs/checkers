@@ -13,6 +13,7 @@ export default ({childProps}) =>
     <AppliedRoute path="/" exact component={Home} props={childProps}/>
     <AppliedRoute path="/login" exact component={Login} props={childProps}/>
     <Route path="/register" exact component={Register} props={childProps}/>
-    <Route path="/game" exact component={Game} props={childProps}/>
+    <Route path="/game" exact component={Game} props={childProps} />
+    {/* render={(props) => <Game {...props} username={childProps.username} password ={childProps.password}/>} */}
     <Route path="/chat" exact component={Chat} props={childProps}/>
   </Switch>;
