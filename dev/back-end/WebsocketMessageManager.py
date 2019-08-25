@@ -62,7 +62,7 @@ class WebsocketMessageManager:
 class WebsocketMessageHandler(tornado.websocket.WebSocketHandler):
     def get(self):
         print("Get got")
-    def open(self):
+    def open(self, user):
         print("Connection identified")
         # if (len(self.connected_players) < 2):
         #     self.connected_players.append(self)
