@@ -15,6 +15,7 @@ from DummyWrap import dummy
 from DatabaseManager import DatabaseManager, DatabaseType
 from GameController import GameController
 from ThreadsafeQueue import ThreadsafeQueue
+from WebsocketMessageManager import WebsocketMessageManager
 from PortManager import PortManager
 from RequestHandlers import AddUserHandler, ContentHandler
 import config as cfg
@@ -29,12 +30,13 @@ class ServerManager:
         self.__message_manager = WebsocketMessageManager(cfg.admin)
         self.__worker = threading.Thread(target=self.run)
         self.__pid = os.getpid()
+        self.__headless = False
         self.__public_requests = ThreadsafeQueue()
         self.__game_pids = ThreadsafeQueue()
 
 
     def createGame(self, port, user1, user2=None, private=False):
-        
+
         args = [    'createGame.py',
                     port,
                     user1,
@@ -42,7 +44,7 @@ class ServerManager:
                ]
         if private:
             args.append('--private')
-        pid = os.spawnlp(os.P_NOWAIT, 'createGame.py', args, '--user1=%s'
+        pid = os.spawnlp(os.P_NOWAIT, 'createGame.py', args, '--user1=%s')
         self.addPid(pid)
 
     def addPid(self, pid):
@@ -81,10 +83,14 @@ class ServerManager:
         self.createGame(p, user1, user2, private=True)
         return True
 
-    @dummy
     def killGame(self, pid):
-        return True
-
+        if (not self.__headless):
+            pid = input("Enter a PID")
+        if (self.__game_pids.remove(pid)):
+            os.kill(pid, signal.SIGINT)
+            print("Game successfully killed")
+        else:
+            print("Game not found in current pids")
     def run(self, useCLI):
         print("Use cli")
         print(useCLI)
@@ -98,7 +104,7 @@ class ServerManager:
             sub = "Server Administration Interface"
             menu = CursesMenu(menStr, sub)
             menu_item = MenuItem("Menu Item")
-            killGame = FunctionItem("Kill a Game[pid]", input, ["Enter a PID"])
+            killGame = FunctionItem("Kill a Game[pid]", self.killGame, ['00000'])
             db_admin = SelectionMenu(["Add user", "Delete user"])
             submenu_item = SubmenuItem("Database Administration", db_admin, menu)
             serv_admin = SelectionMenu(["Server Config", "Server Control"])

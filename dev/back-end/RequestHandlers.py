@@ -19,7 +19,7 @@ class AddUserHandler(tornado.web.RequestHandler):
         except ValueError:
             pass
     def get_argument(self, arg, default=None):
-        if self.request.method in ['POST', 'PUT'] and self.json_data and (self.json_data["message_type"] == 3):
+        if (self.request.method in ['POST', 'PUT'] and self.json_data and (self.json_data["message_type"] == 3)):
             print("database post req recieved")
             dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
             userToAdd = self.json_data['body']['username']
@@ -73,7 +73,7 @@ class loginHandler(tornado.web.RequestHandler):
         except ValueError:
             pass
     def get_argument(self, arg, default=None):
-        if self.request.method in ['POST', 'PUT'] and self.json_data):
+        if (self.request.method in ['POST', 'PUT'] and self.json_data):
             userToAuth = self.json_data['body']['username']
             passwdToAuth = self.json_data['body']['password']
             ##############################################
