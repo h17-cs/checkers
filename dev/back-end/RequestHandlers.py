@@ -17,6 +17,8 @@ class AddUserHandler(tornado.web.RequestHandler):
         self.json_data = None
         try:
             self.json_data = tornado.escape.json_decode(self.request.body)
+            print(self.json_data)
+            print(self.request)
         except ValueError:
             pass
     def get_argument(self, arg, default=None):
