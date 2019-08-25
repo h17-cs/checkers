@@ -63,6 +63,14 @@ class ServerManager:
         # Remove a user from the database
         return self.__db.deleteUser(uname,passwd)
 
+    def requestPublicGame(self, user):
+        # Add a user to the public queue
+        self.__public_requests.push(user)
+
+    def requestPrivateGame(self, user):
+        # Add a user to the public queue
+        port = self.openPrivateGame(user)
+    
     def openPublicGame(self, user1=None, user2=None):
         # Open a public game. If no users are specified, pop some from queue
         if user1 is None:
