@@ -8,8 +8,9 @@ import os,sys,time,threading
 class AddUserHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header("Access-Control-Allow-Headers", "*")
         self.set_header("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS")
+        self.set_header("Content-Type", "application/json")
     def prepare(self):
         dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
         super(AddUserHandler, self).prepare()
@@ -24,16 +25,16 @@ class AddUserHandler(tornado.web.RequestHandler):
             userToAdd = self.json_data['body']['username']
             passwdToAdd = self.json_data['body']['password']
             self.set_status(200)
-            self.finish(str(dm.addUser(userToAdd, passwdToAdd)))
+            self.finish({"resp" : str(dm.addUser(userToAdd, passwdToAdd))})
         else:
             return super(AddUserHandler, self).get_argument(arg, default)
     def write_message(self, message):
         self.write_message(message)
     def post(self):
         print(self.get_argument('', None))
-    def options(self):
-        self.status(200)
-        self.finish()
+    # def options(self):
+    #     self.set_status(200)
+    #     self.finish()
 
 class createPublicGameHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
