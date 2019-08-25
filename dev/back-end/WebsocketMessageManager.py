@@ -64,10 +64,6 @@ class WebsocketMessageHandler(tornado.websocket.WebSocketHandler):
         print("Get got")
     def open(self, user):
         print("Connection identified")
-        # if (len(self.connected_players) < 2):
-        #     self.connected_players.append(self)
-        #     print("Player has connected")
-        #     self.write_message("Connected")
     def on_message(self, message):
         print ('message received:  %s' % message)
         # Reverse Message and send it back

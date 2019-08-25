@@ -128,10 +128,6 @@ class ServerManager:
         print(useCLI)
         if (useCLI):
             self.__headless = False
-            # Do other init tasks...
-            # ...
-            # ...
-
             menStr = "CheckMate Server: v" + str(cfg.version_number)
             sub = "Server Administration Interface"
             menu = CursesMenu(menStr, sub)
@@ -145,8 +141,6 @@ class ServerManager:
             menu.append_item(submenu_item)
 
             menu.append_item(submenu_item2)
-
-            # Blocks the rest
             menu.show()
 
     @dummy
