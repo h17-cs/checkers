@@ -3,52 +3,82 @@
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
 
-from DummyWrap import dummy
-from DatabaseManager import DatabaseManager, DatabaseType
-from GameController import GameController
-from PortManager import PortManager
-import config as cfg
-import argparse
 import os,sys,time,threading
 import configparser
 import asyncio
 from cursesmenu import *
 from cursesmenu.items import *
-from RequestHandlers import AddUserHandler, ContentHandler
 import tornado.ioloop
 import tornado.web
+
+from DummyWrap import dummy
+from DatabaseManager import DatabaseManager, DatabaseType
+from GameController import GameController
+from ThreadsafeQueue import ThreadsafeQueue
+from PortManager import PortManager
+from RequestHandlers import AddUserHandler, ContentHandler
+import config as cfg
+import argparse
 
 class ServerManager:
     def __init__(self):
         self.__db = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
-
         # Instantiate the port manager for all games + admin messages
         self.__port_manager = PortManager(cfg.lower_bound, cfg.upper_bound)
-
         # Instantiate the message manager exclusively for admin messages
         self.__message_manager = WebsocketMessageManager(cfg.admin)
+        self.__worker = threading.Thread(target=self.run)
+        self.__pid = os.getpid()
+        self.__public_requests = ThreadsafeQueue()
+        self.__game_pids = ThreadsafeQueue()
 
-    def runGame():
-        gc = GameController()
-        wmm = WebsocketMessageManager()
-        wmm.run()
 
-    @dummy
+    def createGame(self, port, user1, user2=None, private=False):
+        
+        args = [    'createGame.py',
+                    port,
+                    user1,
+                    user2,
+               ]
+        if private:
+            args.append('--private')
+        pid = os.spawnlp(os.P_NOWAIT, 'createGame.py', args, '--user1=%s'
+        self.addPid(pid)
+
+    def addPid(self, pid):
+        # Add a pid to the internal list of game process IDs
+        self.__game_pids.push(pid)
+
     def addUser(self, uname, passwd):
+        # Add a user from the database
         return self.__db.addUser(uname,passwd)
 
-    @dummy
     def deleteUser(self, uname, passwd):
+        # Remove a user from the database
         return self.__db.deleteUser(uname,passwd)
 
-    @dummy
     def openPublicGame(self, user1=None, user2=None):
-        game = GameController()
+        # Open a public game. If no users are specified, pop some from queue
+        if user1 is None:
+            user1 = self.__public_requests.pop(block=True)
+        if user2 is None:
+            user2 = self.__public_requests.pop(block=True)
+
+        p = self.__port_manager.getPort()
+        if p == -1:
+            # No ports available
+            print("Cannot open public game: No ports available")
+            return False
+        self.createGame(p, user1, user2, private=False)
         return True
 
-    @dummy
-    def openPrivateGame(self, user1=None, user2=None):
-        game = GameController()
+    def openPrivateGame(self, user1, user2=None):
+        p = self.__port_manager.getPort()
+        if p == -1:
+            # No ports available
+            print("Cannot open private game for user %s: No ports available"%user1)
+            return False
+        self.createGame(p, user1, user2, private=True)
         return True
 
     @dummy

@@ -20,7 +20,7 @@ for name in dir(zmq):
         events[val] = name
 
 # Visual version number because we lazy
-version_number = "0.0.1"
+version_number = "0.1.0"
 
 # Group member names for ui
 names = "Charles, Nick, Idan, Brendan"
