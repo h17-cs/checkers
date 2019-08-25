@@ -4,6 +4,7 @@ from react.render import render_component
 from DatabaseManager import DatabaseManager, DatabaseType
 import config as cfg
 import os,sys,time,threading
+from ServerManager import ServerManager
 
 class BaseHandle(tornado.web.RequestHandler):
     def set_default_headers(self):
@@ -17,7 +18,6 @@ class BaseHandle(tornado.web.RequestHandler):
 
 class AddUserHandler(BaseHandle):
     def prepare(self):
-        dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
         super(AddUserHandler, self).prepare()
         self.json_data = None
         try:
@@ -27,24 +27,50 @@ class AddUserHandler(BaseHandle):
         except ValueError:
             pass
     def get_argument(self, arg, default=None):
-        if (self.request.method in ['POST', 'PUT'] and self.json_data and (self.json_data["message_type"] == 3)):
-            dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
-            userToAdd = self.json_data['body']['username']
-            passwdToAdd = self.json_data['body']['password']
-            self.set_status(200)
-            self.finish({"resp" : str(dm.addUser(userToAdd, passwdToAdd))})
+        if (    self.request.method in ['POST', 'PUT'] \
+                and self.json_data \
+                and (self.json_data["message_type"] == 3) ):
+            if arg in self.json_data.keys():
+                self.json_data['body'][arg]
+            else:
+                return None
         else:
             return super(AddUserHandler, self).get_argument(arg, default)
+    '''
     def write_message(self, message):
         self.write_message(message)
+    '''
     def post(self):
-        print(self.get_argument('', None))
+        sm = ServerManager.instance
+        usernm = self.get_argument('username', None)
+        passwd = self.get_argument('password', None)
+        rval = True
+        if not usernm is None and not passwd is None:
+            rval &= sm.addUser(usernm, password)
+        else:
+            rval = False
+        
+        stat = 0
+        msg = ""
+        if rval:
+        # Status 200: User success
+            stat = 200
+            msg = "Account Created"
+        else:
+        # Status 400: User error
+            stat = 400
+            msg = "Failed to create account"
+
+        self.set_status(stat)
+        self.finish({"resp" : msg})
 
 class createPublicGameHandler(BaseHandler):
     def prepare(self):
         super(createPublicGameHandler, self).prepare()
     def get(self, slug):
-        userCreated = self.get_argument('userid', None)
+        user = self.get_argument('userid', None)
+        
+        ServerManager.instance.requestPublicGame(user)
         # await user auth at some point
         ##############################################
         # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
@@ -54,7 +80,9 @@ class createPrivateGameHandler(BaseHandler):
     def prepare(self):
         super(createPrivateGameHandler, self).prepare()
     def get(self, slug):
-        userCreated = self.get_argument('userid', None)
+        user = self.get_argument('userid', None)
+        
+        ServerManager.instance.requestPrivateGame(userCreated)
         # await user auth at some point
         ##############################################
         # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #

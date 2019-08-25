@@ -22,7 +22,15 @@ import config as cfg
 import argparse
 
 class ServerManager:
+    instance = None
+
     def __init__(self):
+        if ServerManager.instance is not None:
+            print("Error: singleton already defined")
+            sys.exit(-1)
+        else:
+            ServerManager.instance = self
+
         self.__db = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
         # Instantiate the port manager for all games + admin messages
         self.__port_manager = PortManager(cfg.lower_bound, cfg.upper_bound)
