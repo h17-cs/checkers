@@ -33,8 +33,8 @@ class App extends Component {
 
     const childProps = {
       userHasAuthenticated: this.userHasAuthenticated,
-      username: this.username,
-      password: this.password
+      username: this.state.username,
+      password: this.state.password
     };
     return (
 

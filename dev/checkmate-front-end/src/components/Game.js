@@ -1,7 +1,8 @@
-import '../Game.css'
 import Board from "./BoardComponent";
 import GameInfo from "./GameInfo";
 import React, { Component } from 'react';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 
 class Game extends Component {
    constructor(props){
@@ -16,7 +17,7 @@ class Game extends Component {
            clock_expire:1566344113915,
            floatTimer: 60,
            gameInfo:{
-                playerOne: "Idan",
+                playerOne: this.props.username,
                 playerTwo: "Nick",
             },
            screenOwner: 0,
@@ -145,27 +146,39 @@ class Game extends Component {
 
     render() {
         return(
+            <MuiThemeProvider>
             <div className="topMargin">
+                <div>
                 <h1>{this.formatGameTime()}</h1>
+                </div>
                 <div className="holdingSpacer">
-                    <Board gameState = {[this.state.gameState, this.state.moveOrder, this.state.possible_moves, this.state.valid_moves, this.state.screenOwner]}  setMoveOrder = {this.setMoveOrder}/>
                     <div>
+                    <Board gameState = {[this.state.gameState, this.state.moveOrder, this.state.possible_moves, this.state.valid_moves, this.state.screenOwner]}  setMoveOrder = {this.setMoveOrder}/>
+                    </div>
+                    <div>
+
+                        <div>
                         <GameInfo gameInfo = {[this.state.gameInfo, this.state.playerTurn]}/>
-                        <div className="formatButtons">
-                            <input type ="button" value= "Forfeit" className="actionButton" onClick={this.forfeit}/>
+                        </div>
+                        <div>
+                           
+                            <input type="button" value= "Forfeit" className="actionButton" onClick={this.forfeit}/>
+                            
+                            
                             <input type ="button" value= "Save Game" className="actionButton"/>
+                            
+                           
                             <input type ="button" value= "Main Menu" className="actionButton"/>
+                            
                             
                         </div>
                     </div>
                 </div>
             </div>
+            </MuiThemeProvider>
         );
     }
 }
 
-/*
-
-*/
 
 export default Game;
