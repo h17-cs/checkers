@@ -37,11 +37,16 @@ from DummyWrap import dummy
 from WebsocketMessageManager import WebsocketMessageManager
 class GameController:
 
-    def __init__(self, control_port, player1_port, player2_port, private=False):
+    def __init__(self, port):
         self.__board = []
         self.__players = []
+        self.__port = port
+        self.__currentTurn = PlayerColor.Light
+        self.__messenger = WebsocketMessageManager(self.__port)
+        self.__players = [Player(PlayerColor.Light, None),
+                        Player(PlayerColor.Dark, None)]
+        #self.__timer = Timer(60.0, GameController.timeout, (self,));
         self.__controllock = threading.Lock()
-        self.__private=private
 
     def getBoard(self):
         # Game board accessor
@@ -51,16 +56,14 @@ class GameController:
         # Game board accessor
         return self.__players[color]
 
-    def main(self):
-        self.__currentTurn = PlayerColor.Light
-        self.__players = [Player(PlayerColor.Light, None),
-                        Player(PlayerColor.Dark, None)]
-        #self.__timer = Timer(60.0, GameController.timeout, (self,));
-
+    def getBoard(self):
+        # Game board accessor
+        return self.__board
 
     @dummy
     def initialize(self):
         # Initialize the game board, place pieces, and start the game
+        #--DUMMY--
         for i in range(32):
             self.__board.append(None)
 
@@ -97,7 +100,8 @@ class GameController:
 
     def removePiece(self, piece):
         # remove a piece from the game board
-        loc = piece.getLocation().toIndex();
+        # --DUMMY--
+        loc = piece.getLocation();
         retval = False
         if self.__board[loc] is None:
             print("Error: location points to None")
@@ -106,7 +110,7 @@ class GameController:
             self.__board[loc] = None
             retval = True
 
-        self.log("Removed %s piece at #%02d"%("king" if piece.getType() is PieceType.King else "ordinary"), loc)
+        self.log("Removed %s piece at #%02d"%("king" if piece.getType() is PieceType.King else "ordinary"), loc.toIndex())
         return retval
 
 
@@ -137,7 +141,18 @@ class GameController:
         return False
 
     @dummy
+    def timeout(self):
+        self.__controllock.acquire()
+
+        self.__controllock.release()
+        pass
+
+    @dummy
     def log(self, message):
         # Log a message to users and maybe log to a file
         pass
 
+    @dummy
+    def run(self):
+        print("Running messenger")
+        self.__messenger.run()
