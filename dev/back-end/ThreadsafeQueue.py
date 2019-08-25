@@ -30,6 +30,17 @@ class ThreadsafeQueue:
         self.__lockobj.release()
         return retval
 
+    def remove(self, item):
+        self.__lockobj.acquire()
+        retval = False
+        if item not in self.__queue:
+            retval = False
+        else:
+            self.__queue.remove(item)
+            retval = True
+        self.__lockobj.release()
+        return retval
+
     def ImFeelingUnlucky(self):
         self.__lockobj.acquire()
         random.shuffle(self.__queue)
