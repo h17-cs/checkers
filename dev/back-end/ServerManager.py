@@ -169,7 +169,7 @@ class ServerManager:
                                     ContentHandler, \
                                     createPublicGameHandler, \
                                     createPrivateGameHandler, \
-                                    oginHandler
+                                    loginHandler
 
         aio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(aio_loop)
