@@ -53,6 +53,9 @@ class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
           <Nav pullRight>
+            <LinkContainer to="/about">
+                  <NavItem>About</NavItem>
+            </LinkContainer>
             {this.state.isAuthenticated ? 
               <Fragment>
                 <LinkContainer to="/">
@@ -60,7 +63,7 @@ class App extends Component {
                 </LinkContainer>
                 <LinkContainer to="/game">
                   <NavItem>Game</NavItem>
-                  </LinkContainer>
+                </LinkContainer>
               </Fragment> : 
               <Fragment>
                 <LinkContainer to="/register">

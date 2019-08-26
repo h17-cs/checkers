@@ -5,7 +5,7 @@ import "./Login.css"
 import "../App"
 import React from 'react';
 import axios from 'axios'
-import {withRouter} from "react-router"
+import {withRouter, Redirect} from "react-router"
 //TODO: change to actual screen redirect after successful login
 
 class Login extends React.Component {

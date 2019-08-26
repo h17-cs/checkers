@@ -8,8 +8,6 @@ import "./containers/Login.css"
 import Login from './containers/Login'
 
 
-
-
 class Register extends Component {
   constructor(props){
     super(props);
@@ -31,7 +29,7 @@ class Register extends Component {
         "password":this.state.password
       }
     }
-    axios.post(apiBaseUrl, payload)
+    axios.post(apiBaseUrl, payload, {headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}, timout: 15000})
    .then(function (response) {
      console.log(response);
      if(response.status === 200){
