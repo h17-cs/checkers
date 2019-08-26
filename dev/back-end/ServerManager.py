@@ -21,14 +21,12 @@ import config as cfg
 import argparse
 
 class ServerManager:
-    instance = None
-
     def __init__(self):
-        if ServerManager.instance is not None:
+        if not hasattr(ServerManager, 'instance'):
+            ServerManager.instance = self
+        else:
             print("Error: singleton already defined")
             sys.exit(-1)
-        else:
-            ServerManager.instance = self
 
         self.__db = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
         # Instantiate the port manager for all games + admin messages
@@ -138,7 +136,7 @@ class ServerManager:
 
     @dummy
     def log(self, msg):
-        pass
+        print(msg)
 
     def run(self, useCLI):
         print("Use cli")
@@ -165,11 +163,14 @@ class ServerManager:
         return True
 
     def serveHTTP(self):
-        from RequestHandlers import AddUserHandler, \
+        from RequestHandlers import BaseHandle, \
+                                    AddUserHandler, \
                                     ContentHandler, \
                                     createPublicGameHandler, \
                                     createPrivateGameHandler, \
                                     loginHandler
+        
+        BaseHandle.game_manager = self
 
         aio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(aio_loop)
@@ -198,6 +199,7 @@ if __name__ == '__main__':
         sm.run(False)
         t = threading.Thread(target=sm.serveHTTP, args=())
         t.start()
+
         # game2 = GameController(5508)
         # t2 = threading.Thread(target=game2.run, args=())f
         # t2.start()
