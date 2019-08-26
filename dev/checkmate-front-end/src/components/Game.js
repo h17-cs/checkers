@@ -17,7 +17,7 @@ class Game extends Component {
            clock_expire:1566344113915,
            floatTimer: 60,
            gameInfo:{
-                playerOne: this.props.username,
+                playerOne: window.localStorage.getItem("username"),
                 playerTwo: "Nick",
             },
            screenOwner: 0,

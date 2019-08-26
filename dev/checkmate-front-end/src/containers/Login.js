@@ -29,7 +29,7 @@ userHasAuthenticated() {
  handleClick(event){
    var self = this;
    //TODO: Change apiBaseURL to the actual URL
-	var apiBaseUrl = "http://68.82.219.27:8080/addUser";
+	var apiBaseUrl = "http://68.82.219.27:8080/login";
 	var payload={
     "message_type" : 3,
     "body" : {    
@@ -55,6 +55,8 @@ userHasAuthenticated() {
                     password: self.state.password }
              })
       self.props.history.push("/");
+      console.log(window.localStorage)
+      localStorage.setItem("username", self.state.username)
 		}
 		else if(response.status === 204){
 			console.log("username password do not match");
