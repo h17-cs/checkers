@@ -2,6 +2,7 @@
   height: 75px;
   width: 75px;
   background-color: #5d9e70;
+  padding-top:6px;
 }
 
 .lightSquare {
@@ -10,7 +11,14 @@
     background-color: #dcf5ce
 }
 
+.highlightSquare {
+    height: 75px;
+    width: 75px;
+    background-color: #e1f52e;
+  }
+
 .darkPiece {
+    
     height: 50px;
     width: 50px;
     background-color: #ad3146;
@@ -117,4 +125,12 @@
 .topMargin{
     margin-top: 50px;
     background-color: #dcf5ce;
+}
+
+.pieceImg{
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

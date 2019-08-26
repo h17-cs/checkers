@@ -10,6 +10,8 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state={
+      username:'',
+      password:'',
       // loginPage:[],
       // uploadScreen:[]
       isAuthenticated:  false
@@ -24,19 +26,15 @@ class App extends Component {
 
   handleLogout = event => {
     this.userHasAuthenticated(false);
+    
   }
-  // componentWillMount(){
-  //   var loginPage =[];
-  //   loginPage.push(<LoginScreen appContext={this} key={"login-screen"}/>);
-  //   this.setState({
-  //                 loginPage:loginPage
-  //                   })
-  // }
+
   render() {
 
     const childProps = {
-      isAuthenticated: this.state.isAuthenticated,
-      userHasAuthenticated: this.userHasAuthenticated
+      userHasAuthenticated: this.userHasAuthenticated,
+      username: this.username,
+      password: this.password
     };
     return (
 
@@ -47,25 +45,29 @@ class App extends Component {
               <LinkContainer to="/">
                 <NavItem>Home</NavItem>
               </LinkContainer>
-              <LinkContainer to="/game">
-                <NavItem>Game</NavItem>
-              </LinkContainer>
-              <LinkContainer to="/chat">
-                <NavItem>Chat</NavItem>
-              </LinkContainer>
             </Nav>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
           <Nav pullRight>
+            <LinkContainer to="/about">
+                  <NavItem>About</NavItem>
+            </LinkContainer>
             {this.state.isAuthenticated ? 
-              <NavItem onClick={this.handleLogout}>Logout</NavItem> : 
+              <Fragment>
+                <LinkContainer to="/">
+                  <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                </LinkContainer>
+                <LinkContainer to="/game">
+                  <NavItem>Game</NavItem>
+                </LinkContainer>
+              </Fragment> : 
               <Fragment>
                 <LinkContainer to="/register">
                 <NavItem>Register</NavItem>
                 </LinkContainer>
                 <LinkContainer to="/login">
-                <NavItem>Login</NavItem>
+                <NavItem Component={this.userHasAuthenticated}>Login</NavItem>
                 </LinkContainer>
               </Fragment>
             }
