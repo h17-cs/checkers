@@ -110,7 +110,7 @@ class createPrivateGameHandler(BaseHandle):
         # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
         ##############################################
 
-class loginHandler(registerHandle):
+class loginHandler(BaseHandle):
     def post(self):
         sm = ServerManager.instance
         usernm = self.get_body_argument('username', None)
