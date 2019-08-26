@@ -1,9 +1,9 @@
 import tornado.web
 from tornado.gen import coroutine
 from react.render import render_component
-from DatabaseManager import DatabaseManager, DatabaseType
 import config as cfg
 import os,sys,time,threading
+import ServerManager
 from ServerManager import ServerManager
 
 class BaseHandle(tornado.web.RequestHandler):
@@ -52,7 +52,7 @@ class AddUserHandler(BaseHandle):
         self.set_status(stat)
         self.finish({"resp" : msg})
 
-class createPublicGameHandler(BaseHandler):
+class createPublicGameHandler(BaseHandle):
     def prepare(self):
         super(createPublicGameHandler, self).prepare()
     def get(self, slug):
@@ -81,7 +81,7 @@ class createPublicGameHandler(BaseHandler):
         # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
         ##############################################
 
-class createPrivateGameHandler(BaseHandler):
+class createPrivateGameHandler(BaseHandle):
     def prepare(self):
         super(createPrivateGameHandler, self).prepare()
     def get(self, slug):
@@ -110,7 +110,7 @@ class createPrivateGameHandler(BaseHandler):
         # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
         ##############################################
 
-class loginHandler(registerHandler):
+class loginHandler(registerHandle):
     def post(self):
         sm = ServerManager.instance
         usernm = self.get_body_argument('username', None)
@@ -135,7 +135,7 @@ class loginHandler(registerHandler):
         self.set_status(stat)
         self.finish({"resp" : msg})
 
-class ContentHandler(BaseHandler):
+class ContentHandler(BaseHandle):
     def get(self):
         rendered = render_component(os.path.join(os.getcwd(), 'local_files', 'checkmate-front-end', 'src', 'Register.js'),{},to_static_markup=False,)
         self.render('/home/salieri/Desktop/checkers/dev/back-end/local_files/checkmate-front-end/public/index.html', rendered=rendered)

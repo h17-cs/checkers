@@ -17,7 +17,6 @@ from GameController import GameController
 from ThreadsafeQueue import ThreadsafeQueue
 from WebsocketMessageManager import WebsocketMessageManager
 from PortManager import PortManager
-from RequestHandlers import AddUserHandler, ContentHandler, createPublicGameHandler, createPrivateGameHandler, loginHandler
 import config as cfg
 import argparse
 
@@ -166,6 +165,12 @@ class ServerManager:
         return True
 
     def serveHTTP(self):
+        from RequestHandlers import AddUserHandler, \
+                                    ContentHandler, \
+                                    createPublicGameHandler, \
+                                    reatePrivateGameHandler, \
+                                    oginHandler
+
         aio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(aio_loop)
         endpoints = [ (r"/addUser", AddUserHandler), (r"/", ContentHandler), (r"/createPublicGame", createPublicGameHandler), (r"/createPrivateGame", createPrivateGameHandler), (r"/login", loginHandler),]
