@@ -25,6 +25,9 @@ version_number = "0.1.0"
 # Group member names for ui
 names = "Charles, Nick, Idan, Brendan"
 
+# log path
+log_addr = "./server.log"
+
 # db path
 db_addr = "./testdb.csv"
 
