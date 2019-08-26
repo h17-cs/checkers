@@ -15,19 +15,13 @@ from DummyWrap import dummy
 from DatabaseManager import DatabaseManager, DatabaseType
 from GameController import GameController
 from ThreadsafeQueue import ThreadsafeQueue
+from Logger import Logger
 from WebsocketMessageManager import WebsocketMessageManager
 from PortManager import PortManager
 import config as cfg
 import argparse
 
 class ServerManager:
-    class Logger:
-        def __init__(self, fname):
-            self.__f = open(fname,'a')
-        def log(self, msg):
-            dt = datetime.datetime.now()
-            self.__f.write("[%%4d/2d/%2d %02d:%02d:%02d:%06d] - %s\n", dt.year(), dt.month(), dt.day(), dt.hour(), dt.minute(), dt.second(), dt.microsecond(), msg)
-    
     def __init__(self):
         if not hasattr(ServerManager, 'instance'):
             ServerManager.instance = self
@@ -44,23 +38,24 @@ class ServerManager:
         self.__pid = os.getpid()
         self.__public_requests = ThreadsafeQueue()
         self.__game_pids = ThreadsafeQueue()
-        self.__logger = ServerManager.Logger(cfg.log_addr)
+        self.__logger = Logger(cfg.log_addr)
         self.__http_proc = threading.Thread(target=self.serveHTTP)
         self.__pub_polling = threading.Thread(target=self.pollPublic)
-
+        self.log("Server Initialized")
         self.__http_proc.start()
         self.__pub_polling.start()
 
     def createGame(self, control_port, user_port, private=False):
-
         args = [    'createGame.py',
                     control_port,
                     user_port,
                ]
         if private:
             args.append('--private')
-        pid = os.spawnlp(os.P_NOWAIT, 'createGame.py', args, '--user1=%s')
+        self.log("Generating new game instance")
+        pid = os.spawnlp(os.P_NOWAIT, './createGame.py', args, '--user1=%s')
         self.addPid(pid)
+        self.log("Calved game instance at pid:%d"%pid)
         return True
 
     def addPid(self, pid):
@@ -82,25 +77,38 @@ class ServerManager:
     def requestPublicGame(self, user):
         # Add a user to the public queue
         self.__public_requests.push(user)
+        "Added user %s to the public queue"%user
+        return True
 
     def requestPrivateGame(self, user):
         # Add a user to the public queue
         port = self.openPrivateGame(user)
+        return port
 
     def openPublicGame(self, user1=None, user2=None):
         # Open a public game. If no users are specified, pop some from queue
         if user1 is None:
+            self.log("Requesting user for game...")
             user1 = self.__public_requests.pop(block=True)
+            self.log("...Got %s"%user1)
         if user2 is None:
+            self.log("Requesting user for game...")
             user2 = self.__public_requests.pop(block=True)
+            self.log("...Got %s"%user2)
 
-        p = self.__port_manager.getPort()
-        if p == -1:
+        control = self.__port_manager.getPort()
+        if control == -1:
             # No ports available
-            self.log("Cannot open public game: No ports available")
+            self.log("Cannot open public game: No ports available for control")
             return None
-        self.createGame(p, user1, user2, private=False)
-        return p
+        user = self.__port_manager.getPort()
+        if user == -1:
+            # No ports available
+            self.log("Cannot open public game: No ports available for user")
+            return None
+        self.createGame(control, user, private=False)
+
+        return True
 
     def openPrivateGame(self, user1, user2=None):
         p = self.__port_manager.getPort()
@@ -112,6 +120,7 @@ class ServerManager:
         return p
 
     def pollPublic(self):
+        self.log("Initialized Polling Thread")
         while self.isRunning():
             p = self.openPublicGame()
             time.sleep(0.01)
@@ -158,7 +167,7 @@ class ServerManager:
         menu = CursesMenu(menStr, sub)
         menu_item = MenuItem("Menu Item")
         killGame = FunctionItem("Kill a Game[pid]", self.killGame, ['00000'])
-        haltServ = FunctionItem("Halt a game", self.halt, None)
+        haltServ = FunctionItem("Halt server", self.halt, None)
         db_admin = SelectionMenu(["Add user", "Delete user"])
         submenu_item = SubmenuItem("Database Administration", db_admin, menu)
         serv_admin = SelectionMenu(["Server Config", "Server Control"])
@@ -183,14 +192,14 @@ class ServerManager:
 
         return True
 
-
     def serveHTTP(self):
         from RequestHandlers import BaseHandle, \
                                     AddUserHandler, \
                                     ContentHandler, \
                                     createPublicGameHandler, \
                                     createPrivateGameHandler, \
-                                    loginHandler
+                                    loginHandler, \
+                                    descriptionHandler
 
         BaseHandle.game_manager = self
 
@@ -200,7 +209,9 @@ class ServerManager:
                      (r"/", ContentHandler), \
                      (r"/createPublicGame", createPublicGameHandler), \
                      (r"/createPrivateGame", createPrivateGameHandler), \
-                     (r"/login", loginHandler),]
+                     (r"/login", loginHandler), \
+                     (r"/about", descriptionHandler)
+                     ]
         dblist = tornado.web.Application(endpoints, debug=cfg.debug)
         dblist.listen(cfg.web_test)
         tornado.ioloop.IOLoop.current().start()

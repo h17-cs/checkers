@@ -20,7 +20,15 @@ from zmq.utils.monitor import recv_monitor_message
 from Message import Message, MessageType
 import config as cfg
 import asyncio
+'''
+class ClientSocketManager:
+    def __init__(self, port, endpoint):
+        self.__listener = tornado.web.Application([r'/', ]
+                                                  [r'/%s'%endpoint, ])
 
+class ClientWebsocketManager
+class AdministrativeWebsocketManager
+'''
 class WebsocketMessageManager:
     def __init__(self, portbind):
         self.__port = portbind;
@@ -28,6 +36,12 @@ class WebsocketMessageManager:
         self.__socket = self.__context.socket(zmq.REP);
         #self.__socket.bind("tcp://*:" + str(self.__port));
         self.__endpoint_url = ''.join(random.choice(cfg.dict) for i in range(cfg.endpoint_length))
+
+    def subscribe(self, fun):
+        # subscribe an event listener
+        # Listeners must be of the form *.function([self], data)
+        self.__subfun = sun
+
     def send(self, message):
         # Send a message to the socket
         self.__socket.send(message.__str__())

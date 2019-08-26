@@ -37,7 +37,7 @@ from DummyWrap import dummy
 from WebsocketMessageManager import WebsocketMessageManager
 class GameController:
 
-    def __init__(self, control_port, player1_port, player2_port, private=False):
+    def __init__(self, control_port, client_port, private=False):
         self.__board = []
         self.__players = []
         self.__controllock = threading.Lock()
@@ -52,7 +52,6 @@ class GameController:
         return self.__players[color]
 
     def main(self):
-        self.__currentTurn = PlayerColor.Light
         self.__players = [Player(PlayerColor.Light, None),
                         Player(PlayerColor.Dark, None)]
         #self.__timer = Timer(60.0, GameController.timeout, (self,));
@@ -67,6 +66,8 @@ class GameController:
         for i in range(12):
             self.addPiece(GamePiece(PieceColor.Light,getPlayer[PlayerColor.Light],self), Location(i))
             self.addPiece(GamePiece(PieceColor.Dark,getPlayer[PlayerColor.Dark],self), Location(32-i))
+        
+        self.__currentTurn = PlayerColor.Light
 
     def registerPlayer(self, playerColor, playerID, port):
         # Register players to the board
@@ -155,6 +156,11 @@ class GameController:
         # Determine whether the game is in an end state
         # --DUMMY--
         return False
+    
+    def ready(self):
+        # Determine whether the game is in an end state
+        # --DUMMY--
+        return len(self.__players) == 1
 
     @dummy
     def log(self, message):

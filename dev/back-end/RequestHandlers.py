@@ -83,13 +83,13 @@ class createPublicGameHandler(BaseHandle):
         print("create public request with u:%s"%(user))
         retval = True
         if user is not None:
-            retval &= sm.requestPrivateGame(user)
+            retval &= sm.requestPublicGame(user)
         else:
             retval = False
         
         stat = 0
         msg = ""
-        if rval:
+        if retval:
         # Status 200: User success
             stat = 200
             msg = "Awaiting Public Game"
@@ -162,6 +162,14 @@ class loginHandler(BaseHandle):
 
         self.set_status(stat)
         self.finish({"resp" : msg})
+
+class descriptionHandler(BaseHandle):
+    def get(self):
+        desc_path='/home/charles/checkers/dev/checkmate-front-end/src/components/About.js'
+        rendered = render_component(desc_path)
+        self.set_status = 200
+        self.write(rendered)
+
 
 class ContentHandler(BaseHandle):
     def get(self):
