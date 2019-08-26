@@ -86,7 +86,7 @@ class ServerManager:
     def requestPrivateGame(self, user):
         # Add a user to the public queue
         port = self.openPrivateGame(user)
-    
+
     def openPublicGame(self, user1=None, user2=None):
         # Open a public game. If no users are specified, pop some from queue
         if user1 is None:
@@ -153,20 +153,20 @@ class ServerManager:
         self.__logger.log(msg)
 
     def CLIinit(self, useCLI):
-        self.__headless = False
         menStr = "CheckMate Server: v" + str(cfg.version_number)
         sub = "Server Administration Interface"
         menu = CursesMenu(menStr, sub)
         menu_item = MenuItem("Menu Item")
         killGame = FunctionItem("Kill a Game[pid]", self.killGame, ['00000'])
+        haltServ = FunctionItem("Halt a game", self.halt, None)
         db_admin = SelectionMenu(["Add user", "Delete user"])
         submenu_item = SubmenuItem("Database Administration", db_admin, menu)
         serv_admin = SelectionMenu(["Server Config", "Server Control"])
         submenu_item2 = SubmenuItem("Server Administration", serv_admin, menu)
         menu.append_item(killGame)
         menu.append_item(submenu_item)
-
         menu.append_item(submenu_item2)
+        menu.append_item(haltServ)
         menu.show()
 
     def halt(self):
@@ -191,7 +191,7 @@ class ServerManager:
                                     createPublicGameHandler, \
                                     createPrivateGameHandler, \
                                     loginHandler
-        
+
         BaseHandle.game_manager = self
 
         self.__aio_loop = asyncio.new_event_loop()
