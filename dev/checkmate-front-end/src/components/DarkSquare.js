@@ -1,4 +1,3 @@
-
 import '../Game.css'
 import React, { Component } from 'react';
 import LightPiece from './LightPiece'
@@ -21,10 +20,10 @@ class DarkSquare extends Component {
     decideOccupation(){
         if(this.state.pieceInfo != null) {
             if(this.state.pieceInfo[0] === 0){
-                return <LightPiece/>
+                return <LightPiece pieceType={this.state.pieceInfo[1]}/>
             }
-            else if(this.props.pieceInfo[0] === 1){
-                return <DarkPiece/>
+            else {
+                return <DarkPiece pieceType={this.state.pieceInfo[1]}/>
             }
         }
     }
