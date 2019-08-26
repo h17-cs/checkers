@@ -12,6 +12,7 @@ class BaseHandle(tornado.web.RequestHandler):
         self.set_header("Access-Control-Allow-Headers", "*")
         self.set_header("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS")
         self.set_header("Content-Type", "application/json")
+
     def options(self):
         self.set_status(200)
         self.finish()
@@ -26,24 +27,11 @@ class AddUserHandler(BaseHandle):
             print(self.request)
         except ValueError:
             pass
-    def get_argument(self, arg, default=None):
-        if (    self.request.method in ['POST', 'PUT'] \
-                and self.json_data \
-                and (self.json_data["message_type"] == 3) ):
-            if arg in self.json_data.keys():
-                self.json_data['body'][arg]
-            else:
-                return None
-        else:
-            return super(AddUserHandler, self).get_argument(arg, default)
-    '''
-    def write_message(self, message):
-        self.write_message(message)
-    '''
+
     def post(self):
         sm = ServerManager.instance
-        usernm = self.get_argument('username', None)
-        passwd = self.get_argument('password', None)
+        usernm = self.get_body_argument('username', None)
+        passwd = self.get_body_argument('password', None)
         rval = True
         if not usernm is None and not passwd is None:
             rval &= sm.addUser(usernm, password)
@@ -68,9 +56,26 @@ class createPublicGameHandler(BaseHandler):
     def prepare(self):
         super(createPublicGameHandler, self).prepare()
     def get(self, slug):
-        user = self.get_argument('userid', None)
+        user = self.get_query_argument('userid', None)
+        retval = True
+        if userid is not None:
+            retval &= ServerManager.instance.requestPrivateGame(user)
+        else:
+            retval = False
         
-        ServerManager.instance.requestPublicGame(user)
+        stat = 0
+        msg = ""
+        if rval:
+        # Status 200: User success
+            stat = 200
+            msg = "Awaiting Public Game"
+        else:
+        # Status 400: User error
+            stat = 400
+            msg = "Failure to create Public Game"
+
+        self.set_status(stat)
+        self.finish({"resp" : msg})
         # await user auth at some point
         ##############################################
         # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
@@ -80,39 +85,55 @@ class createPrivateGameHandler(BaseHandler):
     def prepare(self):
         super(createPrivateGameHandler, self).prepare()
     def get(self, slug):
-        user = self.get_argument('userid', None)
+        user = self.get_query_argument('userid', None)
+        retval = True
+        if userid is not None:
+            retval &= ServerManager.instance.requestPrivateGame(user)
+        else:
+            retval = False
         
-        ServerManager.instance.requestPrivateGame(userCreated)
+        stat = 0
+        msg = ""
+        if rval:
+        # Status 200: User success
+            stat = 200
+            msg = "Awaiting private game"
+        else:
+        # Status 400: User error
+            stat = 400
+            msg = "Failure to create Private Game"
+
+        self.set_status(stat)
+        self.finish({"resp" : msg})
         # await user auth at some point
         ##############################################
         # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
         ##############################################
 
-class loginHandler(BaseHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-        self.set_header("Access-Control-Allow-Methods", "POST, GET")
-    def prepare(self):
-        super(loginHandler, self).prepare()
-        self.json_data = None
-        try:
-            self.json_data = tornado.escape.json_decode(self.request.body)
-        except ValueError:
-            pass
-    def get_argument(self, arg, default=None):
-        if (self.request.method in ['POST', 'PUT'] and self.json_data):
-            userToAuth = self.json_data['body']['username']
-            passwdToAuth = self.json_data['body']['password']
-            ##############################################
-            # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
-            ##############################################
-        else:
-            return super(AddUserHandler, self).get_argument(arg, default)
-    def write_message(self, message):
-        self.write_message(message)
+class loginHandler(registerHandler):
     def post(self):
-        print(self.get_argument('', None))
+        sm = ServerManager.instance
+        usernm = self.get_body_argument('username', None)
+        passwd = self.get_body_argument('password', None)
+        rval = True
+        if not usernm is None and not passwd is None:
+            rval &= sm.checkUser(usernm, password)
+        else:
+            rval = False
+        
+        stat = 0
+        msg = ""
+        if rval:
+        # Status 200: User success
+            stat = 200
+            msg = "Success"
+        else:
+        # Status 400: User error
+            stat = 400
+            msg = "Failed to log in"
+
+        self.set_status(stat)
+        self.finish({"resp" : msg})
 
 class ContentHandler(BaseHandler):
     def get(self):

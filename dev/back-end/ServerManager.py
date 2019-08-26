@@ -48,10 +48,8 @@ class ServerManager:
     def createGame(self, port1, port2, user1, user2=None, private=False):
 
         args = [    'createGame.py',
-                    port1,
-                    port2,
-                    user1,
-                    user2,
+                    control_port,
+                    user_port,
                ]
         if private:
             args.append('--private')
@@ -62,6 +60,10 @@ class ServerManager:
     def addPid(self, pid):
         # Add a pid to the internal list of game process IDs
         self.__game_pids.push(pid)
+
+    def checkUser(self, uname, passwd):
+        # Add a user from the database
+        return self.__db.queryForUser(uname,passwd)
 
     def addUser(self, uname, passwd):
         # Add a user from the database
