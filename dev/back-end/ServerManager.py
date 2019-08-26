@@ -168,7 +168,7 @@ class ServerManager:
         from RequestHandlers import AddUserHandler, \
                                     ContentHandler, \
                                     createPublicGameHandler, \
-                                    reatePrivateGameHandler, \
+                                    createPrivateGameHandler, \
                                     oginHandler
 
         aio_loop = asyncio.new_event_loop()
