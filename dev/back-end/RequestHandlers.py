@@ -13,6 +13,16 @@ class BaseHandle(tornado.web.RequestHandler):
         self.set_header("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS")
         self.set_header("Content-Type", "application/json")
 
+    def get_body_argument(self, query, **kwargs):
+        bod = super().get_body_argument('body', None)
+        if bod is None:
+            print("No body in message")
+            return None
+        if query in bod.keys():
+            return bod[query]
+        else:
+            return None
+
     def options(self):
         self.set_status(200)
         self.finish()
@@ -30,8 +40,9 @@ class AddUserHandler(BaseHandle):
 
     def post(self):
         sm = ServerManager.instance
-        usernm = self.get_body_argument('username', None)
-        passwd = self.get_body_argument('password', None)
+        usernm = self.get_body_argument('username')
+        passwd = self.get_body_argument('password')
+        print("add user request with u:%s, p:%s"%(usernm,passwd))
         rval = True
         if not usernm is None and not passwd is None:
             rval &= sm.addUser(usernm, password)
@@ -55,10 +66,11 @@ class AddUserHandler(BaseHandle):
 class createPublicGameHandler(BaseHandle):
     def prepare(self):
         super(createPublicGameHandler, self).prepare()
-    def get(self, slug):
-        user = self.get_query_argument('userid', None)
+    def get(self):
+        user = self.get_query_argument('userid')
+        print("create public request with u:%s"%(user))
         retval = True
-        if userid is not None:
+        if user is not None:
             retval &= ServerManager.instance.requestPrivateGame(user)
         else:
             retval = False
@@ -84,10 +96,11 @@ class createPublicGameHandler(BaseHandle):
 class createPrivateGameHandler(BaseHandle):
     def prepare(self):
         super(createPrivateGameHandler, self).prepare()
-    def get(self, slug):
-        user = self.get_query_argument('userid', None)
+    def get(self):
+        user = self.get_query_argument('userid')
+        print("create private request with u:%s"%(user))
         retval = True
-        if userid is not None:
+        if user is not None:
             retval &= ServerManager.instance.requestPrivateGame(user)
         else:
             retval = False
@@ -113,8 +126,9 @@ class createPrivateGameHandler(BaseHandle):
 class loginHandler(BaseHandle):
     def post(self):
         sm = ServerManager.instance
-        usernm = self.get_body_argument('username', None)
-        passwd = self.get_body_argument('password', None)
+        usernm = self.get_body_argument('username')
+        passwd = self.get_body_argument('password')
+        print("login request with u:%s, p:%s"%(usernm,passwd))
         rval = True
         if not usernm is None and not passwd is None:
             rval &= sm.checkUser(usernm, password)
