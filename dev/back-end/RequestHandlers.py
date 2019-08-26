@@ -8,23 +8,83 @@ import os,sys,time,threading
 class AddUserHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-        self.set_header("Access-Control-Allow-Methods", "POST, GET")
+        self.set_header("Access-Control-Allow-Headers", "*")
+        self.set_header("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS")
+        self.set_header("Content-Type", "application/json")
     def prepare(self):
         dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
         super(AddUserHandler, self).prepare()
         self.json_data = None
         try:
             self.json_data = tornado.escape.json_decode(self.request.body)
+            print(self.json_data)
+            print(self.request)
         except ValueError:
             pass
     def get_argument(self, arg, default=None):
-        if self.request.method in ['POST', 'PUT'] and self.json_data and (self.json_data["message_type"] == 3):
-            print("database post req recieved")
+        if (self.request.method in ['POST', 'PUT'] and self.json_data and (self.json_data["message_type"] == 3)):
             dm = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
             userToAdd = self.json_data['body']['username']
             passwdToAdd = self.json_data['body']['password']
-            self.finish(str(dm.addUser(userToAdd, passwdToAdd)))
+            self.set_status(200)
+            self.finish({"resp" : str(dm.addUser(userToAdd, passwdToAdd))})
+        else:
+            return super(AddUserHandler, self).get_argument(arg, default)
+    def write_message(self, message):
+        self.write_message(message)
+    def post(self):
+        print(self.get_argument('', None))
+    def options(self):
+        self.set_status(200)
+        self.finish()
+
+class createPublicGameHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header("Access-Control-Allow-Methods", "POST, GET")
+    def prepare(self):
+        super(createPublicGameHandler, self).prepare()
+    def get(self, slug):
+        userCreated = self.get_argument('userid', None)
+        # await user auth at some point
+        ##############################################
+        # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
+        ##############################################
+
+class createPrivateGameHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header("Access-Control-Allow-Methods", "POST, GET")
+    def prepare(self):
+        super(createPrivateGameHandler, self).prepare()
+    def get(self, slug):
+        userCreated = self.get_argument('userid', None)
+        # await user auth at some point
+        ##############################################
+        # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
+        ##############################################
+
+class loginHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header("Access-Control-Allow-Methods", "POST, GET")
+    def prepare(self):
+        super(loginHandler, self).prepare()
+        self.json_data = None
+        try:
+            self.json_data = tornado.escape.json_decode(self.request.body)
+        except ValueError:
+            pass
+    def get_argument(self, arg, default=None):
+        if (self.request.method in ['POST', 'PUT'] and self.json_data):
+            userToAuth = self.json_data['body']['username']
+            passwdToAuth = self.json_data['body']['password']
+            ##############################################
+            # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
+            ##############################################
         else:
             return super(AddUserHandler, self).get_argument(arg, default)
     def write_message(self, message):

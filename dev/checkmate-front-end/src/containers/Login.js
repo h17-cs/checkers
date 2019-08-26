@@ -12,8 +12,8 @@ class Login extends React.Component {
 constructor(props){
   super(props);
   this.state={
-    username: '',
-    password:''
+    username: this.props.username,
+    password:this.props.password
   }
  }
 
@@ -29,7 +29,7 @@ userHasAuthenticated() {
  handleClick(event){
    var self = this;
    //TODO: Change apiBaseURL to the actual URL
-	var apiBaseUrl = "http://httpbin.org/post";
+	var apiBaseUrl = "http://68.82.219.27:8080/login";
 	var payload={
     "message_type" : 3,
     "body" : {    
@@ -46,12 +46,17 @@ userHasAuthenticated() {
 			// uploadScreen.push(<Register appContext={self.props.appContext}/>)
       // self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
       self.userHasAuthenticated();
-      self.props.history.push({
-        pathname: '/game',
-        state: { email: self.state.username,
-                 password: self.state.password }
-          })
+      // self.props.push({
+      //   state: { username: self.state.username,
+      //            password: self.state.password }
+      //     })
+      self.setState({
+          state: { username: self.state.username,
+                    password: self.state.password }
+             })
       self.props.history.push("/");
+      console.log(window.localStorage)
+      localStorage.setItem("username", self.state.username)
 		}
 		else if(response.status === 204){
 			console.log("username password do not match");
@@ -102,5 +107,5 @@ render() {
 const style = {
  margin: 15,
 };
-const TestRouter = withRouter(Login);
+// const TestRouter = withRouter(Login);
 export default Login;

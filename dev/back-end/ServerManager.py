@@ -3,82 +3,144 @@
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
 
-from DummyWrap import dummy
-from DatabaseManager import DatabaseManager, DatabaseType
-from MessageManager import MessageManager
-from GameController import GameController
-from PortManager import PortManager
-import config as cfg
-import argparse
 import os,sys,time,threading
 import configparser
 import asyncio
 from cursesmenu import *
 from cursesmenu.items import *
-from RequestHandlers import AddUserHandler, ContentHandler
 import tornado.ioloop
 import tornado.web
+
+from DummyWrap import dummy
+from DatabaseManager import DatabaseManager, DatabaseType
+from GameController import GameController
+from ThreadsafeQueue import ThreadsafeQueue
+from WebsocketMessageManager import WebsocketMessageManager
+from PortManager import PortManager
+from RequestHandlers import AddUserHandler, ContentHandler, createPublicGameHandler, createPrivateGameHandler, loginHandler
+import config as cfg
+import argparse
 
 class ServerManager:
     def __init__(self):
         self.__db = DatabaseManager(DatabaseType.CSV, cfg.db_addr)
-
         # Instantiate the port manager for all games + admin messages
         self.__port_manager = PortManager(cfg.lower_bound, cfg.upper_bound)
-
         # Instantiate the message manager exclusively for admin messages
-        self.__message_manager = MessageManager(cfg.admin)
+        self.__message_manager = WebsocketMessageManager(cfg.admin)
+        self.__pid = os.getpid()
+        self.__headless = False
+        self.__public_requests = ThreadsafeQueue()
+        self.__game_pids = ThreadsafeQueue()
+        self.__headless = False
+        self.__running = True
+        self.__worker = threading.Thread(target=self.run)
+        self.__polling = threading.Thread(target=self.pollPublic)
 
-    def runGame():
-        gc = GameController()
-        wmm = WebsocketMessageManager()
-        wmm.run()
-    
-    @dummy
+    def createGame(self, port1, port2, user1, user2=None, private=False):
+
+        args = [    'createGame.py',
+                    port1,
+                    port2,
+                    user1,
+                    user2,
+               ]
+        if private:
+            args.append('--private')
+        pid = os.spawnlp(os.P_NOWAIT, 'createGame.py', args, '--user1=%s')
+        self.addPid(pid)
+        return True
+
+    def addPid(self, pid):
+        # Add a pid to the internal list of game process IDs
+        self.__game_pids.push(pid)
+
     def addUser(self, uname, passwd):
+        # Add a user from the database
         return self.__db.addUser(uname,passwd)
 
-    @dummy
     def deleteUser(self, uname, passwd):
+        # Remove a user from the database
         return self.__db.deleteUser(uname,passwd)
 
-    @dummy
     def openPublicGame(self, user1=None, user2=None):
-        game = GameController()
-        return True
+        # Open a public game. If no users are specified, pop some from queue
+        if user1 is None:
+            user1 = self.__public_requests.pop(block=True)
+        if user2 is None:
+            user2 = self.__public_requests.pop(block=True)
 
-    @dummy
-    def openPrivateGame(self, user1=None, user2=None):
-        game = GameController()
-        return True
+        p = self.__port_manager.getPort()
+        if p == -1:
+            # No ports available
+            print("Cannot open public game: No ports available")
+            return None
+        self.createGame(p, user1, user2, private=False)
+        return p
 
-    @dummy
+    def openPrivateGame(self, user1, user2=None):
+        p = self.__port_manager.getPort()
+        if p == -1:
+            # No ports available
+            print("Cannot open private game for user %s: No ports available"%user1)
+            return None
+        self.createGame(p, user1, user2, private=True)
+        return p
+
+    def pollPublic(self):
+        print("Not implem")
+
+    def isRunning(self):
+        # Indicates whether or not the server is running
+        return self.__running
+
     def killGame(self, pid):
-        return True
+        # Kills the game associated with the given PID.
+        # If the process can't be killed, reports
+        if (not self.__headless):
+            pid = input("Enter a pid")
+            pid = int(pid)
+        r = self.__game_pids.remove(pid)
+        if not r:
+            print("PID not valid- pid:%d"%(pid))
+            return False
+        else:
+            os.kill(pid,signal.SIGINT)
+            _, status = os.waitpid(pid)
+            attempts = 0
+            while not os.WIFSTOPPED(status) and attempts < MAXATTEMPTS:
+                attempts+=1
+                time.sleep(0.01)
+                os.kill(pid,signal.SIGINT)
+                _, status = os.waitpid(pid)
+            if attempts == MAXATTEMPTS:
+                self.log("Aborting pkill(2) pid:%d after %d attempts"%(pid,attempts))
+                return False
+            self.log("Successfully killed pid:%d"%(pid))
+            return True
+
+    @dummy
+    def log(self, msg):
+        pass
 
     def run(self, useCLI):
         print("Use cli")
         print(useCLI)
         if (useCLI):
-
-            # Do other init tasks...
-            # ...
-            # ...
-
+            self.__headless = False
             menStr = "CheckMate Server: v" + str(cfg.version_number)
             sub = "Server Administration Interface"
             menu = CursesMenu(menStr, sub)
             menu_item = MenuItem("Menu Item")
-            killGame = FunctionItem("Kill a Game[pid]", input, ["Enter a PID"])
+            killGame = FunctionItem("Kill a Game[pid]", self.killGame, ['00000'])
             db_admin = SelectionMenu(["Add user", "Delete user"])
             submenu_item = SubmenuItem("Database Administration", db_admin, menu)
             serv_admin = SelectionMenu(["Server Config", "Server Control"])
             submenu_item2 = SubmenuItem("Server Administration", serv_admin, menu)
             menu.append_item(killGame)
             menu.append_item(submenu_item)
-            menu.append_item(submenu_item2)
 
-            # Blocks the rest
+            menu.append_item(submenu_item2)
             menu.show()
 
     @dummy
@@ -88,9 +150,9 @@ class ServerManager:
     def serveHTTP(self):
         aio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(aio_loop)
-        endpoints = [ (r"/addUser", AddUserHandler), (r"/", ContentHandler),]
+        endpoints = [ (r"/addUser", AddUserHandler), (r"/", ContentHandler), (r"/createPublicGame", createPublicGameHandler), (r"/createPrivateGame", createPrivateGameHandler), (r"/login", loginHandler),]
         dblist = tornado.web.Application(endpoints, debug=cfg.debug)
-        dblist.listen(8080)
+        dblist.listen(cfg.web_test)
         tornado.ioloop.IOLoop.current().start()
 
 if __name__ == '__main__':
@@ -106,13 +168,13 @@ if __name__ == '__main__':
      )
     args = parser.parse_args()
     if (args.headless):
+
+        # NOTE: All for testing below.
+
         sm = ServerManager()
         sm.run(False)
         t = threading.Thread(target=sm.serveHTTP, args=())
         t.start()
-        game1 = GameController(5507)
-        t1 = threading.Thread(target=game1.run, args=())
-        t1.start()
         # game2 = GameController(5508)
         # t2 = threading.Thread(target=game2.run, args=())f
         # t2.start()

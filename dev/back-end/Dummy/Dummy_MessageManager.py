@@ -1,4 +1,4 @@
-# Dummy code for MessageManager class
+# Dummy code for WebsocketMessageManager class
 # Created: 08/15
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
@@ -10,7 +10,7 @@ import time
 import zmq
 from Message import Message, MessageType
 
-class MessageManager:
+class WebsocketMessageManager:
     @dummy
     def __init__(self, portbind):
         self.__port = None

@@ -2,7 +2,7 @@
 # Created: 08/15
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
-
+# test comm
 from enum import Enum
 from DummyWrap import dummy
 from PortManager import PortManager
@@ -37,11 +37,23 @@ class WebsocketMessageManager:
         msg = self.__socket.recv(copy=True)
         return Message.parse(msg);
 
+    # DEPRICIATED: Used to monitor a socket for connections
+    def monitorSocket(self, monitor, timer):
+        events = cfg.events
+        timeout = time.time() + timer
+        connected_users = []
+        while(monitor.poll() and (time.time() < timeout)):
+            event = recv_monitor_message(monitor)
+            event.update({'descriptor:': events[event['event']]})
+            if ("EVENT_ACCEPTED" in  events[event['event']]):
+                print("Player connected!")
+                connected_users.append(event['value'])
+            print("Event: {}".format(event))
     def run(self):
         aio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(aio_loop)
         print("Endpoint URL for WebsocketMessageHandler: /" + str(self.__endpoint_url))
-        epurl = "/" + self.__endpoint_url
+        epurl = "/game/" + self.__endpoint_url + "/(.*)"
         websocket_endpoint = tornado.web.Application([(epurl, WebsocketMessageHandler),])
         serv = tornado.httpserver.HTTPServer(websocket_endpoint)
         print("PORT: " + str(self.__port))
@@ -50,12 +62,8 @@ class WebsocketMessageManager:
 class WebsocketMessageHandler(tornado.websocket.WebSocketHandler):
     def get(self):
         print("Get got")
-    def open(self):
+    def open(self, user):
         print("Connection identified")
-        # if (len(self.connected_players) < 2):
-        #     self.connected_players.append(self)
-        #     print("Player has connected")
-        #     self.write_message("Connected")
     def on_message(self, message):
         print ('message received:  %s' % message)
         # Reverse Message and send it back
