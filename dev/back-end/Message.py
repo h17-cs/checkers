@@ -44,6 +44,7 @@ class Message:
 
     def parse(jstring):
         # STATIC: Generate a message from a JSON string
+        print (jstring)
         obj = json.loads(jstring)
         mtype = obj['message_type']
         mbody = obj['body']
