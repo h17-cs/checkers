@@ -172,27 +172,26 @@ class ServerManager:
         """Logs a message"""
         self.__logger.log(msg)
 
-    def CLIinit(self, useCLI):
+    def CLIinit(self):
         """Inits the Server menu"""
-        if (useCLI):
-            menStr = "CheckMate Server: v" + str(cfg.version_number)
-            sub = "Server Administration Interface"
-            menu = cursesmenu.CursesMenu(menStr, sub)
-            killGame = cursesmenu.FunctionItem(
-                "Kill a Game[pid]", self.killGame, ['00000'])
-            haltServ = cursesmenu.FunctionItem("Halt server", self.halt, None)
-            db_admin = cursesmenu.SelectionMenu(["Add user", "Delete user"])
-            submenu_item = cursesmenu.SubmenuItem(
-                "Database Administration", db_admin, menu)
-            serv_admin = cursesmenu.SelectionMenu(
-                ["Server Config", "Server Control"])
-            submenu_item2 = cursesmenu.SubmenuItem(
-                "Server Administration", serv_admin, menu)
-            menu.append_item(killGame)
-            menu.append_item(submenu_item)
-            menu.append_item(submenu_item2)
-            menu.append_item(haltServ)
-            menu.show()
+        menStr = "CheckMate Server: v" + str(cfg.version_number)
+        sub = "Server Administration Interface"
+        menu = cursesmenu.CursesMenu(menStr, sub)
+        killGame = cursesmenu.FunctionItem(
+            "Kill a Game[pid]", self.killGame, ['00000'])
+        haltServ = cursesmenu.FunctionItem("Halt server", self.halt, None)
+        db_admin = cursesmenu.SelectionMenu(["Add user", "Delete user"])
+        submenu_item = cursesmenu.SubmenuItem(
+            "Database Administration", db_admin, menu)
+        serv_admin = cursesmenu.SelectionMenu(
+            ["Server Config", "Server Control"])
+        submenu_item2 = cursesmenu.SubmenuItem(
+            "Server Administration", serv_admin, menu)
+        menu.append_item(killGame)
+        menu.append_item(submenu_item)
+        menu.append_item(submenu_item2)
+        menu.append_item(haltServ)
+        menu.show()
 
     def halt(self):
         """Halts the server, killing all open games"""
