@@ -1,0 +1,14 @@
+************* Module PortManager
+PortManager.py:1:0: C0103: Module name "PortManager" doesn't conform to snake_case naming style (invalid-name)
+PortManager.py:22:4: C0103: Method name "getPort" doesn't conform to snake_case naming style (invalid-name)
+PortManager.py:26:11: C1801: Do not use `len(SEQUENCE)` to determine if a sequence is empty (len-as-condition)
+PortManager.py:37:4: C0103: Method name "freePort" doesn't conform to snake_case naming style (invalid-name)
+PortManager.py:42:12: C0103: Variable name "p" doesn't conform to snake_case naming style (invalid-name)
+PortManager.py:50:4: C0103: Method name "portsAvailable" doesn't conform to snake_case naming style (invalid-name)
+PortManager.py:5:0: W0611: Unused randint imported from random (unused-import)
+PortManager.py:8:0: W0611: Unused dummy imported from DummyWrap (unused-import)
+PortManager.py:7:0: C0412: Imports from package random are not grouped (ungrouped-imports)
+
+------------------------------------------------------------------
+Your code has been rated at 7.57/10 (previous run: 7.57/10, +0.00)
+

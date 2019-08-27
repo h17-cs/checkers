@@ -1,0 +1,15 @@
+************* Module DatabaseManager
+DatabaseManager.py:1:0: C0103: Module name "DatabaseManager" doesn't conform to snake_case naming style (invalid-name)
+DatabaseManager.py:12:0: C0111: Missing class docstring (missing-docstring)
+DatabaseManager.py:28:4: C0103: Method name "addUser" doesn't conform to snake_case naming style (invalid-name)
+DatabaseManager.py:34:8: R1705: Unnecessary "else" after "return" (no-else-return)
+DatabaseManager.py:39:4: C0103: Method name "deleteUser" doesn't conform to snake_case naming style (invalid-name)
+DatabaseManager.py:41:8: R1705: Unnecessary "else" after "return" (no-else-return)
+DatabaseManager.py:46:4: C0103: Method name "queryForUser" doesn't conform to snake_case naming style (invalid-name)
+DatabaseManager.py:48:8: R1705: Unnecessary "else" after "return" (no-else-return)
+DatabaseManager.py:8:0: W0611: Unused dummy imported from DummyWrap (unused-import)
+DatabaseManager.py:9:0: W0611: Unused CSVDB_Header imported from CSVDatabase (unused-import)
+
+------------------------------------------------------------------
+Your code has been rated at 6.30/10 (previous run: 6.30/10, +0.00)
+

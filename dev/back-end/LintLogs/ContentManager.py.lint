@@ -1,0 +1,9 @@
+************* Module ContentManager
+ContentManager.py:1:0: C0103: Module name "ContentManager" doesn't conform to snake_case naming style (invalid-name)
+ContentManager.py:14:0: W0223: Method 'data_received' is abstract in class 'RequestHandler' but is not overridden (abstract-method)
+ContentManager.py:28:0: C0103: Constant name "app" doesn't conform to UPPER_CASE naming style (invalid-name)
+ContentManager.py:32:0: C0103: Constant name "http_server" doesn't conform to UPPER_CASE naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 8.00/10 (previous run: 8.00/10, +0.00)
+

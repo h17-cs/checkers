@@ -1,0 +1,6 @@
+************* Module DummyWrap
+DummyWrap.py:1:0: C0103: Module name "DummyWrap" doesn't conform to snake_case naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 8.00/10 (previous run: 8.00/10, +0.00)
+
