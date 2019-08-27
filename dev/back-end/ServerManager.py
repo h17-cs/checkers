@@ -17,6 +17,7 @@ from GameController import GameController
 from ThreadsafeQueue import ThreadsafeQueue
 from WebsocketMessageManager import WebsocketMessageManager
 from PortManager import PortManager
+from SocketManager import AdminSocket
 from RequestHandlers import AddUserHandler, ContentHandler, createPublicGameHandler, createPrivateGameHandler, loginHandler
 import config as cfg
 import argparse
@@ -36,6 +37,7 @@ class ServerManager:
         self.__running = True
         self.__worker = threading.Thread(target=self.run)
         self.__polling = threading.Thread(target=self.pollPublic)
+        self.__admin = AdminSocket(cfg.admin)
 
     def createGame(self, port1, port2, user1, user2=None, private=False):
 

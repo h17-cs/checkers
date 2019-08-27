@@ -20,19 +20,15 @@ class PlayerColor(Enum):
     Dark = 1
 
 class Player:
-    def __init__(self, playerId, playerHandler, activeGame):
+    def __init__(self, playerId, handler, activeGame):
         self.__id = playerId;
-        self.__handler = playerHandler
+        self.__handler = handler
         self.__game = activeGame
         self.__color = None
 
     def getID(self):
         # Return player's ID
         return self.__id
-
-    def getHandler(self):
-        # Return player's message handler
-        return self.__handler
 
     def getGame(self):
         # Return player's active game
@@ -77,5 +73,6 @@ class Player:
 
     @dummy
     def act(self):
-        # --DUMMY--
+        self.__connection();
+
         pass

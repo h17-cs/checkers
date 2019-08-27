@@ -4,6 +4,7 @@
 # Edited: 08/15 (by Charles)
 
 from enum import Enum
+from Message import Message
 
 class ActionType(Enum):
     # Describes the type of action. Options are:
@@ -36,3 +37,6 @@ class Action:
         # Sets the action data
         self.__actionData = newData
 
+
+class ActionMessage(Message):
+    
