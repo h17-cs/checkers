@@ -6,4 +6,3 @@ for u in $users; do
     sleep $(($RANDOM % 100)).$(($RANDOM % 100)) && curl -d "{\"message_type\" : 3, \"body\" : {\"username\": \"$u$id\" ,\"password\": \"test\"}}" -X POST 68.82.219.27:8080/addUser --connect-timeout 60 && echo " OK!" &
   done
 done
-

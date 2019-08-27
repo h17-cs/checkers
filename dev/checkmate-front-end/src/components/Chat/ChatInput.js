@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { TextField } from 'material-ui';
 
 class ChatInput extends Component {
   static propTypes = {
@@ -19,7 +20,7 @@ class ChatInput extends Component {
           this.setState({ message: '' })
         }}
       >
-        <input
+        <TextField
           type="text"
           placeholder={'Enter message...'}
           value={this.state.message}

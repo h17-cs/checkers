@@ -1,3 +1,4 @@
+"""Handles all content serving of the ServerManager"""
 import os.path
 from mimetypes import guess_type
 
@@ -11,8 +12,10 @@ FILES_ROOT = os.path.join(BASEDIR_PATH, 'files')
 
 
 class FileHandler(tornado.web.RequestHandler):
+    """ Handles the serving of file"""
 
     def get(self, path):
+        """ Gets the file"""
         file_location = os.path.join(FILES_ROOT, path)
         if not os.path.isfile(file_location):
             raise tornado.web.HTTPError(status_code=404)
@@ -20,6 +23,7 @@ class FileHandler(tornado.web.RequestHandler):
         self.add_header('Content-Type', content_type)
         with open(file_location) as source_file:
             self.write(source_file.read())
+
 
 app = tornado.web.Application([
     tornado.web.url(r"/(.+)", FileHandler),
