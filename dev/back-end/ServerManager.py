@@ -104,12 +104,12 @@ class ServerManager:
         if control == -1:
             # No ports available
             self.log("Cannot open public game: No ports available for control")
-            return None
+            return False
         user = self.__port_manager.getPort()
         if user == -1:
             # No ports available
             self.log("Cannot open public game: No ports available for user")
-            return None
+            return False
         self.createGame(control, user, private=False)
 
         return True
@@ -120,12 +120,12 @@ class ServerManager:
         if control == -1:
             # No ports available
             self.log("Cannot open public game: No ports available for control")
-            return None
+            return False
         user = self.__port_manager.getPort()
         if user == -1:
             # No ports available
             self.log("Cannot open public game: No ports available for user")
-            return None
+            return False
         self.createGame(control, user, private=True)
         return True
 
