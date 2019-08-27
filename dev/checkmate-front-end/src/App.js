@@ -56,7 +56,7 @@ class App extends Component {
             <LinkContainer to="/about">
                   <NavItem>About</NavItem>
             </LinkContainer>
-            {this.state.isAuthenticated ? 
+            {window.localStorage.getItem("username") ? 
               <Fragment>
                 <LinkContainer to="/">
                   <NavItem onClick={this.handleLogout}>Logout</NavItem>

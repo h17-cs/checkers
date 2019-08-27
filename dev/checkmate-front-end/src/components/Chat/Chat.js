@@ -5,7 +5,8 @@ import ChatMessage from './ChatMessage'
 
 
 
-const URL = 'ws://68.82.219.27:2500'
+//address to test on a local server for testing.
+const URL = 'ws://localhost:3030'
 
 class Chat extends Component {
   state = {

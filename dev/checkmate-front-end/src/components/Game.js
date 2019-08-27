@@ -3,7 +3,6 @@ import GameInfo from "./GameInfo";
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-const URL = 'ws://localhost:3030'
 
 class Game extends Component {
    constructor(props){
@@ -99,54 +98,54 @@ class Game extends Component {
        }
    }
 
-   ws = new WebSocket(URL)
+//    ws = new WebSocket(URL)
 
    componentDidMount(){
        this.interval = setInterval(() => this.timer(), 1000)
 
-       this.ws.onopen = () => {
-        // on connecting, do nothing but log it to the console
-        console.log('connected')
-      }
+    //    this.ws.onopen = () => {
+    //     // on connecting, do nothing but log it to the console
+    //     console.log('connected')
+    //   }
   
-      this.ws.onmessage = evt => {
-        // on receiving a message, add it to the list of messages
-        const message = JSON.parse(evt.data)
-        this.addMessage(message)
-      }
+    //   this.ws.onmessage = evt => {
+    //     // on receiving a message, add it to the list of messages
+    //     const message = JSON.parse(evt.data)
+    //     this.addMessage(message)
+    //   }
   
-      this.ws.onclose = () => {
-        console.log('disconnected')
-        // automatically try to reconnect on connection loss
-        this.setState({
-          ws: new WebSocket(URL),
-        })
-      }
+    //   this.ws.onclose = () => {
+    //     console.log('disconnected')
+    //     // automatically try to reconnect on connection loss
+    //     this.setState({
+    //       ws: new WebSocket(URL),
+    //     })
+    //   }
    }
 
    componentWillMount(){
        clearInterval(this.interval);
    }
 
-   addMessage = message =>
-    this.setState(state => ({ messages: [message, ...state.messages] }))
+//    addMessage = message =>
+//     this.setState(state => ({ messages: [message, ...state.messages] }))
 
-    submitMessage = messageString => {
-        // on submitting the ChatInput form, send the message, add it to the list and reset the input
-        // const message = { 
-        //     name: this.state.name, 
-        //     message: messageString 
-        // }
-        const message = { 
-            turn: this.state.playerTurn,
-            isGameOver:this.state.timeExpire,
-            didForfeit:this.state.didForfeit,
-            timeExpire:this.state.didForfeit,
-            moveMade: this.state.moveOrder
-        }
-        this.ws.send(JSON.stringify(message))
-        this.addMessage(message)
-    }
+    // submitMessage = messageString => {
+    //     // on submitting the ChatInput form, send the message, add it to the list and reset the input
+    //     // const message = { 
+    //     //     name: this.state.name, 
+    //     //     message: messageString 
+    //     // }
+    //     const message = { 
+    //         turn: this.state.playerTurn,
+    //         isGameOver:this.state.timeExpire,
+    //         didForfeit:this.state.didForfeit,
+    //         timeExpire:this.state.didForfeit,
+    //         moveMade: this.state.moveOrder
+    //     }
+    //     this.ws.send(JSON.stringify(message))
+    //     this.addMessage(message)
+    // }
    
    timer(){
         this.setState({floatTimer: (this.state.floatTimer - 1)})
