@@ -35,7 +35,8 @@ class Message:
         # Add a (key, value) pair to the message body
         if key in self.__messageBody.keys():
             return self.__messageBody[key];
-        else return None;
+        else:
+            return None;
 
     def addField(self, key, value):
         # Add a (key, value) pair to the message body

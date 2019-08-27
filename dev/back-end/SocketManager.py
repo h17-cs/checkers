@@ -3,6 +3,7 @@ import socket
 import threading
 from enum import IntEnum
 from Message import Message, MessageType
+from DummyWrap import dummy
 
 class SocketManager:
     def __init__(self, listenport):
@@ -57,13 +58,13 @@ class GameSocket(SocketManager):
         super().__init__(port)
         self.__connections=[]
 
-    def setGame(self, g);
+    def setGame(self, g):
         self.__game = g
 
     def onconnect(self, c, addr):
         m = Message.parse(c.recv(2048));
         act = m.getField("message_action")
-        if m.getType() == MessageType.AccountAdmin && act is not None and act == 0:
+        if m.getType() == MessageType.AccountAdmin and act is not None and act == 0:
             usr = m.getField("username")
             resp = g.addUser(usr) if not usr is None else False
             if resp:
@@ -109,3 +110,4 @@ class AdminSocket(SocketManager):
         self.__svinst = server;
 
     def onconnnect(self, c, addr):
+        pass
