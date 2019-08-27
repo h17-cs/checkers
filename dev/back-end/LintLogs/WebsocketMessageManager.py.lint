@@ -17,5 +17,5 @@ WebsocketMessageManager.py:16:0: C0411: standard import "import asyncio" should 
 WebsocketMessageManager.py:13:0: C0412: Imports from package zmq are not grouped (ungrouped-imports)
 
 ------------------------------------------------------------------
-Your code has been rated at 5.79/10 (previous run: 0.88/10, +4.91)
+Your code has been rated at 5.79/10 (previous run: 5.79/10, +0.00)
 

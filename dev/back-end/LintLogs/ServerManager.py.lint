@@ -35,5 +35,5 @@ ServerManager.py:222:33: E0602: Undefined variable 'descriptionHandler' (undefin
 ServerManager.py:215:8: W0201: Attribute '__aio_loop' defined outside __init__ (attribute-defined-outside-init)
 
 ------------------------------------------------------------------
-Your code has been rated at 6.18/10 (previous run: 6.51/10, -0.33)
+Your code has been rated at 6.18/10 (previous run: 6.18/10, +0.00)
 

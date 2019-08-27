@@ -116,14 +116,18 @@ class ServerManager:
 
     def openPrivateGame(self, user1, user2=None):
         """Creates a new private game from the request of a user"""
-        p = self.__port_manager.getPort()
-        if p == -1:
+        control = self.__port_manager.getPort()
+        if control == -1:
             # No ports available
-            self.log(
-                "Cannot open private game for user %s: No ports available" % user1)
+            self.log("Cannot open public game: No ports available for control")
             return None
-        self.createGame(p, user1, user2, private=True)
-        return p
+        user = self.__port_manager.getPort()
+        if user == -1:
+            # No ports available
+            self.log("Cannot open public game: No ports available for user")
+            return None
+        self.createGame(control, user, private=True)
+        return True
 
     def pollPublic(self):
         """Polls for users in the public queue"""

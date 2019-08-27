@@ -5,5 +5,5 @@ ContentManager.py:28:0: C0103: Constant name "app" doesn't conform to UPPER_CASE
 ContentManager.py:32:0: C0103: Constant name "http_server" doesn't conform to UPPER_CASE naming style (invalid-name)
 
 ------------------------------------------------------------------
-Your code has been rated at 8.00/10 (previous run: 3.00/10, +5.00)
+Your code has been rated at 8.00/10 (previous run: 8.00/10, +0.00)
 

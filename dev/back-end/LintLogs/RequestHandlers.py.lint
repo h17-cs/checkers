@@ -37,5 +37,5 @@ RequestHandlers.py:10:0: C0411: standard import "import time" should be placed b
 RequestHandlers.py:11:0: C0411: standard import "import threading" should be placed before "import tornado.web" (wrong-import-order)
 
 ------------------------------------------------------------------
-Your code has been rated at 6.88/10 (previous run: 6.25/10, +0.62)
+Your code has been rated at 6.88/10 (previous run: 6.88/10, +0.00)
 
