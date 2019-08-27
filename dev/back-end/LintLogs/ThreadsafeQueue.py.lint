@@ -1,0 +1,10 @@
+************* Module ThreadsafeQueue
+ThreadsafeQueue.py:1:0: C0103: Module name "ThreadsafeQueue" doesn't conform to snake_case naming style (invalid-name)
+ThreadsafeQueue.py:25:8: R1705: Unnecessary "elif" after "return" (no-else-return)
+ThreadsafeQueue.py:25:11: C1801: Do not use `len(SEQUENCE)` to determine if a sequence is empty (len-as-condition)
+ThreadsafeQueue.py:29:18: C1801: Do not use `len(SEQUENCE)` to determine if a sequence is empty (len-as-condition)
+ThreadsafeQueue.py:50:4: C0103: Method name "ImFeelingUnlucky" doesn't conform to snake_case naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 8.81/10 (previous run: 8.81/10, +0.00)
+

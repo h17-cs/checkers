@@ -1,0 +1,14 @@
+************* Module Message
+Message.py:1:0: C0103: Module name "Message" doesn't conform to snake_case naming style (invalid-name)
+Message.py:24:8: C0103: Attribute name "__messageType" doesn't conform to snake_case naming style (invalid-name)
+Message.py:25:8: C0103: Attribute name "__messageBody" doesn't conform to snake_case naming style (invalid-name)
+Message.py:35:4: C0103: Method name "getType" doesn't conform to snake_case naming style (invalid-name)
+Message.py:39:4: C0103: Method name "getField" doesn't conform to snake_case naming style (invalid-name)
+Message.py:41:8: R1705: Unnecessary "else" after "return" (no-else-return)
+Message.py:46:4: C0103: Method name "addField" doesn't conform to snake_case naming style (invalid-name)
+Message.py:50:4: E0213: Method should have "self" as first argument (no-self-argument)
+Message.py:62:8: W0702: No exception type(s) specified (bare-except)
+
+------------------------------------------------------------------
+Your code has been rated at 6.06/10 (previous run: 6.06/10, +0.00)
+

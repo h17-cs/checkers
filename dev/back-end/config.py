@@ -3,8 +3,6 @@
 # Due to the nature of this file, it fails to reach the threshold set for
 # static analysis.
 
-import zmq
-
 # The administrative port
 admin = 2048
 
@@ -13,13 +11,6 @@ lower_bound = 2049
 
 # The upper bound of the port range to use.
 upper_bound = 3072
-
-# ZMQ Event types, in case we want to change
-events = {}
-for name in dir(zmq):
-    if name.startswith('EVENT_'):
-        val = getattr(zmq, name)
-        events[val] = name
 
 # Visual version number because we lazy
 version_number = "0.1.0"

@@ -1,0 +1,11 @@
+************* Module Location
+Location.py:1:0: C0103: Module name "Location" doesn't conform to snake_case naming style (invalid-name)
+Location.py:21:4: C0103: Method name "toYXcrd" doesn't conform to snake_case naming style (invalid-name)
+Location.py:25:4: C0103: Method name "toXYcrd" doesn't conform to snake_case naming style (invalid-name)
+Location.py:48:4: C0103: Method name "toIndex" doesn't conform to snake_case naming style (invalid-name)
+Location.py:52:4: C0103: Method name "toLocalIndex" doesn't conform to snake_case naming style (invalid-name)
+Location.py:52:4: R0201: Method could be a function (no-self-use)
+
+------------------------------------------------------------------
+Your code has been rated at 6.25/10 (previous run: 6.25/10, +0.00)
+

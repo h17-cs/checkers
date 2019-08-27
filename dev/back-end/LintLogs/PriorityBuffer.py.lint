@@ -1,0 +1,23 @@
+************* Module PriorityBuffer
+PriorityBuffer.py:1:0: C0103: Module name "PriorityBuffer" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:1:0: C0111: Missing module docstring (missing-docstring)
+PriorityBuffer.py:43:8: C0103: Attribute name "__updateCount" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:23:8: C0103: Method name "getCount" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:27:8: C0103: Method name "getEntry" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:58:8: C0103: Variable name "returnCode" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:60:12: C0103: Variable name "e" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:63:16: C0103: Variable name "returnCode" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:69:8: R1705: Unnecessary "else" after "return" (no-else-return)
+PriorityBuffer.py:76:12: C0103: Variable name "returnCode" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:88:12: C0103: Variable name "e" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:86:12: W0612: Unused variable 'i' (unused-variable)
+PriorityBuffer.py:97:12: E0102: function already defined line 94 (function-redefined)
+PriorityBuffer.py:97:12: C0103: Argument name "x" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:97:25: C0321: More than one statement on a single line (multiple-statements)
+PriorityBuffer.py:102:12: C0103: Variable name "e" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:116:12: C0103: Variable name "e" doesn't conform to snake_case naming style (invalid-name)
+PriorityBuffer.py:6:0: W0611: Unused import time (unused-import)
+
+------------------------------------------------------------------
+Your code has been rated at 7.28/10 (previous run: 7.28/10, +0.00)
+

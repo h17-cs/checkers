@@ -1,0 +1,11 @@
+************* Module MessageManager
+MessageManager.py:1:0: C0103: Module name "MessageManager" doesn't conform to snake_case naming style (invalid-name)
+MessageManager.py:21:46: E1101: Module 'zmq' has no 'REP' member (no-member)
+MessageManager.py:33:4: C0103: Method name "monitorSocket" doesn't conform to snake_case naming style (invalid-name)
+MessageManager.py:35:17: E1101: Module 'config' has no 'events' member (no-member)
+MessageManager.py:33:4: R0201: Method could be a function (no-self-use)
+MessageManager.py:9:0: W0611: Unused dummy imported from DummyWrap (unused-import)
+
+------------------------------------------------------------------
+Your code has been rated at 5.00/10 (previous run: 3.21/10, +1.79)
+
