@@ -10,7 +10,7 @@ class SocketManager:
         self.__port = listenport
         self.__halted = False;
         self.__users = {};
-        self.__worker = threading.Thread(target=listen);
+        self.__worker = threading.Thread(target=self.listen);
         self.__worker.start();
 
     def listen(self):
@@ -69,7 +69,9 @@ class GameSocket(SocketManager):
             resp = g.addUser(usr) if not usr is None else False
             if resp:
                 self.__connections.append(c);
+                c.send("Success")
             else:
+                c.send("Failed")
                 c.close()
 
         else:
