@@ -16,3 +16,6 @@ Members are Idan, Charles, Nick, and Brendan.
   * `pip install pylint`
   #### OR
   * `pip install pylint --upgrade`
+* Running React Frontend
+  * `npm install`
+  * `npm start`

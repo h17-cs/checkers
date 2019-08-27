@@ -5,8 +5,6 @@ import "./Login.css"
 import "../App"
 import React from 'react';
 import axios from 'axios'
-import {withRouter, Redirect} from "react-router"
-//TODO: change to actual screen redirect after successful login
 
 class Login extends React.Component {
 constructor(props){
@@ -43,31 +41,16 @@ userHasAuthenticated() {
 		console.log(response);
 		if(response.status === 200){
 			console.log("Login successfull");
-			// var uploadScreen=[];
-			// uploadScreen.push(<Register appContext={self.props.appContext}/>)
-      // self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
       self.userHasAuthenticated();
-      // self.props.push({
-      //   state: { username: self.state.username,
-      //            password: self.state.password }
-      //     })
-      self.setState({
-          state: { username: self.state.username,
-                    password: self.state.password }
-             })
-      self.props.history.push("/");
-      console.log(window.localStorage)
       localStorage.setItem("username", self.state.username)
+      self.props.history.push("/");
+      window.location.reload();
+      
 		}
 		else if(response.status === 204){
 			console.log("username password do not match");
 			alert("username password do not match")
     }
-    //TODO: Uncomment when database is ready
-		// else{
-		// 	console.log("username does not exists");
-		// 	//alert("username does not exist");
-		// }
 	})
 	.catch(function (error) {
 		console.log(error);
@@ -88,7 +71,7 @@ render() {
             type="username"
             floatingLabelText="Username"
             onChange = {(event,newValue) => this.setState({username:newValue})}
-            />
+          />
           <br/>
             <TextField
               type = "password"
@@ -108,5 +91,4 @@ render() {
 const style = {
  margin: 15,
 };
-// const TestRouter = withRouter(Login);
 export default Login;

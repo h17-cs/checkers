@@ -18,7 +18,9 @@ class Register extends Component {
   }
 
   handleClick(event){
-    //TODO: Change apiBaseURL to the actual URL
+    
+    var self = this;
+   
     var apiBaseUrl = "http://68.82.219.27:8080/addUser";
     console.log("values",this.state.username,this.state.password);
     //To be done:check for empty values before hitting submit
@@ -29,24 +31,23 @@ class Register extends Component {
         "password":this.state.password
       }
     }
-    axios.post(apiBaseUrl, payload, {headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}, timout: 15000})
-   .then(function (response) {
-     console.log(response);
-     if(response.status === 200){
-      //  console.log("registration successfull");
-       var loginscreen=[];
-       loginscreen.push(<Login parentContext={this}/>);
-       var loginmessage = "Not Registered yet.Go to registration";
-       this.props.parentContext.setState({loginscreen:loginscreen,
-       loginmessage:loginmessage,
-       buttonLabel:"Register",
-       isLogin:true
-        });
-     }
-   })
-   .catch(function (error) {
-     console.log(error);
-   });
+    axios.post(apiBaseUrl, payload)
+    .then(function (response) {
+      console.log(response);
+      if(response.status === 200){
+      
+        self.props.history.push("/");
+        window.location.reload();
+        
+      }
+      else if(response.status === 204){
+        console.log("username password do not match");
+        alert("username password do not match")
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   render() {

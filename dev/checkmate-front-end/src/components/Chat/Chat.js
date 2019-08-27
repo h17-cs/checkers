@@ -2,18 +2,17 @@ import React, { Component } from 'react'
 import ChatInput from './ChatInput'
 import '../../Game.css'
 import ChatMessage from './ChatMessage'
-import openSocket from 'socket.io-client';
 
 
 
-const URL = 'ws://68.82.219.27:2500'
+//address to test on a local server for testing.
+const URL = 'ws://localhost:3030'
 
 class Chat extends Component {
   state = {
     name: window.localStorage.getItem("username"),
     messages: [],
   }
-
   ws = new WebSocket(URL)
   username = window.localStorage.getItem("username");
 
@@ -21,14 +20,15 @@ class Chat extends Component {
     this.ws.onopen = () => {
       // on connecting, do nothing but log it to the console
       console.log('connected')
-      // this.ws.send(JSON.stringify({ "message_type" : 3, "body" : { "message_action" : 0, "username" : window.localStorage.getItem("username")} }))
-
     }
+    
 
-    this.ws.onmessage = evt => {
+    this.ws.onmessage = (evt) => {
       // on receiving a message, add it to the list of messages
+      console.log(evt)
       const message = JSON.parse(evt.data)
       this.addMessage(message.body)
+      return false;
     }
 
     this.ws.onclose = () => {
@@ -60,18 +60,7 @@ class Chat extends Component {
 
   render() {
     return (
-      <div>
-        {/* <label htmlFor="name">
-          Name:&nbsp;
-          <TextField
-            type="text"
-            id={'name'}
-            placeholder={'Enter your name...'}
-            value={this.state.name}
-            onChange={e => this.setState({ name: e.target.value })}
-          />
-        </label> */}
-        
+      <div>        
         <div className="chatBox">
             {this.state.messages.map((message, index) =>
             <ChatMessage

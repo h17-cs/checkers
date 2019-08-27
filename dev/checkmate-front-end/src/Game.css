@@ -85,14 +85,12 @@
 
 .chatBox{
     background-color:#979797;  
-    height: 350px;
+    height: 200px;
     width: 90%;
     margin: auto;
 }
 
 .sendButton{
-    height: 25px;
-    width: 45px;
     background-color: #5d9e70;
     margin: 0 auto;
     justify-content: center;
@@ -105,26 +103,21 @@
     margin-top: 5%
 }
 
-.actionButton{
-    height: 35px;
-    width: 80px;
-    background-color: #4e9678;
-    margin: 0 auto;
-    justify-content: center;
-    align-items: center;
-    margin-left: 5px;
-    vertical-align: middle
+#overrideButtons{
+   height: 50px;
+   width: 100px;
+   padding: 0px 0px;
+   margin: 10px 10px 10px 10px;
+   text-align: center;
 }
 
 .formatButtons{
     margin-top: 10px;
     margin-left: 45px;
-    display: inline-block;
 }
 
 .topMargin{
-    margin-top: 50px;
-    background-color: #dcf5ce;
+    margin-left: 12.5%;
 }
 
 .pieceImg{
@@ -133,4 +126,36 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.gameViewCont{
+    display:inline-flex;
+   
+    align-items: center;
+  }
+
+.sidebar{
+    margin-left: 5%;
+}
+
+.gameViewColor{
+    background-color:#96cabb;
+    width:85%;
+    margin-left: 7.5%;
+    margin-top:10px;
+    padding: 2.5%;
+    align-items: center;
+    display:inline-flex;
+    border-radius:20%;
+    -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+}
+
+#msgInputs{
+    display: inline
+}
+
+#overrideSendButton{
+    height: 40px; 
+    width: 200px;
 }
