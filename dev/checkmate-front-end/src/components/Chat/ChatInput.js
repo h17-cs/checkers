@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import '../../Game.css'
+import { TextField } from 'material-ui';
 
 class ChatInput extends Component {
   static propTypes = {
@@ -20,14 +21,19 @@ class ChatInput extends Component {
           this.setState({ message: '' })
         }}
       >
-        <TextField
-          type="text"
-          placeholder={'Enter message...'}
-          value={this.state.message}
-          onChange={e => this.setState({ message: e.target.value })}
-          className="msgTextBox"
-        />
-        <input type="submit" value={'Send'} />
+        <div id="msgInputs">
+         
+            <TextField
+              type="text"
+              placeholder={'Enter message...'}
+              value={this.state.message}
+              onChange={e => this.setState({ message: e.target.value })}
+              className="msgTextBox"
+            />
+         
+            <input type="submit" value={'Send'} id="overrideSendButton" />
+        </div>
+       
       </form>
     )
   }

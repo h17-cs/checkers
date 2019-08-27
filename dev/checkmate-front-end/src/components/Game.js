@@ -147,30 +147,30 @@ class Game extends Component {
     render() {
         return(
             <MuiThemeProvider>
-            <div className="topMargin">
-                <div>
-                <h1>{this.formatGameTime()}</h1>
-                </div>
-                <div className="holdingSpacer">
+            <div className = "gameViewColor">
+                <div className="topMargin">
                     <div>
-                    <Board gameState = {[this.state.gameState, this.state.moveOrder, this.state.possible_moves, this.state.valid_moves, this.state.screenOwner]}  setMoveOrder = {this.setMoveOrder}/>
+                    <h1>{this.formatGameTime()}</h1>
                     </div>
-                    <div>
-
+                    <div className="gameViewCont">
                         <div>
-                        <GameInfo gameInfo = {[this.state.gameInfo, this.state.playerTurn]}/>
+                        <Board gameState = {[this.state.gameState, this.state.moveOrder, this.state.possible_moves, this.state.valid_moves, this.state.screenOwner]}  setMoveOrder = {this.setMoveOrder}/>
                         </div>
-                        <div>
-                           
-                            <input type="button" value= "Forfeit" className="actionButton" onClick={this.forfeit}/>
+                        <div className="sidebar">
+
+                            <div>
+                            <GameInfo gameInfo = {[this.state.gameInfo, this.state.playerTurn]}/>
+                            </div>
+                            <div>
                             
-                            
-                            <input type ="button" value= "Save Game" className="actionButton"/>
-                            
-                           
-                            <input type ="button" value= "Main Menu" className="actionButton"/>
-                            
-                            
+                                <input type="button" value= "Forfeit" id="overrideButtons" onClick={this.forfeit}/>
+                                
+                                <input type ="button" value= "Save Game" id="overrideButtons"/>
+                                
+                                <input type ="button" value= "Main Menu" id="overrideButtons"/>
+                                
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
