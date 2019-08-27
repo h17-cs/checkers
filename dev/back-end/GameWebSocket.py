@@ -24,7 +24,7 @@ class GameWebSocket():
         print(msg)
         m = Message.parse(msg)
         if m is None:
-        act = m.getField("message_action")
+            act = m.getField("message_action")
         if m.getType() == MessageType.AccountAdmin and act is not None and act == 0:
             usr = m.getField("username")
             pwd = m.getField("password")

@@ -70,8 +70,8 @@ class ControlSocket(SocketManager):
     def onconnect(self, c, addr):
         code = c.recv(1)
         msg = "Unknown code (%d)" % code
-        if code == ControlSocket.ControlCode.Status or
-        code == ControlSocket.ControlCode.Halt:
+        if code == ControlSocket.ControlCode.Status or \
+                code == ControlSocket.ControlCode.Halt:
             msg = "\n".join(l.flag(code) for l in self.__listeners)
 
         c.send("%s\n" % msg)

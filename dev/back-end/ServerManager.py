@@ -1,35 +1,32 @@
-# Class for managing back-end server operations
+"""Class for managing back-end server operations"""
 # Created: 08/15
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
 
 import os
+import signal
 import sys
 import time
 import threading
-import datetime
-import configparser
 import asyncio
-from cursesmenu import *
-from cursesmenu.items import *
+import cursesmenu
 import tornado.ioloop
 import tornado.web
 
-from DummyWrap import dummy
 from DatabaseManager import DatabaseManager, DatabaseType
-from GameController import GameController
 from ThreadsafeQueue import ThreadsafeQueue
 from Logger import Logger
 from WebsocketMessageManager import WebsocketMessageManager
 from PortManager import PortManager
-from SocketManager import AdminSocket
-from RequestHandlers import AddUserHandler, ContentHandler, createPublicGameHandler, createPrivateGameHandler, loginHandler
+from RequestHandlers import BaseHandle, AddUserHandler, ContentHandler, createPublicGameHandler, createPrivateGameHandler, loginHandler
 import config as cfg
-import argparse
 
 
 class ServerManager:
+    """Class to define a ServerManager. ServerManager handles games and througput"""
+
     def __init__(self):
+        """Init"""
         if not hasattr(ServerManager, 'instance'):
             ServerManager.instance = self
         else:
@@ -53,6 +50,7 @@ class ServerManager:
         self.__pub_polling.start()
 
     def createGame(self, control_port, user_port, private=False):
+        """Creates a new thread with a GameController running on it"""
         args = ['createGame.py',
                 control_port,
                 user_port,
@@ -66,34 +64,33 @@ class ServerManager:
         return True
 
     def addPid(self, pid):
-        # Add a pid to the internal list of game process IDs
+        """Adds a game PID to a list of the current list of process IDs"""
         self.__game_pids.push(pid)
 
     def checkUser(self, uname, passwd):
-        # Add a user from the database
+        """Checks if a Users is in the database through DatabaseManager"""
         return self.__db.queryForUser(uname, passwd)
 
     def addUser(self, uname, passwd):
-        # Add a user from the database
+        """Adds a User to the Database through DatabaseManager"""
         return self.__db.addUser(uname, passwd)
 
     def deleteUser(self, uname, passwd):
-        # Remove a user from the database
+        """Removes a User from the Database through DatabaseManager"""
         return self.__db.deleteUser(uname, passwd)
 
     def requestPublicGame(self, user):
-        # Add a user to the public queue
+        """Adds a User to the Public game queue"""
         self.__public_requests.push(user)
-        "Added user %s to the public queue" % user
         return True
 
     def requestPrivateGame(self, user):
-        # Add a user to the public queue
+        """Requests the creation of a new Private game"""
         port = self.openPrivateGame(user)
         return port
 
     def openPublicGame(self, user1=None, user2=None):
-        # Open a public game. If no users are specified, pop some from queue
+        """Creates a new public game with two users from the user queue"""
         if user1 is None:
             self.log("Requesting user for game...")
             user1 = self.__public_requests.pop(block=True)
@@ -118,6 +115,7 @@ class ServerManager:
         return True
 
     def openPrivateGame(self, user1, user2=None):
+        """Creates a new private game from the request of a user"""
         p = self.__port_manager.getPort()
         if p == -1:
             # No ports available
@@ -128,18 +126,21 @@ class ServerManager:
         return p
 
     def pollPublic(self):
+        """Polls for users in the public queue"""
         self.log("Initialized Polling Thread")
         while self.isRunning():
             p = self.openPublicGame()
             time.sleep(0.01)
+            self.log(p)
         self.log("Terminated Polling Thread")
 
     def isRunning(self):
-        # Indicates whether or not the server is running
+        """Indicates if the server is running"""
         return self.__running
 
     def killGame(self, pid=None):
-        # Kills the game associated with the given PID.
+        """Kills a game given a PID and removes the PID from __game_pids"""
+        MAXATTEMPTS = cfg.MAXATTEMPTS
         # If the process can't be killed, reports
         r = True
         if not pid is None:
@@ -168,26 +169,33 @@ class ServerManager:
             return True
 
     def log(self, msg):
+        """Logs a message"""
         self.__logger.log(msg)
 
     def CLIinit(self, useCLI):
-        menStr = "CheckMate Server: v" + str(cfg.version_number)
-        sub = "Server Administration Interface"
-        menu = CursesMenu(menStr, sub)
-        menu_item = MenuItem("Menu Item")
-        killGame = FunctionItem("Kill a Game[pid]", self.killGame, ['00000'])
-        haltServ = FunctionItem("Halt server", self.halt, None)
-        db_admin = SelectionMenu(["Add user", "Delete user"])
-        submenu_item = SubmenuItem("Database Administration", db_admin, menu)
-        serv_admin = SelectionMenu(["Server Config", "Server Control"])
-        submenu_item2 = SubmenuItem("Server Administration", serv_admin, menu)
-        menu.append_item(killGame)
-        menu.append_item(submenu_item)
-        menu.append_item(submenu_item2)
-        menu.append_item(haltServ)
-        menu.show()
+        """Inits the Server menu"""
+        if (useCLI):
+            menStr = "CheckMate Server: v" + str(cfg.version_number)
+            sub = "Server Administration Interface"
+            menu = cursesmenu.CursesMenu(menStr, sub)
+            killGame = cursesmenu.FunctionItem(
+                "Kill a Game[pid]", self.killGame, ['00000'])
+            haltServ = cursesmenu.FunctionItem("Halt server", self.halt, None)
+            db_admin = cursesmenu.SelectionMenu(["Add user", "Delete user"])
+            submenu_item = cursesmenu.SubmenuItem(
+                "Database Administration", db_admin, menu)
+            serv_admin = cursesmenu.SelectionMenu(
+                ["Server Config", "Server Control"])
+            submenu_item2 = cursesmenu.SubmenuItem(
+                "Server Administration", serv_admin, menu)
+            menu.append_item(killGame)
+            menu.append_item(submenu_item)
+            menu.append_item(submenu_item2)
+            menu.append_item(haltServ)
+            menu.show()
 
     def halt(self):
+        """Halts the server, killing all open games"""
         if not self.isRunning():
             self.log("Error: Tried to halt a server before it started")
             return False
@@ -202,14 +210,7 @@ class ServerManager:
         return True
 
     def serveHTTP(self):
-        from RequestHandlers import BaseHandle, \
-            AddUserHandler, \
-            ContentHandler, \
-            createPublicGameHandler, \
-            createPrivateGameHandler, \
-            loginHandler, \
-            descriptionHandler
-
+        """Serves HTTP endpoints"""
         BaseHandle.game_manager = self
 
         self.__aio_loop = asyncio.new_event_loop()

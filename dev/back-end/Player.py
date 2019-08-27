@@ -88,8 +88,11 @@ class Player:
             p.getColor(), p.getType()) for p in pieces})
         m.addField("possible_moves", self.determineMoves())
 
-        wait = async lambda: await self.__handler.send(m.__str__())
+        # wait = async(lambda: await self.__handler.send(m.__str__())
         asyncio.get_event_loop().run_until_complete(wait())
+
+    async def wait(self):
+        await self.__handler.send(m.__str__())
 
     @dummy
     def determineMoves(self):
@@ -105,4 +108,4 @@ class Player:
         self.update()
         asyncio.get_event_loop().run_until_complete(query())
 
-        print resp
+        print(resp)

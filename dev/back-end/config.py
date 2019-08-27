@@ -44,3 +44,6 @@ dict = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 # Ports for web server configuration.
 web_test = 8080
 web_prod = 80
+
+# CHARLES HELP
+MAXATTEMPTS = 10
