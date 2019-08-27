@@ -10,7 +10,7 @@ class SocketManager:
         self.__port = listenport
         self.__halted = False;
         self.__users = {};
-        self.__worker = threading.Thread(target=listen);
+        self.__worker = threading.Thread(target=self.listen);
         self.__worker.start();
 
     def listen(self):
