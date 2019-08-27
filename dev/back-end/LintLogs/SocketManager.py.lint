@@ -1,0 +1,25 @@
+************* Module SocketManager
+SocketManager.py:1:0: C0103: Module name "SocketManager" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:1:0: C0111: Missing module docstring (missing-docstring)
+SocketManager.py:22:8: C0103: Variable name "s" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:27:12: C0103: Variable name "c" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:33:8: C0103: Variable name "s" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:31:4: R0201: Method could be a function (no-self-use)
+SocketManager.py:40:8: C0103: Variable name "s" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:38:4: R0201: Method could be a function (no-self-use)
+SocketManager.py:58:4: C0103: Argument name "c" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:58:27: W0613: Unused argument 'addr' (unused-argument)
+SocketManager.py:58:4: R0201: Method could be a function (no-self-use)
+SocketManager.py:65:8: W0107: Unnecessary pass statement (unnecessary-pass)
+SocketManager.py:80:4: C0103: Method name "addListener" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:80:4: C0103: Argument name "l" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:88:11: R1714: Consider merging these comparisons with "in" to 'code in (ControlSocket.ControlCode.Status, ControlSocket.ControlCode.Halt)' (consider-using-in)
+SocketManager.py:104:4: C0103: Method name "linkServer" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:108:4: C0103: Argument name "c" doesn't conform to snake_case naming style (invalid-name)
+SocketManager.py:110:8: W0107: Unnecessary pass statement (unnecessary-pass)
+SocketManager.py:5:0: W0611: Unused Message imported from Message (unused-import)
+SocketManager.py:5:0: W0611: Unused MessageType imported from Message (unused-import)
+
+------------------------------------------------------------------
+Your code has been rated at 6.92/10 (previous run: 6.92/10, +0.00)
+

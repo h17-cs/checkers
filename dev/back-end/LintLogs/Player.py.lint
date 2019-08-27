@@ -1,0 +1,23 @@
+************* Module Player
+Player.py:1:0: C0103: Module name "Player" doesn't conform to snake_case naming style (invalid-name)
+Player.py:34:8: C0103: Attribute name "__userID" doesn't conform to snake_case naming style (invalid-name)
+Player.py:36:4: C0103: Method name "getID" doesn't conform to snake_case naming style (invalid-name)
+Player.py:40:4: C0103: Method name "getGame" doesn't conform to snake_case naming style (invalid-name)
+Player.py:44:4: C0103: Method name "getColor" doesn't conform to snake_case naming style (invalid-name)
+Player.py:48:4: C0103: Method name "assignColor" doesn't conform to snake_case naming style (invalid-name)
+Player.py:65:4: C0103: Method name "queryDraw" doesn't conform to snake_case naming style (invalid-name)
+Player.py:65:4: R0201: Method could be a function (no-self-use)
+Player.py:70:4: C0103: Method name "querySave" doesn't conform to snake_case naming style (invalid-name)
+Player.py:70:4: R0201: Method could be a function (no-self-use)
+Player.py:74:4: C0103: Argument name "userId" doesn't conform to snake_case naming style (invalid-name)
+Player.py:76:8: R1705: Unnecessary "else" after "return" (no-else-return)
+Player.py:84:8: C0103: Variable name "gb" doesn't conform to snake_case naming style (invalid-name)
+Player.py:85:8: C0103: Variable name "m" doesn't conform to snake_case naming style (invalid-name)
+Player.py:84:8: W0612: Unused variable 'gb' (unused-variable)
+Player.py:99:4: C0103: Argument name "m" doesn't conform to snake_case naming style (invalid-name)
+Player.py:104:4: C0103: Method name "determineMoves" doesn't conform to snake_case naming style (invalid-name)
+Player.py:104:4: R0201: Method could be a function (no-self-use)
+
+------------------------------------------------------------------
+Your code has been rated at 7.05/10 (previous run: 7.05/10, +0.00)
+

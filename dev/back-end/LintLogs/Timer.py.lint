@@ -1,0 +1,16 @@
+************* Module Timer
+Timer.py:1:0: C0103: Module name "Timer" doesn't conform to snake_case naming style (invalid-name)
+Timer.py:19:8: C0103: Attribute name "__startTime" doesn't conform to snake_case naming style (invalid-name)
+Timer.py:30:8: C0103: Variable name "t" doesn't conform to snake_case naming style (invalid-name)
+Timer.py:37:4: C0103: Method name "getTimeElapsed" doesn't conform to snake_case naming style (invalid-name)
+Timer.py:44:4: C0103: Method name "getTimeRemaining" doesn't conform to snake_case naming style (invalid-name)
+Timer.py:48:4: C0103: Method name "isRunning" doesn't conform to snake_case naming style (invalid-name)
+Timer.py:58:8: C0103: Variable name "n" doesn't conform to snake_case naming style (invalid-name)
+Timer.py:61:16: C0103: Variable name "n" doesn't conform to snake_case naming style (invalid-name)
+Timer.py:65:57: E0107: Use of the non-existent ++ operator (nonexistent-operator)
+Timer.py:71:12: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
+Timer.py:96:-1: W0105: String statement has no effect (pointless-string-statement)
+
+------------------------------------------------------------------
+Your code has been rated at 7.37/10 (previous run: 7.37/10, +0.00)
+

@@ -1,0 +1,12 @@
+************* Module GameEndpointManager
+GameEndpointManager.py:1:0: C0103: Module name "GameEndpointManager" doesn't conform to snake_case naming style (invalid-name)
+GameEndpointManager.py:15:4: C0103: Method name "getEndpoint" doesn't conform to snake_case naming style (invalid-name)
+GameEndpointManager.py:19:4: C0103: Method name "getControlPort" doesn't conform to snake_case naming style (invalid-name)
+GameEndpointManager.py:23:4: C0103: Method name "getPlayerPorts" doesn't conform to snake_case naming style (invalid-name)
+GameEndpointManager.py:36:4: C0103: Method name "setEndpoint" doesn't conform to snake_case naming style (invalid-name)
+GameEndpointManager.py:42:4: C0103: Method name "getEndpoint" doesn't conform to snake_case naming style (invalid-name)
+GameEndpointManager.py:52:4: C0103: Method name "removeEndpoint" doesn't conform to snake_case naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 8.06/10 (previous run: 8.06/10, +0.00)
+

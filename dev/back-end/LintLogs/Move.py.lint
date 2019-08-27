@@ -1,0 +1,15 @@
+************* Module Move
+Move.py:1:0: C0103: Module name "Move" doesn't conform to snake_case naming style (invalid-name)
+Move.py:16:8: C0103: Attribute name "__nextMove" doesn't conform to snake_case naming style (invalid-name)
+Move.py:18:4: C0103: Method name "appendMove" doesn't conform to snake_case naming style (invalid-name)
+Move.py:18:4: C0103: Argument name "nextMove" doesn't conform to snake_case naming style (invalid-name)
+Move.py:27:4: C0103: Method name "getPiece" doesn't conform to snake_case naming style (invalid-name)
+Move.py:31:4: C0103: Method name "getSource" doesn't conform to snake_case naming style (invalid-name)
+Move.py:35:4: C0103: Method name "getDestination" doesn't conform to snake_case naming style (invalid-name)
+Move.py:39:4: C0103: Method name "getNext" doesn't conform to snake_case naming style (invalid-name)
+Move.py:50:8: C0103: Attribute name "__capturedPiece" doesn't conform to snake_case naming style (invalid-name)
+Move.py:52:4: C0103: Method name "getCapturedPiece" doesn't conform to snake_case naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 5.83/10 (previous run: 5.83/10, +0.00)
+

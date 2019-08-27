@@ -1,0 +1,10 @@
+************* Module Logger
+Logger.py:1:0: C0103: Module name "Logger" doesn't conform to snake_case naming style (invalid-name)
+Logger.py:1:0: C0111: Missing module docstring (missing-docstring)
+Logger.py:6:0: C0111: Missing class docstring (missing-docstring)
+Logger.py:15:8: C0103: Variable name "dt" doesn't conform to snake_case naming style (invalid-name)
+Logger.py:29:4: C0103: Method name "getFile" doesn't conform to snake_case naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 6.43/10 (previous run: 6.43/10, +0.00)
+
