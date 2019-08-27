@@ -28,7 +28,7 @@ class Action:
         self.__actionType = actionType
         self.__actionData = actionData
 
-    def getType(self):
+    def get_type(self):
         """Returns the type of the action"""
         return self.__actionType
 
