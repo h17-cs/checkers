@@ -162,8 +162,3 @@ class loginHandler(BaseHandle):
 
         self.set_status(stat)
         self.finish({"resp" : msg})
-
-class ContentHandler(BaseHandle):
-    def get(self):
-        rendered = render_component(os.path.join(os.getcwd(), 'local_files', 'checkmate-front-end', 'src', 'Register.js'),{},to_static_markup=False,)
-        self.render('/home/salieri/Desktop/checkers/dev/back-end/local_files/checkmate-front-end/public/index.html', rendered=rendered)
