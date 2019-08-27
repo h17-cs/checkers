@@ -15,11 +15,24 @@ class GameWebSocket():
     def setGame(self, g):
         self.__game = g
 
-    async def servePlayers(self, ws, path):
-        while not self.__halted:
-            msg = await ws.recv()
-            if self.__halted:
-                print("Error: socket halted");
+    async def servePlayers(ws, path):
+        msg = await ws.recv()
+        if self.__halted:
+            print("Error: socket halted");
+            ws.close()
+        print(msg)
+        m = Message.parse(msg);
+        if m is None:
+        act = m.getField("message_action")
+        if m.getType() == MessageType.AccountAdmin and act is not None and act == 0:
+            usr = m.getField("username")
+            pwd = m.getField("password")
+            resp = self.__game.addUser(usr, pwd, ws) if not usr is None else False
+            if resp:
+                self.__connections.append(ws);
+                ws.send("Success")
+            else:
+                ws.send("Failed")
                 ws.close()
             print(msg)
             m = Message.parse(msg);

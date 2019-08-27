@@ -29,7 +29,8 @@ userHasAuthenticated() {
  handleClick(event){
    var self = this;
    //TODO: Change apiBaseURL to the actual URL
-	var apiBaseUrl = "http://68.82.219.27:8080/login";
+  // var apiBaseUrl = "http://68.82.219.27:8080/login";
+  var apiBaseUrl = "http://httpbin.org/post";
 	var payload={
     "message_type" : 3,
     "body" : {    
