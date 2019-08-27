@@ -5,7 +5,8 @@ import Login from "./containers/Login";
 import Register from "./Register";
 import Game from "./components/Game";
 import AppliedRoute from "./components/AppliedRoute";
-import Chat from "./components/Chat/Chat"
+import Chat from "./components/Chat/Chat";
+import About from "./components/About";
 
 
 export default ({childProps}) =>
@@ -13,6 +14,8 @@ export default ({childProps}) =>
     <AppliedRoute path="/" exact component={Home} props={childProps}/>
     <AppliedRoute path="/login" exact component={Login} props={childProps}/>
     <Route path="/register" exact component={Register} props={childProps}/>
-    <Route path="/game" exact component={Game} props={childProps}/>
+    <Route path="/game" exact component={Game} props={childProps} />
+    {/* render={(props) => <Game {...props} username={childProps.username} password ={childProps.password}/>} */}
     <Route path="/chat" exact component={Chat} props={childProps}/>
+    <Route path="/about" exact component={About} props={childProps}/>
   </Switch>;

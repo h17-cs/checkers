@@ -1,0 +1,22 @@
+.aboutDiv{
+    text-align: center;
+}
+
+h1{
+    text-align: center;
+}
+
+.title{
+    color: #000000
+}
+
+.members{
+    background-color: #8ac0a2;
+    width:7.5%;
+    height: 15%;
+    border-radius:10%;
+    margin-left: 46.5%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    box-shadow: 5px 5px 8px #a7a7a7;
+}

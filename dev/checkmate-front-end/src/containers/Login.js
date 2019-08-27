@@ -5,13 +5,14 @@ import "./Login.css"
 import "../App"
 import React from 'react';
 import axios from 'axios'
+import {withRouter, Redirect} from "react-router"
 //TODO: change to actual screen redirect after successful login
 
 class Login extends React.Component {
 constructor(props){
   super(props);
   this.state={
-    username:'',
+    username: '',
     password:''
   }
  }
@@ -22,7 +23,6 @@ constructor(props){
 
 userHasAuthenticated() {
   this.props.userHasAuthenticated(true);
-  console.log("sup")
 }
 
 
@@ -46,7 +46,13 @@ userHasAuthenticated() {
 			// uploadScreen.push(<Register appContext={self.props.appContext}/>)
       // self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
       self.userHasAuthenticated();
-      self.props.history.push("/");
+      // self.props.history.push({
+      //   pathname: '/game',
+      //   state: { email: self.state.username,
+      //            password: self.state.password }
+      //     })
+      // self.props.history.push("/");
+       return <Redirect to="/"/>
 		}
 		else if(response.status === 204){
 			console.log("username password do not match");
@@ -97,4 +103,5 @@ render() {
 const style = {
  margin: 15,
 };
+const TestRouter = withRouter(Login);
 export default Login;
