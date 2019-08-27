@@ -51,8 +51,8 @@ class GameWebSocket():
                 msg.addField("message", "Did you just say %s, %s?" %
                              (txt, usr))
                 j = "%s" % msg
-                print(j)
-                await ws.send(j)
+                for soc in self.__connections:
+                    await soc.send(j)
 
             elif m.getType() == MessageType.AccountAdministration:
                 act = m.getField("message_action")
