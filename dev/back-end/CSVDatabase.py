@@ -1,16 +1,12 @@
-# Threadsafe class representing a CSV-style Database
+"""Threadsafe class representing a CSV-style Database"""
 # Created: 08/15
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
-
-from DummyWrap import dummy
-from enum import Enum
-from PriorityBuffer import PriorityBuffer
-from RecordCSV import Record
-
 import threading
 import time
 import os
+from PriorityBuffer import PriorityBuffer
+from RecordCSV import Record
 
 CRLF = 0
 if os.name == "nt":
@@ -22,6 +18,7 @@ elif os.name == "posix":
 
 
 class CSVDB_Header:
+    """ File header for csv database"""
     sizes = {
         "uname": 16,
         "password": 32,
@@ -31,11 +28,12 @@ class CSVDB_Header:
 
 
 class CSVDatabase:
-    # Class representing a CSV-style database manager
+    """ Class representing a CSV-style database manager """
     BufferSize = 1024   # Buffer 2^10 records from file
     RequestTimeout = 10.0
 
     def __init__(self, dbpath, keysize=None, fields=None):
+        """ Inits a new CSV database """
         self.__dbpath = dbpath
         self.__datalock = threading.Lock()
         self.__buff = PriorityBuffer(
@@ -55,7 +53,7 @@ class CSVDatabase:
             self.__fields = fields
 
     def add(self, key, **fields):
-        # Adds a record to the database
+        """ Adds a record to the database """
         # If an empty record exists with the same key (uname), update and fill that record
         # If no record exists with the same key (uname), make and populate a new record
         #   In both of the above, return True
@@ -69,7 +67,7 @@ class CSVDatabase:
         return self.__buff.add(r)
 
     def remove(self, key, **fields):
-        # Removes a user from the database
+        """ Removes a user from the database """
         rec = self.findAll(key, **fields)
 
         if rec is None or len(rec) == 0:
@@ -80,7 +78,7 @@ class CSVDatabase:
             return True
 
     def exists(self, key, **fields):
-        # Check whether any record exists with the given key and fields
+        """ Check whether any record exists with the given key and fields """
         reqtime = time.time()
         findings = None
         while findings is None and time.time() - reqtime < self.RequestTimeout:
@@ -93,7 +91,7 @@ class CSVDatabase:
         return findings is not None and len(findings) > 0
 
     def findAll(self, key, **fields):
-        # Return all records corresponding to the key and field criteria
+        """ Return all records corresponding to the key and field criteria """
         reqtime = time.time()
         findings = buffered = None
         while findings is None and time.time() - reqtime < self.RequestTimeout:
@@ -107,7 +105,7 @@ class CSVDatabase:
         return findings
 
     def readFor(self, key, blocking=True, **fields):
-        # Reads database to find records, then returns the given record
+        """ Reads database to find records, then returns the given record """
         # Accesses DB File, so must aquire file lock
         acquired = self.__datalock.acquire(blocking=blocking)
         if not acquired:
@@ -127,7 +125,7 @@ class CSVDatabase:
         return matches
 
     def writeTo(self, record):
-        # Writes record to DB, inserting in same spot if a record with the same key already exists
+        """ Writes record to DB, inserting in same spot if a record with the same key already exists """
         # Accesses DB File, so must aquire file lock
         self.__datalock.acquire()
         f = open(self.__dbpath, 'r+')
@@ -156,4 +154,5 @@ class CSVDatabase:
         return True
 
     def flush(self):
+        """ Flushes the buffer """
         self.__buff.debuffer(self.__buff.size())

@@ -1,7 +1,9 @@
-# File to store configuration values in case we want to change em
+"""File to store configuration values in case we want to change em"""
+
+# Due to the nature of this file, it fails to reach the threshold set for
+# static analysis.
+
 import zmq
-import threading
-import time
 
 # The administrative port
 admin = 2048
