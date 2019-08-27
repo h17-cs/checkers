@@ -69,7 +69,9 @@ class GameSocket(SocketManager):
             resp = g.addUser(usr) if not usr is None else False
             if resp:
                 self.__connections.append(c);
+                c.send("Success")
             else:
+                c.send("Failed")
                 c.close()
 
         else:
