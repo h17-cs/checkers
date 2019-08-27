@@ -25,52 +25,29 @@ class GameWebSocket():
         print(msg)
         m = Message.parse(msg)
         if m is None:
+            ws.send("Invalid Message")
+        # if not m.hasField("message_action")
+        if m.getType() == MessageType.Text:
+            for c in self.__connections:
+                await c.send(msg)
+
+        elif m.getType() == MessageType.AccountAdministration:
             act = m.getField("message_action")
-        if m.getType() == MessageType.AccountAdmin and act is not None and act == 0:
             usr = m.getField("username")
             pwd = m.getField("password")
-            resp = self.__game.addUser(
-                usr, pwd, ws) if not usr is None else False
-            if resp:
-                self.__connections.append(ws)
-                ws.send("Success")
-            else:
-                ws.send("Failed")
-                ws.close()
-            print(msg)
-            m = Message.parse(msg)
-            # if not m.hasField("message_action")
-            if m.getType() == MessageType.Text:
-                #t = m.getField("timestamp")
-                usr = m.getField("name")
-                txt = m.getField("message")
-
-                msg = Message(MessageType.Text)
-                #msg.addField("timestamp", int(time.time()*1000))
-                msg.addField("name", ":ServerAdmin:")
-                msg.addField("message", "Did you just say %s, %s?" %
-                             (txt, usr))
-                j = "%s" % msg
-                for soc in self.__connections:
-                    await soc.send(j)
-
-            elif m.getType() == MessageType.AccountAdministration:
-                act = m.getField("message_action")
-                usr = m.getField("username")
-                pwd = m.getField("password")
-                if act == 0:
-                    resp = self.__game.addUser(
-                        usr, pwd, ws) if not usr is None else False
-                    if resp:
-                        self.__connections.append(ws)
-                        await ws.send("Success")
-                    else:
-                        await ws.send("Failed")
-                        ws.close()
+            if act == 0:
+                resp = self.__game.addUser(
+                    usr, pwd, ws) if not usr is None else False
+                if resp:
+                    self.__connections.append(ws)
+                    await ws.send("Success")
                 else:
-                    pass
+                    await ws.send("Failed")
+                    ws.close()
             else:
-                time.sleep(0.1)
+                pass
+        else:
+            time.sleep(0.1)
 
     def message(self, addr, port, msg):
         async def msgother():

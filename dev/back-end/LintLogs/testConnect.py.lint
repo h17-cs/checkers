@@ -1,0 +1,2 @@
+************* Module testConnect
+testConnect.py:1:0: C0103: Module name "testConnect" doesn't conform to snake_case naming style (invalid-name)

@@ -1,0 +1,8 @@
+************* Module createGame
+createGame.py:1:0: C0103: Module name "createGame" doesn't conform to snake_case naming style (invalid-name)
+createGame.py:1:0: C0111: Missing module docstring (missing-docstring)
+createGame.py:16:0: C0103: Constant name "game_controller" doesn't conform to UPPER_CASE naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 6.25/10 (previous run: 6.25/10, +0.00)
+

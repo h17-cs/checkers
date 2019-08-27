@@ -1,0 +1,11 @@
+************* Module Action
+Action.py:1:0: C0103: Module name "Action" doesn't conform to snake_case naming style (invalid-name)
+Action.py:28:8: C0103: Attribute name "__actionType" doesn't conform to snake_case naming style (invalid-name)
+Action.py:29:8: C0103: Attribute name "__actionData" doesn't conform to snake_case naming style (invalid-name)
+Action.py:35:4: C0103: Method name "getData" doesn't conform to snake_case naming style (invalid-name)
+Action.py:39:4: C0103: Method name "setData" doesn't conform to snake_case naming style (invalid-name)
+Action.py:39:4: C0103: Argument name "newData" doesn't conform to snake_case naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 6.47/10 (previous run: 6.47/10, +0.00)
+

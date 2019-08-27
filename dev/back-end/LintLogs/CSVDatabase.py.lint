@@ -1,0 +1,28 @@
+************* Module CSVDatabase
+CSVDatabase.py:128:0: C0301: Line too long (104/100) (line-too-long)
+CSVDatabase.py:1:0: C0103: Module name "CSVDatabase" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:20:0: C0103: Class name "CSVDB_Header" doesn't conform to PascalCase naming style (invalid-name)
+CSVDatabase.py:20:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+CSVDatabase.py:62:8: C0103: Variable name "r" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:73:8: R1705: Unnecessary "else" after "return" (no-else-return)
+CSVDatabase.py:73:26: C1801: Do not use `len(SEQUENCE)` to determine if a sequence is empty (len-as-condition)
+CSVDatabase.py:76:16: C0103: Variable name "r" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:87:15: C1801: Do not use `len(SEQUENCE)` to determine if a sequence is empty (len-as-condition)
+CSVDatabase.py:93:4: C0103: Method name "findAll" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:107:4: C0103: Method name "readFor" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:110:8: E1111: Assigning result of a function call, where the function has no return (assignment-from-no-return)
+CSVDatabase.py:116:8: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:118:12: C0103: Variable name "r" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:123:12: C0103: Variable name "m" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:127:4: C0103: Method name "writeTo" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:131:8: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:132:8: C0103: Variable name "firstEmpty" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:133:8: C0103: Variable name "bytesRead" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:136:12: C0103: Variable name "lineSize" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:137:12: C0103: Variable name "bytesRead" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:138:12: C0103: Variable name "r" doesn't conform to snake_case naming style (invalid-name)
+CSVDatabase.py:140:16: C0103: Variable name "firstEmpty" doesn't conform to snake_case naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 7.33/10 (previous run: 7.33/10, +0.00)
+

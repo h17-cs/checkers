@@ -1,0 +1,15 @@
+************* Module GamePiece
+GamePiece.py:1:0: C0103: Module name "GamePiece" doesn't conform to snake_case naming style (invalid-name)
+GamePiece.py:1:0: C0111: Missing module docstring (missing-docstring)
+GamePiece.py:37:4: C0103: Method name "getColor" doesn't conform to snake_case naming style (invalid-name)
+GamePiece.py:41:4: C0103: Method name "getOwner" doesn't conform to snake_case naming style (invalid-name)
+GamePiece.py:45:4: C0103: Method name "getType" doesn't conform to snake_case naming style (invalid-name)
+GamePiece.py:56:4: C0103: Method name "setLocation" doesn't conform to snake_case naming style (invalid-name)
+GamePiece.py:60:4: C0103: Method name "getLocation" doesn't conform to snake_case naming style (invalid-name)
+GamePiece.py:64:4: C0103: Method name "getGame" doesn't conform to snake_case naming style (invalid-name)
+GamePiece.py:69:4: C0103: Method name "getValidMoves" doesn't conform to snake_case naming style (invalid-name)
+GamePiece.py:69:4: R0201: Method could be a function (no-self-use)
+
+------------------------------------------------------------------
+Your code has been rated at 6.97/10 (previous run: 6.97/10, +0.00)
+

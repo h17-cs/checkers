@@ -1,0 +1,18 @@
+************* Module config
+config.py:34:0: W0622: Redefining built-in 'dict' (redefined-builtin)
+config.py:7:0: C0103: Constant name "admin" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:10:0: C0103: Constant name "lower_bound" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:13:0: C0103: Constant name "upper_bound" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:16:0: C0103: Constant name "version_number" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:19:0: C0103: Constant name "names" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:22:0: C0103: Constant name "log_addr" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:25:0: C0103: Constant name "db_addr" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:28:0: C0103: Constant name "debug" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:31:0: C0103: Constant name "endpoint_length" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:34:0: C0103: Constant name "dict" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:38:0: C0103: Constant name "web_test" doesn't conform to UPPER_CASE naming style (invalid-name)
+config.py:39:0: C0103: Constant name "web_prod" doesn't conform to UPPER_CASE naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 0.00/10 (previous run: 0.00/10, +0.00)
+

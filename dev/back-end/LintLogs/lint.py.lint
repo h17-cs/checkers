@@ -1,0 +1,2 @@
+************* Module lint
+lint.py:2:0: E0001: invalid syntax (<unknown>, line 2) (syntax-error)
