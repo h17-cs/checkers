@@ -1,12 +1,13 @@
 
 import threading
 
+
 class GameEndpoint:
     def __init__(self, endpoint, playerport1, playerport2, controlport):
         self.__endpoint = endpoint
-        self.__player1=playerport1
-        self.__player2=playerport2
-        self.__control=controlport
+        self.__player1 = playerport1
+        self.__player2 = playerport2
+        self.__control = controlport
 
     def getEndpoint(self):
         return self.__endpoint
@@ -16,6 +17,7 @@ class GameEndpoint:
 
     def getPlayerPorts(self):
         return self.__player1, self.__player2
+
 
 class GameEndpointManager:
     def __init__(self):

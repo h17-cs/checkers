@@ -21,6 +21,7 @@ class FileHandler(tornado.web.RequestHandler):
         with open(file_location) as source_file:
             self.write(source_file.read())
 
+
 app = tornado.web.Application([
     tornado.web.url(r"/(.+)", FileHandler),
 ])

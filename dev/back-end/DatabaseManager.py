@@ -10,6 +10,7 @@ from enum import Enum
 import threading
 import time
 
+
 class DatabaseType(Enum):
     CSV = 1
 
@@ -34,12 +35,12 @@ class DatabaseManager:
         if self.__db.exists(uname):
             return False
         else:
-            return self.__db.add(key=uname,password=passwd)
+            return self.__db.add(key=uname, password=passwd)
 
     def deleteUser(self, uname, passwd):
         # Removes a user from the database
-        if self.queryForUser(uname,passwd):
-            return self.__db.remove(key=uname,password=passwd)
+        if self.queryForUser(uname, passwd):
+            return self.__db.remove(key=uname, password=passwd)
         else:
             return False
 
@@ -48,7 +49,7 @@ class DatabaseManager:
         if passwd is None:
             return self.__db.exists(key=uname)
         else:
-            return self.__db.exists(key=uname,password=passwd)
+            return self.__db.exists(key=uname, password=passwd)
 
     def flush(self):
         # Flush all buffered data to the file

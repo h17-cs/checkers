@@ -3,12 +3,13 @@ import websockets
 import time
 from Message import *
 
+
 class GameWebSocket():
     def __init__(self, port):
         self.__port = port
-        self.__halted = False;
-        self.__connections=[]
-        self.__worker = websockets.serve(self.servePlayers, port=port);
+        self.__halted = False
+        self.__connections = []
+        self.__worker = websockets.serve(self.servePlayers, port=port)
         asyncio.get_event_loop().run_until_complete(self.__worker)
         asyncio.get_event_loop().run_forever()
 
@@ -18,10 +19,10 @@ class GameWebSocket():
     async def servePlayers(ws, path):
         msg = await ws.recv()
         if self.__halted:
-            print("Error: socket halted");
+            print("Error: socket halted")
             ws.close()
         print(msg)
-        m = Message.parse(msg);
+        m = Message.parse(msg)
         if m is None:
         act = m.getField("message_action")
         if m.getType() == MessageType.AccountAdmin and act is not None and act == 0:
@@ -29,24 +30,24 @@ class GameWebSocket():
             pwd = m.getField("password")
             resp = self.__game.addUser(usr, pwd, ws) if not usr is None else False
             if resp:
-                self.__connections.append(ws);
+                self.__connections.append(ws)
                 ws.send("Success")
             else:
                 ws.send("Failed")
                 ws.close()
             print(msg)
-            m = Message.parse(msg);
-            #if not m.hasField("message_action")
+            m = Message.parse(msg)
+            # if not m.hasField("message_action")
             if m.getType() == MessageType.Text:
                 #t = m.getField("timestamp")
                 usr = m.getField("name")
                 txt = m.getField("message")
-                
+
                 msg = Message(MessageType.Text)
                 #msg.addField("timestamp", int(time.time()*1000))
                 msg.addField("name", ":ServerAdmin:")
-                msg.addField("message", "Did you just say %s, %s?"%(txt,usr))
-                j="%s"%msg
+                msg.addField("message", "Did you just say %s, %s?" % (txt, usr))
+                j = "%s" % msg
                 print(j)
                 await ws.send(j)
 
@@ -57,7 +58,7 @@ class GameWebSocket():
                 if act == 0:
                     resp = self.__game.addUser(usr, pwd, ws) if not usr is None else False
                     if resp:
-                        self.__connections.append(ws);
+                        self.__connections.append(ws)
                         await ws.send("Success")
                     else:
                         await ws.send("Failed")
@@ -69,7 +70,7 @@ class GameWebSocket():
 
     def message(self, addr, port, msg):
         async def msgother():
-            uri="%s:%s"%(addr,port)
+            uri = "%s:%s" % (addr, port)
             async with websockets.connect(uri) as websocket:
                 await websocket.send(msg)
 
@@ -77,8 +78,9 @@ class GameWebSocket():
 
     def query(self, addr, port, msg):
         resp = ""
+
         async def msgother():
-            uri="%s:%s"%(addr,port)
+            uri = "%s:%s" % (addr, port)
             async with websockets.connect(uri) as websocket:
                 await websocket.send(msg)
                 resp = await websocket.recv()
@@ -88,10 +90,10 @@ class GameWebSocket():
 
     def halt(self):
         if not self.halted():
-            self.__halted = True;
+            self.__halted = True
             self.onhalt()
 
     def onhalt(self):
         for c in self.__connections:
-            c.send("Connection Closed.");
+            c.send("Connection Closed.")
             c.close()

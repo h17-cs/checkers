@@ -6,6 +6,7 @@
 from enum import Enum
 from Message import Message
 
+
 class ActionType(Enum):
     # Describes the type of action. Options are:
     #   - Move, an ordinary move as described by R4.2.2 and R4.2.4
@@ -18,6 +19,7 @@ class ActionType(Enum):
     Forfeit = 4
     #   - Save, a mutual stay of game as defined by R4.8
     Save = 5
+
 
 class Action:
     # Defines a player action, and houses relevant action data
@@ -39,4 +41,3 @@ class Action:
 
 
 class ActionMessage(Message):
-    

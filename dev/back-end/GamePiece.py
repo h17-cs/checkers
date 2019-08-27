@@ -10,24 +10,27 @@
 from enum import Enum
 from DummyWrap import dummy
 
+
 class PieceColor(Enum):
     # Describes the type of the color according to R3.1
     Light = 0
     Dark = 1
+
 
 class PieceType(Enum):
     # Describes the type of the piece according to R4.2.3
     Basic = 0
     King = 1
 
+
 class GamePiece:
     # Describes a checkers game piece
     def __init__(self, color, owner, game):
-        self.__color = color;
-        self.__owner = owner;
-        self.__type = PieceType.Basic;
-        self.__location = None;
-        self.__game = game;
+        self.__color = color
+        self.__owner = owner
+        self.__type = PieceType.Basic
+        self.__location = None
+        self.__game = game
 
     def getColor(self):
         # Returns the piece color
@@ -65,4 +68,4 @@ class GamePiece:
         # Returns a list of valid locations for the piece to move to
         # Satisfies R1.4.1
         # --DUMMY--
-        return [None];
+        return [None]

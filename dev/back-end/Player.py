@@ -17,14 +17,16 @@ from Message import *
 import time
 import asyncio
 
+
 class PlayerColor(Enum):
     # R2.6- Defines the color of a player
     Light = 0
     Dark = 1
 
+
 class Player:
     def __init__(self, playerId, handler, activeGame):
-        self.__id = playerId;
+        self.__id = playerId
         self.__handler = handler
         self.__game = activeGame
         self.__color = None
@@ -47,26 +49,26 @@ class Player:
 
     def forfeit(self):
         # Player(this) requested a forfeit
-        self.game.forfeit(self);
+        self.game.forfeit(self)
 
     def draw(self):
         # Player(this) requested a draw
-        self.game.query(self.color, Player.queryDraw);
+        self.game.query(self.color, Player.queryDraw)
 
     def save(self):
         # Player(this) requested a forfeit
-        self.game.query(self.color, Player.querySave);
+        self.game.query(self.color, Player.querySave)
 
     @dummy
     def queryDraw(self):
         # Ask the user if they wish to draw
-        return False 
+        return False
 
     @dummy
     def querySave(self):
         # Ask the user if they wish to save the current game
         return False
-        
+
     def associate(self, userId):
         if self.userID is None:
             self.userID = userId
@@ -78,27 +80,27 @@ class Player:
         gb = self.getGame().getBoard()
         m = Message(MessageType.GameUpdate)
         m.addField("timestamp", int(time.time()*1000))
-        m.addField("turn",self.getGame().getTurn())
+        m.addField("turn", self.getGame().getTurn())
         m.addField("clock_expire", int(1000*(time.time()+self.getGame().getTimeRemaining())))
         pieces = self.getGame().getPieces()
-        m.addField("board_update", {"sqr_%d"%p.getLocation() : (p.getColor(), p.getType()) for p in pieces})
+        m.addField("board_update", {"sqr_%d" % p.getLocation(): (p.getColor(), p.getType()) for p in pieces})
         m.addField("possible_moves", self.determineMoves())
 
-        wait = async lambda : await self.__handler.send(m.__str__())
+        wait = async lambda: await self.__handler.send(m.__str__())
         asyncio.get_event_loop().run_until_complete(wait())
 
     @dummy
     def determineMoves(self):
         return []
 
-
     @dummy
     def act(self):
         resp = None
+
         async def query():
-            resp = await self.__handler.recv() 
+            resp = await self.__handler.recv()
 
         self.update()
         asyncio.get_event_loop().run_until_complete(query())
-        
+
         print resp

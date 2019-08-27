@@ -3,6 +3,7 @@
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
 
+
 class Move():
     # Describes the ordinary movement of a piece as defined by R4.2.2 and R4.2.4
     def __init__(self, source, destination, gamePiece):
@@ -12,7 +13,6 @@ class Move():
         self.__destination = destination
         self.__piece = gamePiece
         self.__nextMove = None
-
 
     def appendMove(self, nextMove):
         # Appends a move to the current move.
@@ -38,11 +38,12 @@ class Move():
         # Returns a move postceding the current move
         return self.__nextMove
 
+
 class Capture(Move):
     # Describes the capturing movement of a piece as defined by R4.3.1 and R4.3.3
     def __init__(self, source, destination, actingPiece, capturedPiece):
         # Super constructor: Move
-        super().__init__(source,destination,actingPiece)
+        super().__init__(source, destination, actingPiece)
         self.__capturedPiece = capturedPiece
 
     def getCapturedPiece(self):

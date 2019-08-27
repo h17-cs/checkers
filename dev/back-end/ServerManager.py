@@ -3,7 +3,11 @@
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
 
-import os,sys,time,threading,datetime
+import os
+import sys
+import time
+import threading
+import datetime
 import configparser
 import asyncio
 from cursesmenu import *
@@ -22,6 +26,7 @@ from SocketManager import AdminSocket
 from RequestHandlers import AddUserHandler, ContentHandler, createPublicGameHandler, createPrivateGameHandler, loginHandler
 import config as cfg
 import argparse
+
 
 class ServerManager:
     def __init__(self):
@@ -48,16 +53,16 @@ class ServerManager:
         self.__pub_polling.start()
 
     def createGame(self, control_port, user_port, private=False):
-        args = [    'createGame.py',
-                    control_port,
-                    user_port,
-               ]
+        args = ['createGame.py',
+                control_port,
+                user_port,
+                ]
         if private:
             args.append('--private')
         self.log("Generating new game instance")
         pid = os.spawnlp(os.P_NOWAIT, './createGame.py', args, '--user1=%s')
         self.addPid(pid)
-        self.log("Calved game instance at pid:%d"%pid)
+        self.log("Calved game instance at pid:%d" % pid)
         return True
 
     def addPid(self, pid):
@@ -66,20 +71,20 @@ class ServerManager:
 
     def checkUser(self, uname, passwd):
         # Add a user from the database
-        return self.__db.queryForUser(uname,passwd)
+        return self.__db.queryForUser(uname, passwd)
 
     def addUser(self, uname, passwd):
         # Add a user from the database
-        return self.__db.addUser(uname,passwd)
+        return self.__db.addUser(uname, passwd)
 
     def deleteUser(self, uname, passwd):
         # Remove a user from the database
-        return self.__db.deleteUser(uname,passwd)
+        return self.__db.deleteUser(uname, passwd)
 
     def requestPublicGame(self, user):
         # Add a user to the public queue
         self.__public_requests.push(user)
-        "Added user %s to the public queue"%user
+        "Added user %s to the public queue" % user
         return True
 
     def requestPrivateGame(self, user):
@@ -92,11 +97,11 @@ class ServerManager:
         if user1 is None:
             self.log("Requesting user for game...")
             user1 = self.__public_requests.pop(block=True)
-            self.log("...Got %s"%user1)
+            self.log("...Got %s" % user1)
         if user2 is None:
             self.log("Requesting user for game...")
             user2 = self.__public_requests.pop(block=True)
-            self.log("...Got %s"%user2)
+            self.log("...Got %s" % user2)
 
         control = self.__port_manager.getPort()
         if control == -1:
@@ -116,7 +121,7 @@ class ServerManager:
         p = self.__port_manager.getPort()
         if p == -1:
             # No ports available
-            self.log("Cannot open private game for user %s: No ports available"%user1)
+            self.log("Cannot open private game for user %s: No ports available" % user1)
             return None
         self.createGame(p, user1, user2, private=True)
         return p
@@ -143,21 +148,21 @@ class ServerManager:
             r &= not pid is None
 
         if not r:
-            self.log("PID not valid- pid:%d"%(pid))
+            self.log("PID not valid- pid:%d" % (pid))
             return False
         else:
-            os.kill(pid,signal.SIGINT)
+            os.kill(pid, signal.SIGINT)
             _, status = os.waitpid(pid)
             attempts = 0
             while not os.WIFSTOPPED(status) and attempts < MAXATTEMPTS:
-                attempts+=1
+                attempts += 1
                 time.sleep(0.01)
-                os.kill(pid,signal.SIGINT)
+                os.kill(pid, signal.SIGINT)
                 _, status = os.waitpid(pid)
             if attempts == MAXATTEMPTS:
-                self.log("Aborting pkill(2) pid:%d after %d attempts"%(pid,attempts))
+                self.log("Aborting pkill(2) pid:%d after %d attempts" % (pid, attempts))
                 return False
-            self.log("Successfully killed pid:%d"%(pid))
+            self.log("Successfully killed pid:%d" % (pid))
             return True
 
     def log(self, msg):
@@ -196,25 +201,24 @@ class ServerManager:
 
     def serveHTTP(self):
         from RequestHandlers import BaseHandle, \
-                                    AddUserHandler, \
-                                    ContentHandler, \
-                                    createPublicGameHandler, \
-                                    createPrivateGameHandler, \
-                                    loginHandler, \
-                                    descriptionHandler
+            AddUserHandler, \
+            ContentHandler, \
+            createPublicGameHandler, \
+            createPrivateGameHandler, \
+            loginHandler, \
+            descriptionHandler
 
         BaseHandle.game_manager = self
 
         self.__aio_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.__aio_loop)
-        endpoints = [(r"/addUser", AddUserHandler), \
-                     (r"/", ContentHandler), \
-                     (r"/createPublicGame", createPublicGameHandler), \
-                     (r"/createPrivateGame", createPrivateGameHandler), \
-                     (r"/login", loginHandler), \
+        endpoints = [(r"/addUser", AddUserHandler),
+                     (r"/", ContentHandler),
+                     (r"/createPublicGame", createPublicGameHandler),
+                     (r"/createPrivateGame", createPrivateGameHandler),
+                     (r"/login", loginHandler),
                      (r"/about", descriptionHandler)
                      ]
         dblist = tornado.web.Application(endpoints, debug=cfg.debug)
         dblist.listen(cfg.web_test)
         tornado.ioloop.IOLoop.current().start()
-

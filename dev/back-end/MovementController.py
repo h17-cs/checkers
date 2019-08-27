@@ -6,6 +6,7 @@
 
 from DummyWrap import dummy
 
+
 class MovementController:
     # Validates, discovers, and defines the movement of pieces
 

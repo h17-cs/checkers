@@ -5,6 +5,7 @@ import threading
 import time
 import random
 
+
 class ThreadsafeQueue:
     def __init__(self):
         self.__queue = []

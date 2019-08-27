@@ -39,14 +39,15 @@ from WebsocketMessageManager import WebsocketMessageManager
 from SocketManager import ControlSocket
 import GameWebSocket as GameSocket
 
+
 class GameController:
     def __init__(self, control_port, user_port, private=False):
         self.__board = []
         self.__players = []
         self.__controllock = threading.Lock()
-        self.__private=private
-        self.__control=ControlSocket(control_port)
-        self.__users=GameSocket(user_port)
+        self.__private = private
+        self.__control = ControlSocket(control_port)
+        self.__users = GameSocket(user_port)
         self.__users.setGame(self)
         self.__halted = False
         self.__timer = None
@@ -61,9 +62,8 @@ class GameController:
 
     def main(self):
         self.__players = [Player(PlayerColor.Light, None),
-                        Player(PlayerColor.Dark, None)]
+                          Player(PlayerColor.Dark, None)]
         #self.__timer = Timer(60.0, GameController.timeout, (self,));
-
 
     @dummy
     def initialize(self):
@@ -72,16 +72,18 @@ class GameController:
             self.__board.append(None)
 
         for i in range(12):
-            self.addPiece(GamePiece(PieceColor.Light,getPlayer[PlayerColor.Light],self), Location(i))
-            self.addPiece(GamePiece(PieceColor.Dark,getPlayer[PlayerColor.Dark],self), Location(32-i))
-        
+            self.addPiece(GamePiece(PieceColor.Light,
+                                    getPlayer[PlayerColor.Light], self), Location(i))
+            self.addPiece(GamePiece(PieceColor.Dark,
+                                    getPlayer[PlayerColor.Dark], self), Location(32-i))
+
         self.__currentTurn = PlayerColor.Light
 
     def addUser(self, user, password, c):
         msg = Message(Message.MessageType.AccountAdministration)
-        msg.addField("message_action", 0);
-        msg.addField("username", user);
-        msg.addField("password", password);
+        msg.addField("message_action", 0)
+        msg.addField("username", user)
+        msg.addField("password", password)
         resp = self.__control.query("localhost", cfg.admin, msg.__str__())
         if resp == "Success":
             p = Player(user, c, self)
@@ -91,7 +93,7 @@ class GameController:
 
     def registerPlayer(self, playerColor, playerID, port):
         # Register players to the board
-        return self.players[playerColor].associate(playerID, port);
+        return self.players[playerColor].associate(playerID, port)
 
     def playerBind(self, playerId, playerHandler):
         # Register players to the game
@@ -129,14 +131,14 @@ class GameController:
             piece.setLocation(location)
             self.__controllock.release()
 
-        self.log("Moved piece from #%02d to #%02d"%(oldloc.toIndex(), location.toIndex()))
+        self.log("Moved piece from #%02d to #%02d" % (oldloc.toIndex(), location.toIndex()))
         return True
 
     def removePiece(self, piece):
         # remove a piece from the game board
-        loc = piece.getLocation().toIndex();
+        loc = piece.getLocation().toIndex()
         self.__controllock.acquire()
-        loc = piece.getLocation();
+        loc = piece.getLocation()
         retval = False
         if self.__board[loc] is None:
             print("Error: location points to None")
@@ -147,21 +149,21 @@ class GameController:
             retval = True
             self.__controllock.release()
 
-        self.log("Removed %s piece at #%02d"%("king" if piece.getType() is PieceType.King else "ordinary"), loc)
+        self.log("Removed %s piece at #%02d" %
+                 ("king" if piece.getType() is PieceType.King else "ordinary"), loc)
         return retval
-
 
     def promotePiece(self, piece):
         # Promote a piece on the game board
         retval = piece.promote()
 
-        self.log("promoted piece at #%0d"%(piece.getLocation().toIndex()))
+        self.log("promoted piece at #%0d" % (piece.getLocation().toIndex()))
         return retval
 
     @dummy
     def queryOtherPlayer(self, sourcecolor, queryFunc):
         # Facilitate a Player-to-Player query
-        otherPlayer = self.player_2 if (self.player_1.color == sourcecolor) else self.player_1;
+        otherPlayer = self.player_2 if (self.player_1.color == sourcecolor) else self.player_1
         result = queryFunc(otherPlayer)
 
         if result:
@@ -176,7 +178,7 @@ class GameController:
         # Determine whether the game is in an end state
         # --DUMMY--
         return False
-    
+
     def ready(self):
         # Determine whether the game is in an end state
         # --DUMMY--
@@ -189,9 +191,10 @@ class GameController:
         elif code == ControlSocket.ControlCode.Status:
             colorcode = "\033[31;0m" if isEnded() else "\033[32;0m"
             status = "Dormant" if isEnded() else "Active"
-            return "Status: [%s%s\033[0m], time remaining: %f"%(colorcode,status,self.__timer.getTimeRemaining())
+            return "Status: [%s%s\033[0m], time remaining: %f" % (colorcode, status, self.__timer.getTimeRemaining())
         else:
-            return "Code (%d) not supported"%code
+            return "Code (%d) not supported" % code
+
     @dummy
     def log(self, message):
         # Log a message to users and maybe log to a file
@@ -200,7 +203,7 @@ class GameController:
     @dummy
     def halt(self):
         # Halt the game
-        self.__halted = True;
+        self.__halted = True
         self.log("Game Halted.")
         self.__control.halt()
         self.__users.halt()

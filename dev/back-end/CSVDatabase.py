@@ -12,21 +12,23 @@ import threading
 import time
 import os
 
-CRLF = 0;
+CRLF = 0
 if os.name == "nt":
-    #Windows
+    # Windows
     CRLF = 1
 elif os.name == "posix":
-    #Linux
+    # Linux
     pass
+
 
 class CSVDB_Header:
     sizes = {
-        "uname" : 16,
-        "password" : 32,
-        "game_id" : 64
+        "uname": 16,
+        "password": 32,
+        "game_id": 64
     }
-    default = [("password",sizes["password"])]
+    default = [("password", sizes["password"])]
+
 
 class CSVDatabase:
     # Class representing a CSV-style database manager
@@ -36,10 +38,10 @@ class CSVDatabase:
     def __init__(self, dbpath, keysize=None, fields=None):
         self.__dbpath = dbpath
         self.__datalock = threading.Lock()
-        self.__buff = PriorityBuffer(self.BufferSize, debuffer= lambda x: self.writeTo(x.getEntry()))
+        self.__buff = PriorityBuffer(self.BufferSize, debuffer=lambda x: self.writeTo(x.getEntry()))
 
         if not os.path.isfile(dbpath):
-            open(dbpath,'w').close();
+            open(dbpath, 'w').close()
 
         if keysize is None:
             self.__keysize = CSVDB_Header.sizes["uname"]
@@ -82,7 +84,7 @@ class CSVDatabase:
         findings = None
         while findings is None and time.time() - reqtime < self.RequestTimeout:
             findings = self.__buff.get(Record.match(key, **fields))
-            #print(findings,fields)
+            # print(findings,fields)
             if len(findings) == 0:
                 findings = self.readFor(key, blocking=False, **fields)
                 time.sleep(0.01)
@@ -112,9 +114,9 @@ class CSVDatabase:
 
         matches = []
         match = Record.match(key, **fields)
-        f = open(self.__dbpath,'r')
+        f = open(self.__dbpath, 'r')
         for line in f:
-            r = Record.parse(line,self.__fields)
+            r = Record.parse(line, self.__fields)
             if r.getFlag() == Record.Flag.Filled and match(r):
                 matches.append(r)
         f.close()
@@ -127,14 +129,14 @@ class CSVDatabase:
         # Writes record to DB, inserting in same spot if a record with the same key already exists
         # Accesses DB File, so must aquire file lock
         self.__datalock.acquire()
-        f = open(self.__dbpath,'r+')
+        f = open(self.__dbpath, 'r+')
         firstEmpty = -1
         bytesRead = 0
         found = False
         for line in f:
             lineSize = len(line) + CRLF
             bytesRead += lineSize
-            r = Record.parse(line,self.__fields)
+            r = Record.parse(line, self.__fields)
             if firstEmpty < 0 and r.getFlag() == Record.Flag.Empty:
                 firstEmpty = bytesRead - lineSize
 
@@ -146,7 +148,7 @@ class CSVDatabase:
         if not found and firstEmpty != -1:
             f.seek(firstEmpty)
 
-        f.write("%s\n"%(record))
+        f.write("%s\n" % (record))
         f.close()
         self.__datalock.release()
 

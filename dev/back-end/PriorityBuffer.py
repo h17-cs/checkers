@@ -6,9 +6,11 @@
 import time
 import threading
 
+
 class PriorityBuffer:
     UpdateDecay = .98
     ResortEvery = 20
+
     class PriorityBufferEntry:
         def __init__(self, entry):
             self.__entry = entry
@@ -39,20 +41,20 @@ class PriorityBuffer:
 
     def calc_overflow_debuffer(self):
         # In the case of an overflow, how many entries do we debuffer
-        #return self.size() - self.__limit + 1   # Overflow + 1 (scalar)
+        # return self.size() - self.__limit + 1   # Overflow + 1 (scalar)
         return int(self.size() * .1)            # 10% of the total size (proportional)
 
     def add(self, entry):
         self.update()
         self.__datalock.acquire()
-        
+
         returnCode = False
         for i in range(self.size()):
             e = self.__buffer[i]
             if e.getEntry() == (entry):
                 e.increment()
                 returnCode = True
-        
+
         if returnCode:
             self.__datalock.release()
             return returnCode
@@ -62,7 +64,7 @@ class PriorityBuffer:
             self.debuffer(self.calc_overflow_debuffer())
             # And then retry
             return self.add(entry)
-        else: 
+        else:
             self.__buffer.append(PriorityBuffer.PriorityBufferEntry(entry))
             returnCode = True
 
@@ -83,7 +85,7 @@ class PriorityBuffer:
 
     def get(self, func=None):
         if func is None:
-            func = lambda x: x
+            def func(x): return x
 
         retval = []
         self.__datalock.acquire()
@@ -109,6 +111,6 @@ class PriorityBuffer:
 
     def resort(self):
         self.__datalock.acquire()
-        self.__buffer.sort(key=PriorityBuffer.PriorityBufferEntry.getCount,reverse=True)
+        self.__buffer.sort(key=PriorityBuffer.PriorityBufferEntry.getCount, reverse=True)
         self.__updateCount = 0
         self.__datalock.release()
