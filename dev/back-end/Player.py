@@ -13,6 +13,9 @@
 from enum import Enum
 
 from DummyWrap import dummy
+from Message import *
+import time
+import asyncio
 
 class PlayerColor(Enum):
     # R2.6- Defines the color of a player
@@ -71,8 +74,31 @@ class Player:
         else:
             return False
 
+    def update(self):
+        gb = self.getGame().getBoard()
+        m = Message(MessageType.GameUpdate)
+        m.addField("timestamp", int(time.time()*1000))
+        m.addField("turn",self.getGame().getTurn())
+        m.addField("clock_expire", int(1000*(time.time()+self.getGame().getTimeRemaining())))
+        pieces = self.getGame().getPieces()
+        m.addField("board_update", {"sqr_%d"%p.getLocation() : (p.getColor(), p.getType()) for p in pieces})
+        m.addField("possible_moves", self.determineMoves())
+
+        wait = async lambda : await self.__handler.send(m.__str__())
+        asyncio.get_event_loop().run_until_complete(wait())
+
+    @dummy
+    def determineMoves(self):
+        return []
+
+
     @dummy
     def act(self):
-        self.__connection();
+        resp = None
+        async def query():
+            resp = await self.__handler.recv() 
 
-        pass
+        self.update()
+        asyncio.get_event_loop().run_until_complete(query())
+        
+        print resp
