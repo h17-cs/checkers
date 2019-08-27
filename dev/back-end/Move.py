@@ -16,7 +16,8 @@ class Move():
 
     def appendMove(self, nextMove):
         # Appends a move to the current move.
-        # If the current move already has an apended move, insert the new move between the two
+        # If the current move already has an apended move,
+        # insert the new move between the two
         if not self.__nextMove is None:
             self.__nextMove.appendMove(nextMove)
 

@@ -121,7 +121,8 @@ class ServerManager:
         p = self.__port_manager.getPort()
         if p == -1:
             # No ports available
-            self.log("Cannot open private game for user %s: No ports available" % user1)
+            self.log(
+                "Cannot open private game for user %s: No ports available" % user1)
             return None
         self.createGame(p, user1, user2, private=True)
         return p
@@ -160,7 +161,8 @@ class ServerManager:
                 os.kill(pid, signal.SIGINT)
                 _, status = os.waitpid(pid)
             if attempts == MAXATTEMPTS:
-                self.log("Aborting pkill(2) pid:%d after %d attempts" % (pid, attempts))
+                self.log("Aborting pkill(2) pid:%d after %d attempts" %
+                         (pid, attempts))
                 return False
             self.log("Successfully killed pid:%d" % (pid))
             return True

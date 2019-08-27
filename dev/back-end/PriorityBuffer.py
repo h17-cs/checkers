@@ -42,7 +42,8 @@ class PriorityBuffer:
     def calc_overflow_debuffer(self):
         # In the case of an overflow, how many entries do we debuffer
         # return self.size() - self.__limit + 1   # Overflow + 1 (scalar)
-        return int(self.size() * .1)            # 10% of the total size (proportional)
+        # 10% of the total size (proportional)
+        return int(self.size() * .1)
 
     def add(self, entry):
         self.update()
@@ -111,6 +112,7 @@ class PriorityBuffer:
 
     def resort(self):
         self.__datalock.acquire()
-        self.__buffer.sort(key=PriorityBuffer.PriorityBufferEntry.getCount, reverse=True)
+        self.__buffer.sort(
+            key=PriorityBuffer.PriorityBufferEntry.getCount, reverse=True)
         self.__updateCount = 0
         self.__datalock.release()

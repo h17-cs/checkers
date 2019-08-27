@@ -28,7 +28,8 @@ class GameWebSocket():
         if m.getType() == MessageType.AccountAdmin and act is not None and act == 0:
             usr = m.getField("username")
             pwd = m.getField("password")
-            resp = self.__game.addUser(usr, pwd, ws) if not usr is None else False
+            resp = self.__game.addUser(
+                usr, pwd, ws) if not usr is None else False
             if resp:
                 self.__connections.append(ws)
                 ws.send("Success")
@@ -46,7 +47,8 @@ class GameWebSocket():
                 msg = Message(MessageType.Text)
                 #msg.addField("timestamp", int(time.time()*1000))
                 msg.addField("name", ":ServerAdmin:")
-                msg.addField("message", "Did you just say %s, %s?" % (txt, usr))
+                msg.addField("message", "Did you just say %s, %s?" %
+                             (txt, usr))
                 j = "%s" % msg
                 print(j)
                 await ws.send(j)
@@ -56,7 +58,8 @@ class GameWebSocket():
                 usr = m.getField("username")
                 pwd = m.getField("password")
                 if act == 0:
-                    resp = self.__game.addUser(usr, pwd, ws) if not usr is None else False
+                    resp = self.__game.addUser(
+                        usr, pwd, ws) if not usr is None else False
                     if resp:
                         self.__connections.append(ws)
                         await ws.send("Success")

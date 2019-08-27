@@ -81,9 +81,11 @@ class Player:
         m = Message(MessageType.GameUpdate)
         m.addField("timestamp", int(time.time()*1000))
         m.addField("turn", self.getGame().getTurn())
-        m.addField("clock_expire", int(1000*(time.time()+self.getGame().getTimeRemaining())))
+        m.addField("clock_expire", int(
+            1000*(time.time()+self.getGame().getTimeRemaining())))
         pieces = self.getGame().getPieces()
-        m.addField("board_update", {"sqr_%d" % p.getLocation(): (p.getColor(), p.getType()) for p in pieces})
+        m.addField("board_update", {"sqr_%d" % p.getLocation(): (
+            p.getColor(), p.getType()) for p in pieces})
         m.addField("possible_moves", self.determineMoves())
 
         wait = async lambda: await self.__handler.send(m.__str__())

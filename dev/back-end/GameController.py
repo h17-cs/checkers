@@ -131,7 +131,8 @@ class GameController:
             piece.setLocation(location)
             self.__controllock.release()
 
-        self.log("Moved piece from #%02d to #%02d" % (oldloc.toIndex(), location.toIndex()))
+        self.log("Moved piece from #%02d to #%02d" %
+                 (oldloc.toIndex(), location.toIndex()))
         return True
 
     def removePiece(self, piece):
@@ -163,7 +164,8 @@ class GameController:
     @dummy
     def queryOtherPlayer(self, sourcecolor, queryFunc):
         # Facilitate a Player-to-Player query
-        otherPlayer = self.player_2 if (self.player_1.color == sourcecolor) else self.player_1
+        otherPlayer = self.player_2 if (
+            self.player_1.color == sourcecolor) else self.player_1
         result = queryFunc(otherPlayer)
 
         if result:

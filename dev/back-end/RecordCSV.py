@@ -123,7 +123,8 @@ class Record:
         dat = self.getData()
         data_tail = data_tail % tuple(dat[f] for f, _ in fields)
 
-        flag = Record.FlagChar.Filled if self.getFlag() == Record.Flag.Filled else Record.FlagChar.Empty
+        flag = Record.FlagChar.Filled if self.getFlag(
+        ) == Record.Flag.Filled else Record.FlagChar.Empty
         key = ("%%%ds" % self.__keysize) % self.getKey()
         key_header = "%c,%s" % (flag, key)
         self.__datalock.release()
@@ -143,7 +144,8 @@ class Record:
                    ))
 
         r = Record(16, fields)
-        r.setFlag(Record.Flag.Filled if flag == Record.FlagChar.Filled else Record.Flag.Empty)
+        r.setFlag(Record.Flag.Filled if flag ==
+                  Record.FlagChar.Filled else Record.Flag.Empty)
         r.setKey(tokens[1])
         if tokens[1] is None or len(tokens[1]) == 0:
             r.setFlag(Record.Flag.Empty)

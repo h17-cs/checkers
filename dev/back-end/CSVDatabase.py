@@ -38,7 +38,8 @@ class CSVDatabase:
     def __init__(self, dbpath, keysize=None, fields=None):
         self.__dbpath = dbpath
         self.__datalock = threading.Lock()
-        self.__buff = PriorityBuffer(self.BufferSize, debuffer=lambda x: self.writeTo(x.getEntry()))
+        self.__buff = PriorityBuffer(
+            self.BufferSize, debuffer=lambda x: self.writeTo(x.getEntry()))
 
         if not os.path.isfile(dbpath):
             open(dbpath, 'w').close()
