@@ -53,35 +53,6 @@ class SocketManager:
     def onhalt(self):
         pass;
 
-class GameSocket(SocketManager):
-    def __init__(self, port):
-        super().__init__(port)
-        self.__connections=[]
-
-    def setGame(self, g):
-        self.__game = g
-
-    def onconnect(self, c, addr):
-        m = Message.parse(c.recv(2048));
-        act = m.getField("message_action")
-        if m.getType() == MessageType.AccountAdmin and act is not None and act == 0:
-            usr = m.getField("username")
-            resp = g.addUser(usr) if not usr is None else False
-            if resp:
-                self.__connections.append(c);
-                c.send("Success")
-            else:
-                c.send("Failed")
-                c.close()
-
-        else:
-            c.close()
-
-    def onhalt(self):
-        for c in self.__connectios:
-            c.send("Connection Closed.");
-            c.close()
-
 class ControlSocket(SocketManager):
     class ControlCode(IntEnum):
         Status = 0;
