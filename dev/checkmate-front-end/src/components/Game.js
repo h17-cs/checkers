@@ -3,6 +3,7 @@ import GameInfo from "./GameInfo";
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+const URL = 'ws://localhost:3030'
 
 class Game extends Component {
    constructor(props){
@@ -28,85 +29,124 @@ class Game extends Component {
            didForfeit:0,
            timeExpire:0,
            possible_moves: {
-            "zero": null,
-            "one": null,
-            "two": null,
-            "three": null,
-            "four": null,
-            "five": null,
-            "six": null,
-            "seven": null,
-            "eight": [12, 13],
-            "nine": [13,14],
-            "ten": [14, 15],
-            "eleven": [15],
-            "twelve": null,
-            "thirteen": null,
-            "fourteen":  null,
-            "fifteen":  null,
-            "sixteen":  null,
-            "seventeen":  null,
-            "eighteen":  null,
-            "nineteen":  null,
-            "twent": [16],
-            "twentOne": [16, 17],
-            "twentTwo": [17, 18],
-            "twentThree": [18, 19],
-            "twentFour": null,
-            "twentFive": null,
-            "twentSix": null,
-            "twentSeven": null,
-            "twentEight": null,
-            "twentNine": null,
-            "thirt": null,
-            "thirtOne": null,
-            "thirtTwo": null,
+            "sqr_1": null,
+            "sqr_2": null,
+            "sqr_3": null,
+            "sqr_4": null,
+            "sqr_5": null,
+            "sqr_6": null,
+            "sqr_7": null,
+            "sqr_8": null,
+            "sqr_9": [12, 13],
+            "sqr_10": [13,14],
+            "sqr_11": [14, 15],
+            "sqr_12": [15],
+            "sqr_13": null,
+            "sqr_14": null,
+            "sqr_15":  null,
+            "sqr_16":  null,
+            "sqr_17":  null,
+            "sqr_18":  null,
+            "sqr_19":  null,
+            "sqr_20":  null,
+            "sqr_21": [16],
+            "sqr_22": [16, 17],
+            "sqr_23": [17, 18],
+            "sqr_24": [18, 19],
+            "sqr_25": null,
+            "sqr_26": null,
+            "sqr_27": null,
+            "sqr_28": null,
+            "sqr_29": null,
+            "sqr_30": null,
+            "sqr_31": null,
+            "sqr_32": null
            },
            gameState: {
-            "zero": [0 , 0],
-            "one": [0 , 0],
-            "two": [0 , 0],
-            "three": [0 , 0],
-            "four": [0 , 0],
-            "five": [0 , 0],
-            "six": [0 , 0],
-            "seven": [0 , 0],
-            "eight": [0 , 0],
-            "nine": [0 , 0],
-            "ten": [0 , 0],
-            "eleven": [0 , 0],
-            "twelve": null,
-            "thirteen": null,
-            "fourteen":  null,
-            "fifteen":  null,
-            "sixteen":  null,
-            "seventeen":  null,
-            "eighteen":  null,
-            "nineteen":  null,
-            "twent": [1 , 0],
-            "twentOne": [1 , 0],
-            "twentTwo": [1 , 0],
-            "twentThree": [1 , 0],
-            "twentFour": [1 , 0],
-            "twentFive": [1 , 0],
-            "twentSix": [1 , 0],
-            "twentSeven": [1 , 0],
-            "twentEight": [1 , 0],
-            "twentNine": [1 , 0],
-            "thirt": [1, 0],
-            "thirtOne": [1 , 0],
-            "thirtTwo": [1 , 0],
+            "sqr_1": [0 , 0],
+            "sqr_2": [0 , 0],
+            "sqr_3": [0 , 0],
+            "sqr_4": [0 , 0],
+            "sqr_5": [0 , 0],
+            "sqr_6": [0 , 0],
+            "sqr_7": [0 , 0],
+            "sqr_8": [0 , 0],
+            "sqr_9": [0 , 0],
+            "sqr_10": [0 , 0],
+            "sqr_11": [0 , 0],
+            "sqr_12": [0 , 0],
+            "sqr_13": null,
+            "sqr_14": null,
+            "sqr_15":  null,
+            "sqr_16":  null,
+            "sqr_17":  null,
+            "sqr_18":  null,
+            "sqr_19":  null,
+            "sqr_20":  null,
+            "sqr_21": [1 , 0],
+            "sqr_22": [1 , 0],
+            "sqr_23": [1 , 0],
+            "sqr_24": [1 , 0],
+            "sqr_25": [1 , 0],
+            "sqr_26": [1 , 0],
+            "sqr_27": [1 , 0],
+            "sqr_28": [1 , 0],
+            "sqr_29": [1 , 0],
+            "sqr_30": [1 , 0],
+            "sqr_31": [1, 0],
+            "sqr_32": [1 , 0]
         }
        }
    }
 
+   ws = new WebSocket(URL)
+
    componentDidMount(){
        this.interval = setInterval(() => this.timer(), 1000)
+
+       this.ws.onopen = () => {
+        // on connecting, do nothing but log it to the console
+        console.log('connected')
+      }
+  
+      this.ws.onmessage = evt => {
+        // on receiving a message, add it to the list of messages
+        const message = JSON.parse(evt.data)
+        this.addMessage(message)
+      }
+  
+      this.ws.onclose = () => {
+        console.log('disconnected')
+        // automatically try to reconnect on connection loss
+        this.setState({
+          ws: new WebSocket(URL),
+        })
+      }
    }
 
    componentWillMount(){
        clearInterval(this.interval);
    }
+
+   addMessage = message =>
+    this.setState(state => ({ messages: [message, ...state.messages] }))
+
+    submitMessage = messageString => {
+        // on submitting the ChatInput form, send the message, add it to the list and reset the input
+        // const message = { 
+        //     name: this.state.name, 
+        //     message: messageString 
+        // }
+        const message = { 
+            turn: this.state.playerTurn,
+            isGameOver:this.state.timeExpire,
+            didForfeit:this.state.didForfeit,
+            timeExpire:this.state.didForfeit,
+            moveMade: this.state.moveOrder
+        }
+        this.ws.send(JSON.stringify(message))
+        this.addMessage(message)
+    }
    
    timer(){
         this.setState({floatTimer: (this.state.floatTimer - 1)})
