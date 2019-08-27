@@ -18,6 +18,8 @@ from ThreadsafeQueue import ThreadsafeQueue
 from Logger import Logger
 from WebsocketMessageManager import WebsocketMessageManager
 from PortManager import PortManager
+from SocketManager import AdminSocket
+from RequestHandlers import AddUserHandler, ContentHandler, createPublicGameHandler, createPrivateGameHandler, loginHandler
 import config as cfg
 import argparse
 

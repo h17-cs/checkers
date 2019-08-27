@@ -24,8 +24,18 @@ class Message:
         return json.dumps(
             {
                 'message_type' : self.__messageType,
-                'message_body' : self.__messageBody
+                'body' : self.__messageBody
             } );
+    
+    def getType(self):
+        # Get the message type
+        return self.__messageType;
+
+    def getField(self, key):
+        # Add a (key, value) pair to the message body
+        if key in self.__messageBody.keys():
+            return self.__messageBody[key];
+        else return None;
 
     def addField(self, key, value):
         # Add a (key, value) pair to the message body
@@ -35,7 +45,7 @@ class Message:
         # STATIC: Generate a message from a JSON string
         obj = json.loads(jstring)
         mtype = obj['message_type']
-        mbody = obj['message_body']
+        mbody = obj['body']
         
         msg = Message(mtype)
         for key in mbody:

@@ -34,14 +34,21 @@ from enum import Enum
 from Timer import Timer
 from Player import Player, PlayerColor
 from DummyWrap import dummy
+import config as cfg
 from WebsocketMessageManager import WebsocketMessageManager
-class GameController:
+from SocketManager import GameSocket, ControlSocket
 
-    def __init__(self, control_port, client_port, private=False):
+class GameController:
+    def __init__(self, control_port, user_port, private=False):
         self.__board = []
         self.__players = []
         self.__controllock = threading.Lock()
         self.__private=private
+        self.__control=ControlSocket(control_port)
+        self.__users=GameSocket(user_port)
+        self.__users.setGame(self)
+        self.__halted = False
+        self.__timer = None
 
     def getBoard(self):
         # Game board accessor
@@ -68,6 +75,18 @@ class GameController:
             self.addPiece(GamePiece(PieceColor.Dark,getPlayer[PlayerColor.Dark],self), Location(32-i))
         
         self.__currentTurn = PlayerColor.Light
+
+    def addUser(self, user, password, c):
+        msg = Message(Message.MessageType.AccountAdministration)
+        msg.addField("message_action", 0);
+        msg.addField("username", user);
+        msg.addField("password", password);
+        resp = self.__control.query("localhost", cfg.admin, msg.__str__())
+        if resp == "Success":
+            p = Player(user, c, self)
+            players.append(user)
+        else:
+            return False
 
     def registerPlayer(self, playerColor, playerID, port):
         # Register players to the board
@@ -162,7 +181,25 @@ class GameController:
         # --DUMMY--
         return len(self.__players) == 1
 
+    def flag(self, code):
+        if code == ControlSocket.ControlCode.Halt:
+            self.halt()
+            return "Halted"
+        elif code == ControlSocket.ControlCode.Status:
+            colorcode = "\033[31;0m" if isEnded() else "\033[32;0m"
+            status = "Dormant" if isEnded() else "Active"
+            return "Status: [%s%s\033[0m], time remaining: %f"%(colorcode,status,self.__timer.getTimeRemaining())
+        else:
+            return "Code (%d) not supported"%code
     @dummy
     def log(self, message):
         # Log a message to users and maybe log to a file
         pass
+
+    @dummy
+    def halt(self):
+        # Halt the game
+        self.__halted = True;
+        self.log("Game Halted.")
+        self.__control.halt()
+        self.__users.halt()
