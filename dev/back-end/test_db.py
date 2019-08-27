@@ -82,39 +82,35 @@ def removesome(i):
 
 
 def refresh():
-    for i in range(6):
-        time.sleep(30)
-        print("\t\t\t", "Flushing")
-        db.flush()
+   time.sleep(20)
+   print("\t\t\t", "Flushing")
+   db.flush()
 
 
 threads = []
 
-for i in range(15):
-    threads.append(threading.Thread(target=createsome, args=(200,)))
-
-for i in range(100):
-    threads.append(threading.Thread(target=querysome, args=(200,)))
+for i in range(5):
+    threads.append(threading.Thread(target=createsome, args=(75,)))
 
 for i in range(10):
-    threads.append(threading.Thread(target=removesome, args=(200,)))
+    threads.append(threading.Thread(target=querysome, args=(75,)))
 
-threads.append(threading.Thread(target=refresh))
+for i in range(5):
+    threads.append(threading.Thread(target=removesome, args=(75,)))
+
+#threads.append(threading.Thread(target=refresh))
 
 print("Target actions is 3000 adds, 2000 removes, 20000 queries")
 
 
 def run():
     global failures, globcount, END
-    try:
-        for t in threads:
-            t.start()
-
-        k = input("\t\t\tPress enter whenever")
-    except:
-        pass
-    END = True
+    for t in threads:
+        t.start()
     for t in threads:
         t.join()
     db.flush()
     print("Failures:", failures)
+
+if __name__ == "__main__":
+    run()
