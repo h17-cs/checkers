@@ -1,17 +1,18 @@
-# Threadsafe class that manages active ports and port counts
+"""Threadsafe class that manages active ports and port counts"""
 # Created: 08/15
 # Author: Charles Hill
 # Edited: 08/15 (by Charles)
-
-from DummyWrap import dummy
 from random import randint
 import threading
 import random
+from DummyWrap import dummy
 
 
 class PortManager:
+    """ Manages all free and open ports within the set bounds"""
 
     def __init__(self, lowerbound, upperbound):
+        """ Creates a new port manager """
         self.__portlock = threading.Lock()
         self.__closed = []
         self.__open = [i for i in range(lowerbound, upperbound+1)]
@@ -19,7 +20,7 @@ class PortManager:
         self.scramble()
 
     def getPort(self):
-        # Acquire any free port, closing it from further use
+        """Acquire any free port, closing it from further use"""
         self.__portlock.acquire()
 
         if len(self.__open) == 0:
@@ -34,7 +35,7 @@ class PortManager:
         return port
 
     def freePort(self, port):
-        # Close the given port, freeing it for further use
+        """ Close the given port, freeing it for further use"""
         self.__portlock.acquire()
 
         try:
@@ -47,7 +48,7 @@ class PortManager:
         self.__portlock.release()
 
     def portsAvailable(self):
-        # Determine how many ports are available
+        """ Determine how many ports are available"""
         self.__portlock.acquire()
 
         count = len(self.__open)
@@ -57,7 +58,7 @@ class PortManager:
         return count
 
     def scramble(self):
-        # Randomize the port order
+        """ Randomize the port order"""
         self.__portlock.acquire()
 
         random.shuffle(self.__open)

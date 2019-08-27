@@ -1,3 +1,5 @@
+""" Numerous request handlers for external endpoints"""
+
 import tornado.web
 import json
 from tornado.gen import coroutine
@@ -10,9 +12,11 @@ import threading
 
 
 class BaseHandle(tornado.web.RequestHandler):
+    """ Defines base handler"""
     game_manager = None
 
     def set_default_headers(self):
+        """Override of headers to get past CORS issues"""
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "*")
         self.set_header("Access-Control-Allow-Methods",
@@ -20,11 +24,13 @@ class BaseHandle(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json")
 
     def get_message_type(self):
+        """Get the type of message sent"""
         obj = self.request.body.decode('ascii')
         parse = json.loads(obj)
         return parse["message_type"] if json is not None else None
 
     def get_body_argument(self, query, **kwargs):
+        """Get the json body of the message"""
         obj = self.request.body.decode('ascii')
         parse = json.loads(obj)
         #bod = super().get_body_argument('body', None)
@@ -40,12 +46,16 @@ class BaseHandle(tornado.web.RequestHandler):
             return None
 
     def options(self):
+        """CORS Preflight response code"""
         self.set_status(200)
         self.finish()
 
 
 class AddUserHandler(BaseHandle):
+    """Handler for adding a user to the DB"""
+
     def prepare(self):
+        """ Prepares json response"""
         super(AddUserHandler, self).prepare()
         self.json_data = None
         try:
@@ -56,6 +66,7 @@ class AddUserHandler(BaseHandle):
             pass
 
     def post(self):
+        """ on Post request behavior"""
         sm = self.game_manager
         # print("Message of type ", self.get_message_type())
         usernm = self.get_body_argument('username')
@@ -83,10 +94,14 @@ class AddUserHandler(BaseHandle):
 
 
 class createPublicGameHandler(BaseHandle):
+    """Handler to create a new public game"""
+
     def prepare(self):
+        """ Prepares json response"""
         super(createPublicGameHandler, self).prepare()
 
     def get(self):
+        """ on get request behavior"""
         sm = self.game_manager
         user = self.get_query_argument('userid')
         print("create public request with u:%s" % (user))
@@ -109,17 +124,17 @@ class createPublicGameHandler(BaseHandle):
 
         self.set_status(stat)
         self.finish({"resp": msg})
-        # await user auth at some point
-        ##############################################
-        # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
-        ##############################################
 
 
 class createPrivateGameHandler(BaseHandle):
+    """Handler to create a new private game"""
+
     def prepare(self):
+        """ Prepares json data"""
         super(createPrivateGameHandler, self).prepare()
 
     def get(self):
+        """ on get request behavior"""
         sm = self.game_manager
         user = self.get_query_argument('userid')
         print("create private request with u:%s" % (user))
@@ -142,14 +157,13 @@ class createPrivateGameHandler(BaseHandle):
 
         self.set_status(stat)
         self.finish({"resp": msg})
-        # await user auth at some point
-        ##############################################
-        # PASS DATA TO SOCKET FOR CENTRAL PROCESSING #
-        ##############################################
 
 
 class loginHandler(BaseHandle):
+    """Handler to log user in"""
+
     def post(self):
+        """ on post request behavior"""
         sm = self.game_manager
         print("Message of type ", self.get_message_type())
         usernm = self.get_body_argument('username')
@@ -177,7 +191,10 @@ class loginHandler(BaseHandle):
 
 
 class descriptionHandler(BaseHandle):
+    """ Test file content handler"""
+
     def get(self):
+        """ on get request behavior"""
         desc_path = '/home/charles/checkers/dev/checkmate-front-end/src/components/About.js'
         rendered = render_component(desc_path)
         self.set_status = 200
@@ -185,6 +202,8 @@ class descriptionHandler(BaseHandle):
 
 
 class ContentHandler(BaseHandle):
+    """ Handles serverside rendering of react content"""
+
     def get(self):
         rendered = render_component(os.path.join(os.getcwd(
         ), 'local_files', 'checkmate-front-end', 'src', 'Register.js'), {}, to_static_markup=False,)

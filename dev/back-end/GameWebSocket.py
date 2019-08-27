@@ -1,7 +1,7 @@
 import asyncio
 import websockets
 import time
-from Message import *
+from Message import Message, MessageType
 
 
 class GameWebSocket():
@@ -9,6 +9,7 @@ class GameWebSocket():
         self.__port = port
         self.__halted = False
         self.__connections = []
+        self.__game = None
         self.__worker = websockets.serve(self.servePlayers, port=port)
         asyncio.get_event_loop().run_until_complete(self.__worker)
         asyncio.get_event_loop().run_forever()
@@ -16,7 +17,7 @@ class GameWebSocket():
     def setGame(self, g):
         self.__game = g
 
-    async def servePlayers(ws, path):
+    async def servePlayers(self, ws, path):
         msg = await ws.recv()
         if self.__halted:
             print("Error: socket halted")

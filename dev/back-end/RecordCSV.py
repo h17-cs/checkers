@@ -8,15 +8,19 @@ import threading
 
 
 class Record:
+    """ Single record class"""
     class Flag(Enum):
+        """ Single flag class"""
         Filled = True
         Empty = False
 
     class FlagChar:
+        """ Database operations marker class"""
         Filled = '#'
         Empty = '-'
 
     def __init__(self, keysize, fields=None):
+        """ Create new record"""
         self.__flag = Record.Flag.Empty
         self.__key = ""
         self.__keysize = keysize
@@ -29,30 +33,30 @@ class Record:
                 self.appendField(field, fieldsize)
 
     def appendField(self, field, fieldsize):
-        # Add fields to the record
+        """Add fields to the record"""
         self.__datalock.acquire()
         self.__fields.append((field, fieldsize))
         self.__data[field] = ''
         self.__datalock.release()
 
     def setKey(self, key):
-        # Set the database entry key
+        """Set the database entry key"""
         self.__key = key
 
     def getKey(self):
-        # Get the database entry key
+        """Get the database entry key"""
         return self.__key
 
     def setFlag(self, flag):
-        # Set the database entry flag
+        """Set the database entry flag"""
         self.__flag = flag
 
     def getFlag(self):
-        # Get the database entry flag
+        """Get the database entry flag"""
         return self.__flag
 
     def getField(self, field):
-        # Get the data corresponding to the field, if the field exists
+        """Get the data corresponding to the field, if the field exists"""
         self.__datalock.acquire()
         ret_dat = None
         if self.hasField(field):
@@ -61,7 +65,7 @@ class Record:
         return ret_dat
 
     def setField(self, field, data):
-        # Set the data corresponding to the field, if the field exists
+        """Set the data corresponding to the field, if the field exists"""
         self.__datalock.acquire()
         ret_stat = False
         if self.hasField(field):
@@ -71,11 +75,11 @@ class Record:
         return ret_stat
 
     def hasField(self, field):
-        # Check if Record has the given field
+        """Check if Record has the given field"""
         return field in [header for header, _ in self.__fields]
 
     def setData(self, **data):
-        # Set multiple Record fields off kwargs param
+        """Set multiple Record fields off kwargs param"""
         self.__datalock.acquire()
 
         for k in data:
@@ -85,15 +89,15 @@ class Record:
         self.__datalock.release()
 
     def getData(self):
-        # Get the data encoded by this line
+        """Get the data encoded by this line"""
         return self.__data
 
     def getFields(self):
-        # Get the field headers for the record
+        """Get the field headers for the record"""
         return self.__fields
 
     def __eq__(self, other):
-        # Compare this entry to another
+        """Compare this entry to another"""
         # Computationally exhasting, so broken into 3 parts
         #   Note: flags not especially important
         def testKeys():
@@ -113,7 +117,7 @@ class Record:
         return testKeys() and testHeads() and testData()
 
     def __str__(self):
-        # generate a string representing the record and all its fields
+        """ generate a string representing the record and all its fields"""
         data_tail = ""
         fields = self.getFields()
         self.__datalock.acquire()
@@ -131,7 +135,7 @@ class Record:
         return "%s,%s" % (key_header, data_tail)
 
     def parse(line, fields):
-        # Parse a record from a string and headers
+        """ Parse a record from a string and headers"""
         tokens = [t.strip() for t in line.split(',')]
         flag = tokens[0]
         key = tokens[1]
@@ -156,6 +160,7 @@ class Record:
         return r
 
     def match(key, **fields):
+        """ match the key with the fields in the record"""
         def helper(entry):
             if not entry.getKey() == key:
                 return False

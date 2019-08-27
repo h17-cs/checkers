@@ -12,20 +12,22 @@ from DummyWrap import dummy
 
 
 class PieceColor(Enum):
-    # Describes the type of the color according to R3.1
+    """ Describes the type of the color according to R3.1"""
     Light = 0
     Dark = 1
 
 
 class PieceType(Enum):
-    # Describes the type of the piece according to R4.2.3
+    """Describes the type of the piece according to R4.2.3"""
     Basic = 0
     King = 1
 
 
 class GamePiece:
-    # Describes a checkers game piece
+    """Describes a checkers game piece"""
+
     def __init__(self, color, owner, game):
+        """ Creates a new GamePiece """
         self.__color = color
         self.__owner = owner
         self.__type = PieceType.Basic
@@ -33,39 +35,39 @@ class GamePiece:
         self.__game = game
 
     def getColor(self):
-        # Returns the piece color
+        """Returns the piece color"""
         return self.__color
 
     def getOwner(self):
-        # Returns the piece owner
+        """ Returns the piece owner"""
         return self.__owner
 
     def getType(self):
-        # Returns the piece type
+        """ Returns the piece type"""
         return self.__type
 
     def promote(self):
-        # Promote a piece from Basic to King
+        """ Promote a piece from Basic to King """
         if self.__type == PieceType.King:
             pass
         else:
             self.__type = PieceType.King
 
     def setLocation(self, newloc):
-        # Returns the piece location
+        """ Returns the piece location """
         self.__location = newloc
 
     def getLocation(self):
-        # Returns the piece location
+        """ Returns the piece location """
         return self.__location
 
     def getGame(self):
-        # Returns the checkers game associated with the piece
+        """ Returns the checkers game associated with the piece """
         return self.__game
 
     @dummy
     def getValidMoves(self):
-        # Returns a list of valid locations for the piece to move to
+        """ Returns a list of valid locations for the piece to move to """
         # Satisfies R1.4.1
         # --DUMMY--
         return [None]

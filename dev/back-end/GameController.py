@@ -30,14 +30,11 @@
 #   - Complies to Use Cases as defined in the Requirements document
 
 import threading
-from enum import Enum
-from Timer import Timer
 from Player import Player, PlayerColor
 from DummyWrap import dummy
-from Message import Message
 from GamePiece import PieceType, PieceColor, GamePiece
 from Location import Location
-from Message import Message, MessageType
+from Message import Message
 import config as cfg
 from SocketManager import ControlSocket
 import GameWebSocket as GameSocket
@@ -90,13 +87,15 @@ class GameController:
     def addUser(self, user, password, c):
         """ Adds a user to the game """
         msg = Message(Message.MessageType.AccountAdministration)
+        # Use c var
+        print(c)
         msg.addField("message_action", 0)
         msg.addField("username", user)
         msg.addField("password", password)
         resp = self.__control.query("localhost", cfg.admin, msg.__str__())
         if resp == "Success":
-            p = Player(user, c, self)
-            players.append(user)
+            self.__players.append(user)
+            return True
         else:
             return False
 
@@ -140,9 +139,9 @@ class GameController:
             piece.setLocation(location)
             self.__controllock.release()
 
-        self.log("Moved piece from #%02d to #%02d" %
-                 (oldloc.toIndex(), location.toIndex()))
-        return True
+            self.log("Moved piece from #%02d to #%02d" %
+                     (oldloc.toIndex(), location.toIndex()))
+            return True
 
     def removePiece(self, piece):
         """ remove a piece from the game board """
@@ -158,9 +157,10 @@ class GameController:
             self.__board[loc] = None
             retval = True
             self.__controllock.release()
-
-        self.log("Removed %s piece at #%02d" %
-                 ("king" if piece.getType() is PieceType.King else "ordinary"), loc)
+        log_str = "Removed % s piece" % (
+            "king" if piece.getType() is PieceType.King else "ordinary")
+        log_str += "at #%02d" % loc
+        self.log(log_str)
         return retval
 
     def promotePiece(self, piece):
