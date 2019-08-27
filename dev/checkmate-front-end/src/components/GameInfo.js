@@ -14,7 +14,13 @@ class GameInfo extends Component {
                 <GameTrackBox gameTrackBox = {this.props.gameInfo}/>
                 <hr className="hrLine"/>
                 <Chat/>
-               
+                {/* <div className="formatButtons"> */}
+                    <div class="btn-group" role="group">
+                        <input type ="button" value= "Forfeit" className="actionButton" onClick={this.forfeit}/>
+                        <input type ="button" value= "Save Game" className="actionButton"/>
+                        <input type ="button" value= "Main Menu" className="actionButton"/>         
+                    </div>
+                {/* </div> */}
             </div>
         );
     }

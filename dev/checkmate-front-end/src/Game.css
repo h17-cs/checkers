@@ -83,14 +83,12 @@
 
 .chatBox{
     background-color:#979797;  
-    height: 350px;
+    height: 200px;
     width: 90%;
     margin: auto;
 }
 
 .sendButton{
-    height: 25px;
-    width: 45px;
     background-color: #5d9e70;
     margin: 0 auto;
     justify-content: center;
@@ -104,20 +102,16 @@
 }
 
 .actionButton{
-    height: 35px;
-    width: 80px;
-    background-color: #4e9678;
-    margin: 0 auto;
-    justify-content: center;
-    align-items: center;
-    margin-left: 5px;
-    vertical-align: middle
+   height: 10px;
+   width: 10px;
+   padding: 0;
+   margin: 0;
 }
 
 .formatButtons{
     margin-top: 10px;
     margin-left: 45px;
-    display: inline-block;
+   
 }
 
 .topMargin{

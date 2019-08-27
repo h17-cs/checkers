@@ -47,16 +47,16 @@ class Chat extends Component {
   render() {
     return (
       <div>
-        <label htmlFor="name">
-          Name:&nbsp;
-          <input
+        {/* <label htmlFor="name">
+          Name:&nbsp; */}
+          {/* <input
             type="text"
             id={'name'}
             placeholder={'Enter your name...'}
             value={this.state.name}
             onChange={e => this.setState({ name: e.target.value })}
-          />
-        </label>
+          /> */}
+        {/* </label> */}
         
         <div className="chatBox">
             {this.state.messages.map((message, index) =>

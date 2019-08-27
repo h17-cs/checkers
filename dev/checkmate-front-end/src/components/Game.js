@@ -151,12 +151,7 @@ class Game extends Component {
                     <Board gameState = {[this.state.gameState, this.state.moveOrder, this.state.possible_moves, this.state.valid_moves, this.state.screenOwner]}  setMoveOrder = {this.setMoveOrder}/>
                     <div>
                         <GameInfo gameInfo = {[this.state.gameInfo, this.state.playerTurn]}/>
-                        <div className="formatButtons">
-                            <input type ="button" value= "Forfeit" className="actionButton" onClick={this.forfeit}/>
-                            <input type ="button" value= "Save Game" className="actionButton"/>
-                            <input type ="button" value= "Main Menu" className="actionButton"/>
-                            
-                        </div>
+                        
                     </div>
                 </div>
             </div>
