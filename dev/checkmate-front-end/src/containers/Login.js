@@ -44,6 +44,7 @@ userHasAuthenticated() {
       self.userHasAuthenticated();
       localStorage.setItem("username", self.state.username)
       self.props.history.push("/");
+      window.location.reload();
       
 		}
 		else if(response.status === 204){

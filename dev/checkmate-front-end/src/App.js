@@ -19,7 +19,6 @@ class App extends Component {
     };
   }
 
-
   userHasAuthenticated = authenticated => {
     this.setState({
       isAuthenticated : authenticated
@@ -61,9 +60,7 @@ class App extends Component {
                 <LinkContainer to="/">
                   <NavItem onClick={this.handleLogout}>Logout</NavItem>
                 </LinkContainer>
-                <LinkContainer to="/game">
-                  <NavItem>Game</NavItem>
-                </LinkContainer>
+               
               </Fragment> : 
               <Fragment>
                 <LinkContainer to="/register">
