@@ -20,9 +20,27 @@ class PlayerColor(Enum):
     Dark = 1
 
 class Player:
-    def __init__(self,color,activeGame):
-        self.color = color;
-        self.userID = None;
+    def __init__(self, playerId, handler, activeGame):
+        self.__id = playerId;
+        self.__handler = handler
+        self.__game = activeGame
+        self.__color = None
+
+    def getID(self):
+        # Return player's ID
+        return self.__id
+
+    def getGame(self):
+        # Return player's active game
+        return self.__game
+
+    def getColor(self):
+        # Return the player's color
+        return self.__color
+
+    def assignColor(self, color):
+        # Set the player's color
+        self.__color = color
 
     def forfeit(self):
         # Player(this) requested a forfeit
@@ -39,13 +57,11 @@ class Player:
     @dummy
     def queryDraw(self):
         # Ask the user if they wish to draw
-        # --DUMMY--
         return False 
 
     @dummy
     def querySave(self):
         # Ask the user if they wish to save the current game
-        # --DUMMY--
         return False
         
     def associate(self, userId):
@@ -57,5 +73,6 @@ class Player:
 
     @dummy
     def act(self):
-        # --DUMMY--
+        self.__connection();
+
         pass

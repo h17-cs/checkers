@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import ChatInput from './ChatInput'
 import '../../Game.css'
 import ChatMessage from './ChatMessage'
+import TextField from 'material-ui/TextField';
+
 
 const URL = 'ws://localhost:3030'
 
 class Chat extends Component {
   state = {
-    name: '',
+    name: this.props.names[0].playerOne,
     messages: [],
   }
 
@@ -48,22 +50,22 @@ class Chat extends Component {
     return (
       <div>
         {/* <label htmlFor="name">
-          Name:&nbsp; */}
-          {/* <input
+          Name:&nbsp;
+          <TextField
             type="text"
             id={'name'}
             placeholder={'Enter your name...'}
             value={this.state.name}
             onChange={e => this.setState({ name: e.target.value })}
-          /> */}
-        {/* </label> */}
+          />
+        </label> */}
         
         <div className="chatBox">
             {this.state.messages.map((message, index) =>
             <ChatMessage
                 key={index}
                 message={message.message}
-                name={message.name}
+                name={this.props.names[0].playerOne}
             />,
             )}
         </div>

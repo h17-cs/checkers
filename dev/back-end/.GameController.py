@@ -34,22 +34,19 @@ from enum import Enum
 from Timer import Timer
 from Player import Player, PlayerColor
 from DummyWrap import dummy
-import config as cfg
 from WebsocketMessageManager import WebsocketMessageManager
-from SocketManager import GameSocket, ControlSocket
-
 class GameController:
 
-    def __init__(self, control_port, user_port, private=False):
+    def __init__(self, port):
         self.__board = []
         self.__players = []
+        self.__port = port
+        self.__currentTurn = PlayerColor.Light
+        self.__messenger = WebsocketMessageManager(self.__port)
+        self.__players = [Player(PlayerColor.Light, None),
+                        Player(PlayerColor.Dark, None)]
+        #self.__timer = Timer(60.0, GameController.timeout, (self,));
         self.__controllock = threading.Lock()
-        self.__private=private
-        self.__control=ControlSocket(control_port)
-        self.__users=GameSocket(user_port)
-        self.__users.setGame(self)
-        self.__halted = False
-        self.__timer = None
 
     def getBoard(self):
         # Game board accessor
@@ -59,16 +56,14 @@ class GameController:
         # Game board accessor
         return self.__players[color]
 
-    def main(self):
-        self.__currentTurn = PlayerColor.Light
-        self.__players = [Player(PlayerColor.Light, None),
-                        Player(PlayerColor.Dark, None)]
-        #self.__timer = Timer(60.0, GameController.timeout, (self,));
-
+    def getBoard(self):
+        # Game board accessor
+        return self.__board
 
     @dummy
     def initialize(self):
         # Initialize the game board, place pieces, and start the game
+        #--DUMMY--
         for i in range(32):
             self.__board.append(None)
 
@@ -76,77 +71,46 @@ class GameController:
             self.addPiece(GamePiece(PieceColor.Light,getPlayer[PlayerColor.Light],self), Location(i))
             self.addPiece(GamePiece(PieceColor.Dark,getPlayer[PlayerColor.Dark],self), Location(32-i))
 
-    def addUser(self, user, password, c):
-        msg = Message(Message.MessageType.AccountAdministration)
-        msg.addField("message_action", 0);
-        msg.addField("username", user);
-        msg.addField("password", password);
-        resp = self.__control.query("localhost", cfg.admin, msg.__str__())
-        if resp == "Success":
-            p = Player(user, c, self)
-            players.append(user)
-        else:
-            return False
-
     def registerPlayer(self, playerColor, playerID, port):
         # Register players to the board
         return self.players[playerColor].associate(playerID, port);
 
-    def playerBind(self, playerId, playerHandler):
-        # Register players to the game
-        self.__controllock.acquire()
-        retval = False
-        if len(self.__players) < 2:
-            self.__players.append(Player(playerId, playerHandler, self))
-            retval = True
-        self.__controllock.release()
-        return retval
-
     def addPiece(self, piece, location):
         # add a piece to the board
-        self.__controllock.acquire()
         if self.__board[location.toIndex()] is not None:
             print("Attempted to place a piece in a filled square")
-            self.__controllock.release()
             return False
         else:
             self.__board[location.toIndex()] = piece
             piece.setLocation(location)
-            self.__controllock.release()
             return True
 
     def movePiece(self, piece, location):
         # move a piece
-        self.__controllock.acquire()
         oldloc = piece.getLocation()
         if self.__board[location.toIndex()] is not None:
             print("Attempted to place a piece in a filled square")
-            self.__controllock.release()
             return False
         else:
             self.__board[location.toIndex()] = piece
             piece.setLocation(location)
-            self.__controllock.release()
 
         self.log("Moved piece from #%02d to #%02d"%(oldloc.toIndex(), location.toIndex()))
         return True
 
     def removePiece(self, piece):
         # remove a piece from the game board
-        loc = piece.getLocation().toIndex();
-        self.__controllock.acquire()
+        # --DUMMY--
         loc = piece.getLocation();
         retval = False
         if self.__board[loc] is None:
             print("Error: location points to None")
             retval = False
-            self.__controllock.release()
         else:
             self.__board[loc] = None
             retval = True
-            self.__controllock.release()
 
-        self.log("Removed %s piece at #%02d"%("king" if piece.getType() is PieceType.King else "ordinary"), loc)
+        self.log("Removed %s piece at #%02d"%("king" if piece.getType() is PieceType.King else "ordinary"), loc.toIndex())
         return retval
 
 
@@ -176,25 +140,19 @@ class GameController:
         # --DUMMY--
         return False
 
-    def flag(self, code):
-        if code == ControlSocket.ControlCode.Halt:
-            self.halt()
-            return "Halted"
-        elif code == ControlSocket.ControlCode.Status:
-            colorcode = "\033[31;0m" if isEnded() else "\033[32;0m"
-            status = "Dormant" if isEnded() else "Active"
-            return "Status: [%s%s\033[0m], time remaining: %f"%(colorcode,status,self.__timer.getTimeRemaining())
-        else:
-            return "Code (%d) not supported"%code
+    @dummy
+    def timeout(self):
+        self.__controllock.acquire()
+
+        self.__controllock.release()
+        pass
+
     @dummy
     def log(self, message):
         # Log a message to users and maybe log to a file
         pass
 
     @dummy
-    def halt(self):
-        # Halt the game
-        self.__halted = True;
-        self.log("Game Halted.")
-        self.__control.halt()
-        self.__users.halt()
+    def run(self):
+        print("Running messenger")
+        self.__messenger.run()

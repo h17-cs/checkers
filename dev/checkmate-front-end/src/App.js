@@ -14,9 +14,11 @@ class App extends Component {
       password:'',
       // loginPage:[],
       // uploadScreen:[]
-      isAuthenticated:  false
+      isAuthenticated: false,
+      isAuthenticating: true
     };
   }
+
 
   userHasAuthenticated = authenticated => {
     this.setState({
@@ -25,19 +27,20 @@ class App extends Component {
   }
 
   handleLogout = event => {
-    this.userHasAuthenticated(false);
-    
+    this.userHasAuthenticated(false);  
+    window.localStorage.clear();  
   }
 
   render() {
 
     const childProps = {
+      isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
-      username: this.username,
-      password: this.password
+      username: this.state.username,
+      password: this.state.password
     };
     return (
-
+        
       <div className="App">
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>

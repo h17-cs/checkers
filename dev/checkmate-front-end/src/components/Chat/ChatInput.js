@@ -20,7 +20,7 @@ class ChatInput extends Component {
           this.setState({ message: '' })
         }}
       >
-        <input
+        <TextField
           type="text"
           placeholder={'Enter message...'}
           value={this.state.message}
