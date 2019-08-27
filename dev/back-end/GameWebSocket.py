@@ -7,7 +7,7 @@ class GameWebSocket():
         self.__port = listenport
         self.__halted = False;
         self.__connections=[]
-        self.__worker = websockets.serve(servePlayers, 'localhost', port);
+        self.__worker = websockets.serve(servePlayers, port=port);
         asyncio.get_event_loop().run_until_complete(self.__worker)
         asyncio.get_event_loop().run_forever()
 
@@ -21,6 +21,7 @@ class GameWebSocket():
             ws.close()
         print(msg)
         m = Message.parse(msg);
+        if m is None:
         act = m.getField("message_action")
         if m.getType() == MessageType.AccountAdmin and act is not None and act == 0:
             usr = m.getField("username")

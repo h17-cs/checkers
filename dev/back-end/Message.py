@@ -44,12 +44,15 @@ class Message:
 
     def parse(jstring):
         # STATIC: Generate a message from a JSON string
-        obj = json.loads(jstring)
-        mtype = obj['message_type']
-        mbody = obj['body']
+        try:
+            obj = json.loads(jstring)
+            mtype = obj['message_type']
+            mbody = obj['body']
         
-        msg = Message(mtype)
-        for key in mbody:
-            msg.addField(key, mbody[key])
+            msg = Message(mtype)
+            for key in mbody:
+                msg.addField(key, mbody[key])
 
-        return msg
+            return msg
+        except:
+            return None
