@@ -1,40 +1,59 @@
 import asyncio
 import websockets
-import Message
+import time
+from Message import *
 
 class GameWebSocket():
     def __init__(self, port):
-        self.__port = listenport
+        self.__port = port
         self.__halted = False;
         self.__connections=[]
-        self.__worker = websockets.serve(servePlayers, 'localhost', port);
+        self.__worker = websockets.serve(self.servePlayers, port=port);
         asyncio.get_event_loop().run_until_complete(self.__worker)
         asyncio.get_event_loop().run_forever()
 
     def setGame(self, g):
         self.__game = g
 
-    async def servePlayers(ws, path):
-        msg = await ws.recv()
-        if self.__halted:
-            print("Error: socket halted");
-            ws.close()
-        print(msg)
-        m = Message.parse(msg);
-        act = m.getField("message_action")
-        if m.getType() == MessageType.AccountAdmin and act is not None and act == 0:
-            usr = m.getField("username")
-            pwd = m.getField("password")
-            resp = self.__game.addUser(usr, pwd, ws) if not usr is None else False
-            if resp:
-                self.__connections.append(ws);
-                ws.send("Success")
-            else:
-                ws.send("Failed")
+    async def servePlayers(self, ws, path):
+        while not self.__halted:
+            msg = await ws.recv()
+            if self.__halted:
+                print("Error: socket halted");
                 ws.close()
-        else:
-            ws.close()
-        
+            print(msg)
+            m = Message.parse(msg);
+            #if not m.hasField("message_action")
+            if m.getType() == MessageType.Text:
+                #t = m.getField("timestamp")
+                usr = m.getField("name")
+                txt = m.getField("message")
+                
+                msg = Message(MessageType.Text)
+                #msg.addField("timestamp", int(time.time()*1000))
+                msg.addField("name", ":ServerAdmin:")
+                msg.addField("message", "Did you just say %s, %s?"%(txt,usr))
+                j="%s"%msg
+                print(j)
+                await ws.send(j)
+
+            elif m.getType() == MessageType.AccountAdministration:
+                act = m.getField("message_action")
+                usr = m.getField("username")
+                pwd = m.getField("password")
+                if act == 0:
+                    resp = self.__game.addUser(usr, pwd, ws) if not usr is None else False
+                    if resp:
+                        self.__connections.append(ws);
+                        await ws.send("Success")
+                    else:
+                        await ws.send("Failed")
+                        ws.close()
+                else:
+                    pass
+            else:
+                time.sleep(0.1)
+
     def message(self, addr, port, msg):
         async def msgother():
             uri="%s:%s"%(addr,port)

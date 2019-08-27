@@ -1,5 +1,6 @@
 from Message import *
 from SocketManager import *
+from GameWebSocket import GameWebSocket
 
 deny = False
 soc = None
@@ -12,6 +13,8 @@ class dummygame:
 f = open("gameupdate.json")
 payload = "".join(l for l in f)
 
-gs = GameSocket(2500)
+gs = GameWebSocket(2500)
 d = dummygame()
 gs.setGame(d)
+
+print("OK!")

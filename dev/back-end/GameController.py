@@ -36,7 +36,8 @@ from Player import Player, PlayerColor
 from DummyWrap import dummy
 import config as cfg
 from WebsocketMessageManager import WebsocketMessageManager
-from SocketManager import GameSocket, ControlSocket
+from SocketManager import ControlSocket
+import GameWebSocket as GameSocket
 
 class GameController:
     def __init__(self, control_port, user_port, private=False):
